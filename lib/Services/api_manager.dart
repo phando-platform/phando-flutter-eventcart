@@ -15,7 +15,7 @@ import '../Models/order_list_model.dart';
 import '../Models/order_timelines_model.dart';
 import '../Models/popular_products_model.dart';
 import '../Models/product_details_model.dart';
-import '../Models/profile_model.dart';
+import '../Models/profile_model.dart' as PM;
 import '../Models/send_reset_code_model.dart';
 import '../Models/trends_model.dart';
 import '../Models/wish_list_model.dart';
@@ -415,7 +415,7 @@ class ApiManager {
     }
   }
 
-  Future<ProfileModel> getProfileInfo(String token) async {
+  Future<PM.ProfileModel> getProfileInfo(String token) async {
     final response = await http.get(
       Uri.parse(apiUrl + 'profile'),
       headers: {
@@ -425,14 +425,15 @@ class ApiManager {
     );
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return ProfileModel.fromJson(data);
+      return PM.ProfileModel.fromJson(data);
     } else {
       final data = jsonDecode(response.body);
-      return ProfileModel.fromJson(data);
+      return PM.ProfileModel.fromJson(data);
     }
   }
 
   Future<OrderCreateResponse> createOrder(
+      PM.Value userData,
       OrderCreateModel model,
       String token,
       String payment,
@@ -443,11 +444,6 @@ class ApiManager {
       String couponId,
       String shippingId,
       String billingId) async {
-    final SharedPreferences _prefs = await SharedPreferences.getInstance();
-    print("User name: ");
-    print(_prefs.getString('firstName'));
-    print(_prefs.getString('lastName'));
-
     final response = await http.post(
       Uri.parse(apiUrl + 'order'),
       headers: {
@@ -455,26 +451,26 @@ class ApiManager {
         'Authorization': 'Bearer $token',
       },
       body: <dynamic, dynamic>{
-        'first_name': '', //
-        'last_name': '', //
-        'user_address_1': '',
-        'user_mobile': '', //
-        'user_email': '', //
-        'user_post_code': '',
-        'user_city': '',
-        'user_country_id': '',
-        'shipping_name': '',
-        'shipping_mobile': '',
-        'shipping_email': '',
-        'shipping_post': '',
-        'shipping_town': '',
-        'shipping_country_id': '',
-        'address_line_one': '',
+        'first_name': userData.customer!.firstName,
+        'last_name': userData.customer!.lastName,
+        'user_address_1': userData.customer!.address,
+        'user_mobile': userData.customer!.mobile,
+        'user_email': userData.customer!.email,
+        'user_post_code': userData.billing!.postCode,
+        'user_city': userData.billing!.userCity,
+        'user_country_id': userData.billing!.countryId,
+        'shipping_name': userData.shipping!.shippingName,
+        'shipping_mobile': userData.shipping!.shippingMobile,
+        'shipping_email': userData.shipping!.shippingEmail,
+        'shipping_post': userData.shipping!.shippingPost,
+        'shipping_town': userData.shipping!.shippingTown,
+        'shipping_country_id': userData.shipping!.shippingCountryId,
+        'address_line_one': userData.shipping!.addressLineOne,
         'cart': json.encode(model.cart),
         'payment_by': payment,
         'currency': json.encode(model.currency),
-        'currency.id': '',
-        'currency.exchange_rate': '',
+        'currency.id': model.currency!.id,
+        'currency.exchange_rate': model.currency!.exchangeRate,
         'subTotal': subTotal,
         'totalShipping': totalShipping,
         'total': total,
@@ -491,9 +487,11 @@ class ApiManager {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return OrderCreateResponse.fromJson(data);
+      // return OrderCreateResponse();
     } else {
       final data = jsonDecode(response.body);
       return OrderCreateResponse.fromJson(data);
+      // return OrderCreateResponse();
     }
   }
 

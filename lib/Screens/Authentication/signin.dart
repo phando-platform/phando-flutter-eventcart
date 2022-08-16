@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../Helpers/helper.functions.dart';
 import '../../../GlobalComponents/button_global.dart';
 import '../../constant.dart';
 import '../../Services/api_manager.dart';
@@ -172,7 +173,10 @@ class _SignInState extends State<SignIn> {
                           emailController.text, passwordController.text);
                       if (login.status == 'Success') {
                         EasyLoading.showSuccess(login.message.toString());
+
+                        // saveUserDetails(login.accessToken!);
                         final SharedPreferences prefs = await _prefs;
+
                         print(login.accessToken);
                         print(login.customer?.firstName);
                         print(login.customer?.lastName);
@@ -194,12 +198,7 @@ class _SignInState extends State<SignIn> {
                             'username', login.customer?.username ?? 'Guest');
                         prefs.setBool('autoLogin', isChecked);
 
-                        print("User name: ");
-                        // final SharedPreferences _prefs = await SharedPreferences.getInstance();
-
-                        print(prefs.getString('firstName'));
-                        print(prefs.getString('lastName'));
-                        //const Home().launch(context);
+                        const Home().launch(context);
                       } else {
                         EasyLoading.showError(login.error.toString());
                       }

@@ -1,4 +1,4 @@
-package com.event.app;
+package com.eventcart.app;
 
 import io.flutter.embedding.android.FlutterActivity;
 

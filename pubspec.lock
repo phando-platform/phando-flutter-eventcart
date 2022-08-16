@@ -14,7 +14,7 @@ packages:
       name: archive
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.0"
+    version: "3.3.1"
   argon_buttons_flutter:
     dependency: "direct main"
     description:
@@ -72,7 +72,7 @@ packages:
     source: hosted
     version: "4.1.1"
   change_app_package_name:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: change_app_package_name
       url: "https://pub.dartlang.org"
@@ -126,28 +126,28 @@ packages:
       name: connectivity_plus_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.2"
+    version: "1.2.4"
   connectivity_plus_platform_interface:
     dependency: transitive
     description:
       name: connectivity_plus_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.1"
   connectivity_plus_web:
     dependency: transitive
     description:
       name: connectivity_plus_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.3"
   connectivity_plus_windows:
     dependency: transitive
     description:
       name: connectivity_plus_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.2"
   convert:
     dependency: transitive
     description:
@@ -175,14 +175,14 @@ packages:
       name: cupertino_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.5"
   custom_refresh_indicator:
     dependency: "direct main"
     description:
       name: custom_refresh_indicator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1"
+    version: "1.2.1"
   dbus:
     dependency: transitive
     description:
@@ -203,7 +203,7 @@ packages:
       name: eventify
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -278,7 +278,7 @@ packages:
       name: flutter_credit_card
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.2"
   flutter_easyloading:
     dependency: "direct main"
     description:
@@ -379,7 +379,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.4"
+    version: "0.13.5"
   http_auth:
     dependency: transitive
     description:
@@ -477,7 +477,7 @@ packages:
       name: onesignal_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.1"
+    version: "3.4.0"
   path:
     dependency: transitive
     description:
@@ -491,14 +491,14 @@ packages:
       name: path_drawing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   path_parsing:
     dependency: transitive
     description:
       name: path_parsing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   path_provider:
     dependency: transitive
     description:
@@ -603,7 +603,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.27.4"
+    version: "0.27.5"
   shared_preferences:
     dependency: transitive
     description:

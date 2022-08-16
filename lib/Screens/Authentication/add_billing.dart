@@ -178,8 +178,8 @@ class _AddBillingState extends State<AddBilling> {
                     toast("Please input your Full name to signup");
                   } else if (postalController.text.isEmpty) {
                     toast("Please input your post code to signup");
-                  } else if (postalController.text.length > 5) {
-                    toast("Postal Code cannot have more than 5 characters");
+                  } else if (postalController.text.length < 6) {
+                    toast("Postal Code cannot be less than 6 characters");
                   } else if (addressOneController.text.isNotEmpty &&
                       cityController.text.isNotEmpty &&
                       postalController.text.isNotEmpty) {

@@ -1,6 +1,10 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/src/extensions/string_extensions.dart';
 import 'package:validators/validators.dart';
 import 'package:flutter_share/flutter_share.dart';
+
+// custom imports
+import '../Services/api_manager.dart';
 
 bool isEmailValid(String value) {
   if (value.isEmptyOrNull) {
@@ -58,3 +62,10 @@ Future<void> shareProductLink(String title, String videoUrl) async {
     text: videoUrl,
   );
 }
+
+// saveUserDetails(String _token) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   final ApiManager _apiManager = ApiManager();
+//   EasyLoading.show(status: 'Saving User Details...');
+//   final profileModel = await _apiManager.getProfileInfo(_token);
+// }

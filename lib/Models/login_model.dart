@@ -1,7 +1,7 @@
 /// status : "Success"
 /// error : "User does not exist"
 /// message : "Login Successful"
-/// customer : {"id":1,"first_name":"Hedley","last_name":"Mckinney","address":"Rerum obcaecati aliq","mobile":"8801XXXXXXXXX","username":"customer","email":"customer@event.com","gender":1,"dob":"2000-08-30T18:00:00.000000Z"}
+/// customer : {"id":1,"first_name":"Hedley","last_name":"Mckinney","address":"Rerum obcaecati aliq","mobile":"8801XXXXXXXXX","username":"customer","email":"customer@eventcart.com","gender":1,"dob":"2000-08-30T18:00:00.000000Z"}
 /// access_token : "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYTUxZDdhNGM4YTUyN2VkMWM0OWVkNGU2MmQ0ZTVmOGM3MWFkYjEzMjhmNTFjZWI0NTlmYmY5MzFmYjZjYWNhYjEwMjgxNzUzYWFmMDVjNDQiLCJpYXQiOjE2NTAxNzMyMDMuODI2MTg0MDM0MzQ3NTM0MTc5Njg3NSwibmJmIjoxNjUwMTczMjAzLjgyNjE5MzA5NDI1MzU0MDAzOTA2MjUsImV4cCI6MTY1MDI1OTYwMy43NzExNDcwMTI3MTA1NzEyODkwNjI1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.SrJYeOtYDEgQbIHs0Mjd0JjMDd076tj3FIXyNy7cdY4bCRYSlpvwZSgesHOI0oFYRPC00ZZ5vthZSAKr2Spo6PYjP2sX6taRzwVuQZwSE_uAs19BJKaHbSFNMh-RkaXno6DDJRlMAil2r14qrPjJzjV00I0pWq3U9cJkytuKjMxF9D7vCSYWBt_SnW7NBGj6DKn3LmnLvl1maUocNbC-3RrWFrpwKS04ITZRh1LeSYt08WN-wCHYGnQi4PGWmWAH_QP0l-uA21D5eJpXfNzBVggGDAo96LT3b32Nsw08ogOeKgSDblfsVRqvtvEGM8RxytrG83OhnIx9V-CnAhpHtEWYYIY01nX7liYXnNeBhxVkv2yyheR0jmcAvFuveBHgtKcCMX8GL3mYVdnTqUETlYQdXDr0qe27XmF_PkQebccdwFIT-nNwhkjqmUSWoRgPn6b9lANaHx3Kl0SVyryBD9hLPYpKIsymFsE7J4BJXYlLI4vRa6Xc4fRjd-abjAmL1wEhwDBUONbhIvLks1wACIfqtOVmalN3ZCW-V1BhANCTpnBJBFCnGjc7pIrhkXMNucUbTfScy3jDSdyoSIWH_lcbuhj2CfEJ3C9tpJPj7EIB9aVZRYbtkB6yBsw0bXG4IZyYA-Q3gXx7jAr4J1yp8OzbHJgLkPqct6FkgrCerZ4"
 /// token_type : "Bearer"
 /// expires_at : "2022-04-18 11:26:43"
@@ -72,7 +72,7 @@ class LoginModel {
 /// address : "Rerum obcaecati aliq"
 /// mobile : "8801XXXXXXXXX"
 /// username : "customer"
-/// email : "customer@event.com"
+/// email : "customer@eventcart.com"
 /// gender : 1
 /// dob : "2000-08-30T18:00:00.000000Z"
 

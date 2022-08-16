@@ -97,6 +97,8 @@ class _OrderReviewState extends State<OrderReview> {
 
   @override
   Widget build(BuildContext context) {
+    print("token ===>");
+    print(token);
     return Stack(
       children: [
         Scaffold(
@@ -487,6 +489,7 @@ class _OrderReviewState extends State<OrderReview> {
                                           paymentBy: 'cod');
                                       final order =
                                           await _apiManager.createOrder(
+                                              snapshot.data!.value!,
                                               model,
                                               token,
                                               'cod',
@@ -519,10 +522,12 @@ class _OrderReviewState extends State<OrderReview> {
                                               order.value?.order?.orderNo ?? '';
                                         });
                                       } else {
+                                        print("success == false");
                                         EasyLoading.showError(
                                             order.message.toString());
                                       }
                                     } catch (e) {
+                                      print("exception occured");
                                       EasyLoading.showError(e.toString());
                                     }
                                   },
@@ -683,6 +688,7 @@ class _OrderReviewState extends State<OrderReview> {
                                                           currency: currency,
                                                           paymentBy: 'paypal');
                                                       final order = await _apiManager.createOrder(
+                                                          snapshot.data!.value!,
                                                           model,
                                                           token,
                                                           'paypal',
