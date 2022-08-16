@@ -84,7 +84,7 @@ class _HomeState extends State<Home> {
         ],
       ),
       bottomNavigationBar: AnimatedBottomNavigationBar(
-        elevation: 6.0,
+        // elevation: 6.0,
         gapLocation: GapLocation.center,
         notchSmoothness: NotchSmoothness.smoothEdge,
         activeColor: kMainColor,

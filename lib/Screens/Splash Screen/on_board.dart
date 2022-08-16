@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+// import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:simple_connection_checker/simple_connection_checker.dart';
 
 import '../../../GlobalComponents/button_global.dart';
@@ -53,9 +53,9 @@ class _OnBoardState extends State<OnBoard> {
   @override
   void initState() {
     // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
-      EasyLoading.showSuccess('Notification Allowed');
-    });
+    // OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+    //   EasyLoading.showSuccess('Notification Allowed');
+    // });
     super.initState();
   }
 

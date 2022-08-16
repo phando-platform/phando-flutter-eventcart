@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+// import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import './constant.dart';
 import './Screens/Splash Screen/splash_screen.dart';
@@ -13,7 +13,7 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  OneSignal.shared.setAppId(oneSignalAppId);
+  // OneSignal.shared.setAppId(oneSignalAppId);
   runApp(const ProviderScope(child: MyApp()));
 }
 
