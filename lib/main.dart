@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -14,6 +16,8 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
   ]);
   // OneSignal.shared.setAppId(oneSignalAppId);
+
+  HttpOverrides.global = new MyHttpOverrides();
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -33,5 +37,14 @@ class MyApp extends StatelessWidget {
       home: const SplashScreen(),
       builder: EasyLoading.init(),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
