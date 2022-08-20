@@ -26,7 +26,6 @@ import '../Models/profile_update_model.dart';
 import '../Models/signup_model.dart';
 
 class ApiManager {
-  // static const apiUrl = "https://my-bazar.maantheme.com/api/v1/";
   static const apiUrl = "https://events.phando.in/api/v1/";
 
   Future<LoginModel> signInWithEmail(

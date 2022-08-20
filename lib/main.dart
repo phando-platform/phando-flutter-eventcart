@@ -17,7 +17,7 @@ Future<void> main() async {
   ]);
   // OneSignal.shared.setAppId(oneSignalAppId);
 
-  HttpOverrides.global = new MyHttpOverrides();
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const ProviderScope(child: MyApp()));
 }
 

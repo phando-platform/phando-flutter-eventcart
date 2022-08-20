@@ -28,7 +28,7 @@ const String oneSignalAppId = 'c031bb73-7033-4ca9-bf1e-06c56e2e462c';
 //Razorpay Settings
 const String companyName = 'Event Cart';
 const String razorPayApiKey = 'rzp_test_BWqfBmcCYhpsci';
-const String companyDescription = 'Event Company';
+const String companyDescription = 'Event Cart';
 
 final kTextStyle = GoogleFonts.manrope(
   color: kTitleColor,
