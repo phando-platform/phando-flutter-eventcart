@@ -27,6 +27,7 @@ class _HomeState extends State<Home> {
   String? username;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   String? token;
+
   Future<void> getToken() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
@@ -38,11 +39,13 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     getToken();
+    print("init invoked");
     super.initState();
   }
 
   void _onItemTapped(int index) {
     setState(() {
+      print("tapped");
       _selectedIndex = index;
     });
   }
@@ -74,6 +77,8 @@ class _HomeState extends State<Home> {
         );
       }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+
       body: IndexedStack(
         index: _selectedIndex,
         children: [

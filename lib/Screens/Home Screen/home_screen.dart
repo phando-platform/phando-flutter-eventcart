@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0.0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: kBlackColor),
-        leading: Image.asset('images/drawer.png'),
+        /*leading: Image.asset('images/drawer.png'),*/
         title: Image.asset('images/logo.png', width: 115),
         actions: [
           Image.asset('images/notification.png'),
@@ -139,6 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
+
                       Center(
                         child: CarouselSlider.builder(
                           itemCount: snapshot.data?.value?.banners?.length ?? 0,
@@ -360,11 +361,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                             'null',
                                         prefs.getString('token').toString());
                                 if (wishlist.success == true) {
-                                  EasyLoading.showSuccess(
-                                      wishlist.message.toString());
+                                  EasyLoading.showSuccess(wishlist.message.toString());
+                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
+                                      ModalRoute.withName("/Home"));
+
                                 } else {
-                                  EasyLoading.showError(
-                                      wishlist.message.toString());
+                                  EasyLoading.showError(wishlist.message.toString());
                                 }
                               } catch (e) {
                                 toast(e.toString());

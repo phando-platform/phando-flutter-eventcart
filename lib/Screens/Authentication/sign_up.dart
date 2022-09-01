@@ -31,6 +31,7 @@ class _SignUpState extends State<SignUp> {
 
   // default country id = India
   int countryId = 104;
+   String countryCode="IN";
 
   @override
   Widget build(BuildContext context) {
@@ -178,9 +179,11 @@ class _SignUpState extends State<SignUp> {
                       padding: EdgeInsets.zero,
                       onChanged: (country) {
                         print(country.name);
+                        print(country.code);
                         setState(() {
                           String name = country.name?.toUpperCase() ?? 'INDIA';
-                          countryId = countries.indexOf(name, 0) + 1;
+                            countryCode = country.code?.toUpperCase() ?? 'IN';
+                            countryId = countries.indexOf(name, 0) + 1;
                         });
                       },
                       initialSelection: 'IN',
@@ -232,6 +235,13 @@ class _SignUpState extends State<SignUp> {
   }
 
   _onFormSubmit() async {
+    print(mobileController.text);
+    print(countryCode);
+
+
+
+
+
     if (firstNameController.text.length < 3) {
       toast("Please enter a valid First Name");
     } else if (lastNameController.text.length < 3) {
@@ -244,7 +254,71 @@ class _SignUpState extends State<SignUp> {
       toast("Please add a valid Mobile no.");
     } else if (!isPasswordValid(passwordController.text)) {
       toast("Password must have at least 8 characters");
-    } else {
+    }
+    else if (mobileController.text.length==10) {
+      if(countryCode!="IN"){
+        toast("Please Select Valid Country");
+      }
+      else {
+        try {
+          print("country");
+          print(countries[countryId - 1]);
+          EasyLoading.show(status: 'Signing Up...');
+          final signUp = await _apiManager.signUpWithEmail(
+              firstNameController.text,
+              lastNameController.text,
+              usernameController.text,
+              emailController.text,
+              mobileController.text,
+              passwordController.text);
+          if (signUp.status == 'Success') {
+            // hide errors list
+            // empty out errors list
+            setState(() {
+              _showErrors = true;
+              _errorsList = [];
+            });
+            EasyLoading.showSuccess('Sign up Successful...');
+            final SharedPreferences prefs = await _prefs;
+            prefs.setString('token', signUp.accessToken?.toString() ?? 'Guest');
+            prefs.setString('lastName', signUp.customer?.lastName ?? 'Guest');
+            prefs.setString('email', signUp.customer?.email ?? 'Guest');
+            prefs.setString('phone', signUp.customer?.mobile ?? 'Guest');
+            prefs.setInt('country', countryId);
+            prefs.setString('username', signUp.customer?.username ?? 'Guest');
+            prefs.setBool('autoLogin', true);
+
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
+                country: countryId,
+                mobile: mobileController.text
+            )),
+                ModalRoute.withName("/AddBilling"));
+
+
+            /* AddBilling(
+            country: countryId,
+            mobile: mobileController.text,
+          ).launch(context);*/
+          } else {
+            var errorsObj = signUp.errors as Map<String, dynamic>;
+
+            // show errors list
+            // set errorsList to received errors list
+            setState(() {
+              _showErrors = true;
+              _errorsList = getErrorsList(errorsObj);
+            });
+
+            // hide any existing EasyLoding msg
+            EasyLoading.dismiss();
+          }
+        } catch (e) {
+          print(e.toString());
+          EasyLoading.showError(e.toString());
+        }
+      }
+    }
+    else {
       try {
         print("country");
         print(countries[countryId - 1]);
@@ -273,10 +347,17 @@ class _SignUpState extends State<SignUp> {
           prefs.setString('username', signUp.customer?.username ?? 'Guest');
           prefs.setBool('autoLogin', true);
 
-          AddBilling(
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
+              country: countryId,
+              mobile: mobileController.text
+          )),
+              ModalRoute.withName("/AddBilling"));
+
+
+         /* AddBilling(
             country: countryId,
             mobile: mobileController.text,
-          ).launch(context);
+          ).launch(context);*/
         } else {
           var errorsObj = signUp.errors as Map<String, dynamic>;
 

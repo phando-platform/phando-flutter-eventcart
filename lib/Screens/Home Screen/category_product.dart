@@ -1,3 +1,5 @@
+import 'package:event_app/Screens/Home%20Screen/home.dart';
+import 'package:event_app/Screens/Home%20Screen/wish_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -41,12 +43,20 @@ class _CategoryProductState extends State<CategoryProduct> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         elevation: 0.0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: kBlackColor),
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
+                  ModalRoute.withName("/Home"));
+            }),
         title: Text(
           widget.catName,
           style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
@@ -130,22 +140,20 @@ class _CategoryProductState extends State<CategoryProduct> {
                                 onBookMarkPressed: () async {
                                   try {
                                     EasyLoading.show(status: 'Adding...');
-                                    final SharedPreferences prefs =
-                                        await _prefs;
-                                    final wishlist =
-                                        await _apiManager.addToWishList(
-                                            snapshot.data?.value?.data![i].id
-                                                    .toString() ??
-                                                'null',
-                                            prefs
-                                                .getString('token')
-                                                .toString());
+                                    final SharedPreferences prefs = await _prefs;
+                                    final wishlist = await _apiManager.addToWishList(snapshot.data?.value?.data![i].id.toString() ?? 'null', prefs.getString('token').toString());
                                     if (wishlist.success == true) {
-                                      EasyLoading.showSuccess(
-                                          wishlist.message.toString());
+                                      EasyLoading.showSuccess(wishlist.message.toString());
+
                                     } else {
-                                      EasyLoading.showError(
-                                          wishlist.message.toString());
+                                      print(wishlist.message.toString());
+                                      if(wishlist.message.toString()=="Unprocessable Content"){
+                                        EasyLoading.showError("Product Already Added");
+                                      }
+                                      else{
+                                        EasyLoading.showError(wishlist.message.toString());
+                                      }
+
                                     }
                                   } catch (e) {
                                     toast(e.toString());

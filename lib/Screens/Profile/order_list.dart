@@ -62,28 +62,7 @@ class _OrderListState extends State<OrderList> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // HorizontalList(
-            //   spacing: 0,
-            //   itemCount: orderStatus.length,
-            //   itemBuilder: (_, i) {
-            //     return Padding(
-            //       padding: const EdgeInsets.all(5.0),
-            //       child: Container(
-            //         padding: const EdgeInsets.all(10.0),
-            //         decoration: BoxDecoration(
-            //           borderRadius: BorderRadius.circular(10.0),
-            //           border: Border.all(color: kGreyTextColor.withOpacity(0.2),),
-            //           color: selectedIndex == i ? kMainColor : Colors.white,
-            //         ),
-            //         child: Text(orderStatus[i],style: kTextStyle.copyWith(color: selectedIndex == i ? Colors.white : kTitleColor,),),
-            //       ).onTap((){
-            //         setState(() {
-            //           selectedIndex = i;
-            //         });
-            //       }),
-            //     );
-            //   },
-            // ),
+
             const SizedBox(
               height: 20.0,
             ),
@@ -121,7 +100,7 @@ class _OrderListState extends State<OrderList> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(10.0),
                                           child: ListTile(
-                                            leading: Image.network(snapshot
+                                           /* leading: Image.network(snapshot
                                                     .data
                                                     ?.value
                                                     ?.data?[index]
@@ -129,12 +108,12 @@ class _OrderListState extends State<OrderList> {
                                                     .product
                                                     ?.images?[0]
                                                     .image ??
-                                                ''),
+                                                ''),*/
                                             title: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
+                                               /* Text(
                                                   snapshot
                                                           .data
                                                           ?.value
@@ -145,7 +124,7 @@ class _OrderListState extends State<OrderList> {
                                                       '',
                                                   style: kTextStyle.copyWith(
                                                       color: kTitleColor),
-                                                ),
+                                                ),*/
                                                 Row(
                                                   children: [
                                                     Text(

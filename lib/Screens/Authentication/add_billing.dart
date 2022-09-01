@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -147,6 +148,9 @@ class _AddBillingState extends State<AddBilling> {
                 height: 20.0,
               ),
               AppTextField(
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(6),
+                ],
                 textFieldType: TextFieldType.PHONE,
                 controller: postalController,
                 decoration: InputDecoration(
@@ -170,6 +174,7 @@ class _AddBillingState extends State<AddBilling> {
                 buttontext: 'Add Shipping',
                 buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
                 onPressed: () async {
+
                   if (addressOneController.text.isEmpty) {
                     toast("Please input your Address to Signup");
                   } else if (cityController.text.isEmpty) {
@@ -178,8 +183,8 @@ class _AddBillingState extends State<AddBilling> {
                     toast("Please input your Full name to signup");
                   } else if (postalController.text.isEmpty) {
                     toast("Please input your post code to signup");
-                  } else if (postalController.text.length > 5) {
-                    toast("Postal Code cannot have more than 5 characters");
+                  } else if (postalController.text.length < 5) {
+                    toast("Postal code less than 5");
                   } else if (addressOneController.text.isNotEmpty &&
                       cityController.text.isNotEmpty &&
                       postalController.text.isNotEmpty) {
@@ -199,9 +204,11 @@ class _AddBillingState extends State<AddBilling> {
                               : addressTwoController.text.toString(),
                           cityController.text.toString(),
                           postalController.text.toString(),
-                          widget.country.toString(),
+                          "104", /*India*/
+                        //  widget.country.toString(),
                           widget.mobile.toString(),
                         );
+
                         print("shipping response");
                         print(shipping.success);
                         final billing = await _apiManager.setBillingInfo(
@@ -210,14 +217,21 @@ class _AddBillingState extends State<AddBilling> {
                             widget.mobile.toString(),
                             cityController.text.toString(),
                             postalController.text.toString(),
-                            widget.country.toString());
+                            "104");
+                           /* widget.country.toString());*/
                         print("billing response");
                         print(billing.success);
                         if (billing.success == true &&
                             shipping.success == true) {
+                          final SharedPreferences prefs = await _prefs;
+                          prefs.setString('postal_Code', postalController.text.toString() ?? '000000');
+                          prefs.setString('user_city', cityController.text.toString() ?? 'xyz');
+                          prefs.setString('add_one', addressOneController.text.toString() ?? 'xyz');
+                          prefs.setString('add_two', addressTwoController.text.toString() ?? 'xyz');
                           EasyLoading.showSuccess(
                               'Shipping Address Successfully Saved');
-                          const Home().launch(context);
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
+                              ModalRoute.withName("/Home"));
                         } else {
                           EasyLoading.showError(billing.message.toString());
                           print(shipping.toString());
@@ -237,4 +251,6 @@ class _AddBillingState extends State<AddBilling> {
       ),
     );
   }
+
+
 }

@@ -22,6 +22,7 @@ class WishList extends StatefulWidget {
 }
 
 class _WishListState extends State<WishList> {
+
   final ApiManager _apiManager = ApiManager();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   String? token;
@@ -33,6 +34,7 @@ class _WishListState extends State<WishList> {
       token = prefs.getString('token');
     });
   }
+
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
@@ -55,16 +57,30 @@ class _WishListState extends State<WishList> {
           style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
+
       body: RefreshIndicator(
-        key: _refreshIndicatorKey,
         onRefresh: () {
           return Future(() {
-            setState(() {});
+            EasyLoading.showSuccess("Please wait..");
+            setState(() {
+            });
           });
         },
         child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
           child: Column(
+
             children: [
+              const SizedBox(
+                height: 4.0,
+              ),
+              Text(
+                'Swipe down to refresh page',
+                style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
               Container(
                 padding: const EdgeInsets.all(10.0),
                 child: FutureBuilder<WishListModel>(
@@ -76,7 +92,7 @@ class _WishListState extends State<WishList> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SvgPicture.asset(
+                             SvgPicture.asset(
                                 'images/emptycart.svg',
                                 height: context.height() / 2,
                                 width: context.width(),
@@ -98,8 +114,7 @@ class _WishListState extends State<WishList> {
                                   buttontext: 'Shop Now',
                                   buttonDecoration: kButtonDecoration.copyWith(
                                       color: kMainColor),
-                                  onPressed: () =>
-                                      const Home().launch(context)),
+                                  onPressed: () => const Home().launch(context)),
                             ],
                           );
                         }
@@ -153,8 +168,7 @@ class _WishListState extends State<WishList> {
                                               'null');
                                   if (wishlist.success == true) {
                                     setState(() {});
-                                    EasyLoading.showSuccess(
-                                        wishlist.message.toString());
+                                    EasyLoading.showSuccess(wishlist.message.toString());
                                   } else {
                                     setState(() {});
                                     EasyLoading.showError(
@@ -299,7 +313,7 @@ class WishListProductCard extends StatelessWidget {
                   size: 12.0,
                 ),
                 Text(
-                  '(${productData.productRating})',
+                  '\u{20B9}${productData.productRating}',
                   style: kTextStyle.copyWith(
                       color: kGreyTextColor, fontSize: 10.0),
                 ),
@@ -311,14 +325,14 @@ class WishListProductCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  '\$' + productData.productPrice,
+                  '\u{20B9}' + productData.productPrice,
                   style: kTextStyle.copyWith(color: kMainColor, fontSize: 18.0),
                 ),
                 const SizedBox(
                   width: 5.0,
                 ),
                 Text(
-                  '\$' + productData.productPrice,
+                  '\u{20B9}' + productData.productPrice,
                   style: kTextStyle.copyWith(
                       color: kGreyTextColor,
                       fontSize: 12.0,

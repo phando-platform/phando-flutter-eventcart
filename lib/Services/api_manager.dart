@@ -27,7 +27,8 @@ import '../Models/signup_model.dart';
 
 class ApiManager {
   // static const apiUrl = "https://my-bazar.maantheme.com/api/v1/";
-  static const apiUrl = "https://events.phando.in/api/v1/";
+  //static const apiUrl = "https://events.phando.in/api/v1/";
+  static const apiUrl = "https://eventcart.co.in/api/v1/";
 
   Future<LoginModel> signInWithEmail(
       String username, String passwordUser) async {
@@ -423,6 +424,8 @@ class ApiManager {
         'Authorization': 'Bearer $token',
       },
     );
+    print("Profile"+" "+token);
+    print("Profile"+" "+response.body);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return ProfileModel.fromJson(data);
@@ -445,8 +448,51 @@ class ApiManager {
       String billingId) async {
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
     print("User name: ");
-    print(_prefs.getString('firstName'));
-    print(_prefs.getString('lastName'));
+
+
+
+
+
+
+    String? strFirstName=_prefs.getString('firstName')??"Not Specified";
+   String? strLastName=_prefs.getString('lastName')??"Not Specified";
+   String? strAddOne=_prefs.getString('add_one')??"Not Specified";
+   String? strPhone=_prefs.getString('phone')??"Not Specified";
+   String? strEmail=_prefs.getString('email')??"Not Specified";
+   String? strPostCode=_prefs.getString('postal_Code')??"Not Specified";
+
+   // print(token);
+
+    print(strFirstName);
+    print(strLastName);
+    print(strAddOne);
+    print(strPhone);
+    print(strEmail);
+    print(strPostCode);
+    print(strAddOne);
+    print('104');
+
+    print(strAddOne);
+    print(strPhone);
+    print(strEmail);
+    print("200");
+    print(strAddOne);
+    print('104');
+    print(strAddOne);
+
+    print(payment);
+    print(model.currency?.id??0);
+    print('1.35');
+    print(subTotal);
+    print(totalShipping);
+    print(total);
+
+    print(json.encode(model.cart?[0].id));
+    print(json.encode(model.cart?[0].price));
+    print(json.encode(model.cart?[0].quantity));
+    print(json.encode(model.cart?[0].shippingCost));
+    print(json.encode(model.cart?[0].productPriceTotal));
+    print(json.encode(model.cart?[0].estimatedShippingDays));
 
     final response = await http.post(
       Uri.parse(apiUrl + 'order'),
@@ -454,34 +500,39 @@ class ApiManager {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
+
       body: <dynamic, dynamic>{
-        'first_name': '', //
-        'last_name': '', //
-        'user_address_1': '',
-        'user_mobile': '', //
-        'user_email': '', //
-        'user_post_code': '',
-        'user_city': '',
-        'user_country_id': '',
-        'shipping_name': '',
-        'shipping_mobile': '',
-        'shipping_email': '',
-        'shipping_post': '',
-        'shipping_town': '',
-        'shipping_country_id': '',
-        'address_line_one': '',
-        'cart': json.encode(model.cart),
+
+        'first_name': strFirstName,
+        'last_name': strLastName,
+        'user_address_1':strAddOne,   //null
+        'user_mobile':strPhone,
+        'user_email': strEmail,
+        'user_post_code':strPostCode, //null
+        'user_city':strAddOne, //null
+        'user_country_id': "104",
+        'shipping_name': strAddOne,
+        'shipping_mobile': strPhone,
+        'shipping_email':strEmail,
+        'shipping_post': "200",
+        'shipping_town':strAddOne,
+        'shipping_country_id': "104",
+        'address_line_one':strAddOne,
+        'shipping_town':strAddOne,
+        'shipping_country_id': '104',
+        'address_line_one':strAddOne,
         'payment_by': payment,
-        'currency': json.encode(model.currency),
-        'currency.id': '',
-        'currency.exchange_rate': '',
         'subTotal': subTotal,
         'totalShipping': totalShipping,
         'total': total,
-        'coupon_id': couponId,
-        'coupon_discount': couponDiscount,
-        'shipping_address_id': shippingId,
-        'billing_address_id': billingId,
+        'currency[id]':model.currency?.id,
+        'currency[exchange_rate]': '1.35',
+        'cart[0][id]':model.cart?[0].id,
+        'cart[0][price]':model.cart?[0].price,
+        'cart[0][quantity]':model.cart?[0].quantity,
+        'cart[0][shipping_cost]':model.cart?[0].shippingCost,
+        'cart[0][product_price_total]':model.cart?[0].productPriceTotal,
+        'cart[0][estimated_shipping_days]':model.cart?[0].estimatedShippingDays
       },
     );
 
@@ -561,6 +612,7 @@ class ApiManager {
   Future<OrderTimelinesModel> getDeliveryStatus(int id, String token) async {
     final response = await http.get(
       Uri.parse(apiUrl + 'order_timelines/$id'),
+
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',

@@ -227,9 +227,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        !isAdded ? 'Add To Cart' : 'Go To Cart',
-                                        style: kTextStyle.copyWith(
+                                      Text(!isAdded ? 'Add To Cart' : 'Go To Cart', style: kTextStyle.copyWith(
                                             color: kMainColor,
                                             fontWeight: FontWeight.bold),
                                       ),

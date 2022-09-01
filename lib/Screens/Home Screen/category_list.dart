@@ -91,7 +91,7 @@ class _CategoryListState extends State<CategoryList> {
                           backgroundColor: index % 2 == 0
                               ? kMainColor.withOpacity(0.1)
                               : Colors.green.withOpacity(0.1),
-                          child: SvgPicture.network(
+                          child: Image.network(
                             snapshot.data?.value?.data?[index].icon
                                     .toString() ??
                                 'https://i.imgur.com/FPAXyqE.jpeg',

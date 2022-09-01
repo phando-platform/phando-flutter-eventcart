@@ -38,9 +38,9 @@ class _OrderReviewState extends State<OrderReview> {
   Future<void> getToken() async {
     SharedPreferences preferences = await _prefs;
     setState(() {
-      token = preferences.getString('token')!;
-      country = preferences.getInt('country')!;
-      mobile = preferences.getString('phone')!;
+      token = preferences.getString('token')??"";
+      country = preferences.getInt('country');
+      mobile = preferences.getString('phone');
     });
   }
 
@@ -73,16 +73,16 @@ class _OrderReviewState extends State<OrderReview> {
     try {
       _razorpay.open(options);
     } catch (e) {
-      debugPrint('Error: e');
+      print('catch block'+" "+e.toString());
     }
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print('Success Response: ${response.paymentId}');
+    print('Success Response Message: ${response.paymentId}');
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    print('Error Response: $response');
+    print('Error Response Message: $response');
     /* Fluttertoast.showToast(
         msg: "ERROR: " + response.code.toString() + " - " + response.message!,
         toastLength: Toast.LENGTH_SHORT); */
@@ -114,7 +114,9 @@ class _OrderReviewState extends State<OrderReview> {
             future: _apiManager.getProfileInfo(token),
             builder: (BuildContext context, snapshot) {
               if (snapshot.hasData) {
+                print("177");
                 if (snapshot.data?.value?.shipping == null) {
+                  print("119");
                   return Center(
                     child: SizedBox(
                         height: 60.0,
@@ -290,19 +292,15 @@ class _OrderReviewState extends State<OrderReview> {
                                   width: 80.0,
                                   fit: BoxFit.cover,
                                 ),
-                                title: Text(
-                                  'Cash On Delivery',
-                                  style:
-                                      kTextStyle.copyWith(color: kTitleColor),
-                                ),
+                                title: Text('Cash On Delivery',
+                                  style: kTextStyle.copyWith(color: kTitleColor)),
                                 subtitle: Text(
                                   'Pay On Cash',
                                   style: kTextStyle.copyWith(
                                       color: kGreyTextColor),
                                   maxLines: 2,
                                 ),
-                                trailing: Checkbox(
-                                    value: isCod,
+                                trailing: Checkbox(value: isCod,
                                     onChanged: (val) {
                                       setState(() {
                                         isCod = val!;
@@ -456,71 +454,44 @@ class _OrderReviewState extends State<OrderReview> {
                                     try {
                                       EasyLoading.show(
                                           status: 'Creating Order');
-                                      double subtotal = (ref
-                                              .read(cartProvider.notifier)
-                                              .getTotalCharge() -
-                                          discount);
-                                      double shipping = ref
-                                          .read(cartProvider.notifier)
-                                          .getShippingCharge();
+                                      double subtotal = (ref.read(cartProvider.notifier).getTotalCharge() - discount);
+                                      double shipping = ref.read(cartProvider.notifier).getShippingCharge();
                                       double total = (subtotal + shipping);
 
-                                      Currency currency =
-                                          Currency(exchangeRate: '1', id: '1');
+                                      Currency currency = Currency(exchangeRate: '1', id: '1');
                                       OrderCreateModel model = OrderCreateModel(
                                           couponId: info.couponId ?? "1",
-                                          couponDiscount:
-                                              info.discountAmount == null
-                                                  ? "0.0"
-                                                  : discount.toString(),
+                                          couponDiscount: info.discountAmount == null ? "0.0" : discount.toString(),
                                           subTotal: subtotal.toString(),
                                           totalShipping: shipping.toString(),
                                           total: total.toString(),
-                                          shippingAddressId: snapshot
-                                              .data?.value?.shipping?.id
-                                              .toString(),
-                                          billingAddressId: snapshot
-                                              .data?.value?.billing?.id
-                                              .toString(),
+                                          shippingAddressId: snapshot.data?.value?.shipping?.id.toString(),
+                                          billingAddressId: snapshot.data?.value?.billing?.id.toString(),
                                           cart: cartItems,
                                           currency: currency,
                                           paymentBy: 'cod');
-                                      final order =
-                                          await _apiManager.createOrder(
-                                              model,
-                                              token,
-                                              'cod',
+                                      final order = await _apiManager.createOrder(model, token, 'cod',
                                               subtotal.toString(),
                                               shipping.toString(),
                                               total.toString(),
-                                              info.discountAmount == null
-                                                  ? "0.0"
-                                                  : discount.toString(),
+                                              info.discountAmount == null ? "0.0" : discount.toString(),
                                               info.couponId ?? "0",
-                                              snapshot.data?.value?.shipping?.id
-                                                      .toString() ??
-                                                  '',
-                                              snapshot.data?.value?.billing?.id
-                                                      .toString() ??
-                                                  '');
+                                              snapshot.data?.value?.shipping?.id.toString() ?? '',
+                                              snapshot.data?.value?.billing?.id.toString() ?? '');
+
+                                      print("Order response"+" "+order.toString());
                                       if (order.success == true) {
-                                        EasyLoading.showSuccess(
-                                            'Create Successfull');
-                                        ref
-                                            .read(cartProvider)
-                                            .cartItems
-                                            .clear();
-                                        ref
-                                            .read(cartItemUiProvider)
-                                            .cartItemUis
-                                            .clear();
+                                        EasyLoading.showSuccess('Create Successfull');
+                                        ref.read(cartProvider).cartItems.clear();
+                                        ref.read(cartItemUiProvider).cartItemUis.clear();
                                         setState(() {
-                                          orderNo =
-                                              order.value?.order?.orderNo ?? '';
+                                        //  orderNo = order.value?.orders?.orderNo ?? '';
+                                          orderNo = '';
+                                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
+                                              ModalRoute.withName("/Home"));
                                         });
                                       } else {
-                                        EasyLoading.showError(
-                                            order.message.toString());
+                                        EasyLoading.showError(order.message.toString());
                                       }
                                     } catch (e) {
                                       EasyLoading.showError(e.toString());
@@ -717,11 +688,7 @@ class _OrderReviewState extends State<OrderReview> {
                                                             .cartItemUis
                                                             .clear();
                                                         setState(() {
-                                                          orderNo = order
-                                                                  .value
-                                                                  ?.order
-                                                                  ?.orderNo ??
-                                                              '';
+                                                          orderNo = order.value?.orders?[0].orderId ??"";
                                                         });
                                                       } else {
                                                         EasyLoading.showError(
@@ -761,6 +728,7 @@ class _OrderReviewState extends State<OrderReview> {
                                           .read(cartProvider.notifier)
                                           .getShippingCharge();
                                       double total = (subtotal + shipping);
+                                     // double total = 1.0;
                                       openCheckout(total);
                                     }).visible(isRazorpay),
                               ],
@@ -772,6 +740,7 @@ class _OrderReviewState extends State<OrderReview> {
                   ),
                 );
               } else {
+                print("Else");
                 return const Center(child: CircularProgressIndicator());
               }
             },

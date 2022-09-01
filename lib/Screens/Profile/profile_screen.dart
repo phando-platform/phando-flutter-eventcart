@@ -29,9 +29,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     SharedPreferences preferences = await _prefs;
 
     setState(() {
-      token = preferences.getString('token')!;
-      country = preferences.getInt('country')!;
-      mobile = preferences.getString('phone')!;
+      token = preferences.getString('token')??"";
+      country = preferences.getInt('country');
+      mobile = preferences.getString('phone');
+      print(country);
+      print(mobile);
     });
     final wish = await _apiManager.wishList(token);
     setState(() {
@@ -323,8 +325,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             );
-          } else{
-            return const Center(child: CircularProgressIndicator(),);
+          }
+          else{
+            return  Center(
+
+              child: SizedBox(height:60.0,child: ButtonGlobal(buttontext: 'Add Shipping Id', buttonDecoration: kButtonDecoration.copyWith(color: kMainColor), onPressed: () => AddBilling(country: country, mobile: mobile).launch(context))),
+            );
+
+            /*return const Center(
+
+              child: CircularProgressIndicator(),
+            );*/
           }
         },
       ),
