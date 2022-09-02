@@ -227,7 +227,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(!isAdded ? 'Add To Cart' : 'Go To Cart', style: kTextStyle.copyWith(
+                                      Text(
+                                        !isAdded ? 'Add To Cart' : 'Go To Cart',
+                                        style: kTextStyle.copyWith(
                                             color: kMainColor,
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -688,7 +690,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit pharetra eu ut ut enim laoreet. Scel eri sque vitae, dui tortor tortor.',
+                              snapshot.data?.value?.description.toString() ??
+                                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit pharetra eu ut ut enim laoreet. Scel eri sque vitae, dui tortor tortor.',
                               style: kTextStyle,
                               maxLines: 5,
                             ).visible(description),
@@ -725,6 +728,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
+                                    // snapshot.data?.value?.
+                                    //                 .toString()??
                                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit pharetra eu ut ut enim laoreet. Scel eri sque vitae, dui tortor tortor.',
                                     style: kTextStyle,
                                     maxLines: 5,
