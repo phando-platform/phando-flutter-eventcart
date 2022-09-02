@@ -366,7 +366,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ModalRoute.withName("/Home"));
 
                                 } else {
-                                  EasyLoading.showError(wishlist.message.toString());
+                                  if(wishlist.message.toString()=="Unprocessable Content"){
+                                    EasyLoading.showError("Product Already Added");
+                                  }
+                                  else{
+                                    EasyLoading.showError(wishlist.message.toString());
+                                  }
                                 }
                               } catch (e) {
                                 toast(e.toString());

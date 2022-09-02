@@ -314,11 +314,11 @@ class _OrderReviewState extends State<OrderReview> {
                                       });
                                     }),
                               ),
-                            ),
+                            ),/*COD*/
                             const SizedBox(
                               height: 10.0,
                             ),
-                            Container(
+                           /* Container(
                               padding: const EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -358,10 +358,12 @@ class _OrderReviewState extends State<OrderReview> {
                                       });
                                     }),
                               ),
-                            ),
+                            ),  *//*paypal*//*
+
                             const SizedBox(
                               height: 10.0,
-                            ),
+                            ),*/
+
                             Container(
                               padding: const EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
@@ -402,7 +404,7 @@ class _OrderReviewState extends State<OrderReview> {
                                       });
                                     }),
                               ),
-                            ),
+                            ), /* Razorpay*/
                           ],
                         ),
                       ),
@@ -416,12 +418,12 @@ class _OrderReviewState extends State<OrderReview> {
                           ),
                         ),
                         child: Consumer(builder: (_, ref, watch) {
-                          List<Carts> cartItems =
-                              ref.watch(cartProvider).getItems();
-                          Discount info =
-                              ref.watch(fetDiscountInfoProvider).getInfo();
+
+                          List<Carts> cartItems=ref.watch(cartProvider).getItems();
+                          Discount info=ref.watch(fetDiscountInfoProvider).getInfo();
                           double discount = info.discountAmount ?? 0.0;
                           int cartSize = cartItems.length;
+
                           return Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: Column(

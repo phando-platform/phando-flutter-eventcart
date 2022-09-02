@@ -36,7 +36,12 @@ class _ProductDetailsState extends State<ProductDetails> {
       if (wishlist.success == true) {
         EasyLoading.showSuccess(wishlist.message.toString());
       } else {
-        EasyLoading.showError(wishlist.message.toString());
+        if(wishlist.message.toString()=="Unprocessable Content"){
+          EasyLoading.showError("Product Already Added");
+        }
+        else{
+          EasyLoading.showError(wishlist.message.toString());
+        }
       }
     } catch (e) {
       toast(e.toString());
@@ -399,7 +404,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               const Duration(milliseconds: 800),
                           autoPlayCurve: Curves.fastOutSlowIn,
                           enlargeCenterPage: true,
-                          scrollDirection: Axis.horizontal,
+                          scrollDirection: Axis.horizontal
                         ),
                       ),
                     ),
