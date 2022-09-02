@@ -424,8 +424,8 @@ class ApiManager {
         'Authorization': 'Bearer $token',
       },
     );
-    print("Profile"+" "+token);
-    print("Profile"+" "+response.body);
+    print("Profile11" + " " + token);
+    print("Profile22" + " " + response.body);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return ProfileModel.fromJson(data);
@@ -449,19 +449,14 @@ class ApiManager {
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
     print("User name: ");
 
+    String? strFirstName = _prefs.getString('firstName') ?? "Not Specified";
+    String? strLastName = _prefs.getString('lastName') ?? "Not Specified";
+    String? strAddOne = _prefs.getString('add_one') ?? "Not Specified";
+    String? strPhone = _prefs.getString('phone') ?? "Not Specified";
+    String? strEmail = _prefs.getString('email') ?? "Not Specified";
+    String? strPostCode = _prefs.getString('postal_Code') ?? "Not Specified";
 
-
-
-
-
-    String? strFirstName=_prefs.getString('firstName')??"Not Specified";
-   String? strLastName=_prefs.getString('lastName')??"Not Specified";
-   String? strAddOne=_prefs.getString('add_one')??"Not Specified";
-   String? strPhone=_prefs.getString('phone')??"Not Specified";
-   String? strEmail=_prefs.getString('email')??"Not Specified";
-   String? strPostCode=_prefs.getString('postal_Code')??"Not Specified";
-
-   // print(token);
+    // print(token);
 
     print(strFirstName);
     print(strLastName);
@@ -481,7 +476,7 @@ class ApiManager {
     print(strAddOne);
 
     print(payment);
-    print(model.currency?.id??0);
+    print(model.currency?.id ?? 0);
     print('1.35');
     print(subTotal);
     print(totalShipping);
@@ -500,39 +495,37 @@ class ApiManager {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
-
       body: <dynamic, dynamic>{
-
         'first_name': strFirstName,
         'last_name': strLastName,
-        'user_address_1':strAddOne,   //null
-        'user_mobile':strPhone,
+        'user_address_1': strAddOne, //null
+        'user_mobile': strPhone,
         'user_email': strEmail,
-        'user_post_code':strPostCode, //null
-        'user_city':strAddOne, //null
+        'user_post_code': strPostCode, //null
+        'user_city': strAddOne, //null
         'user_country_id': "104",
         'shipping_name': strAddOne,
         'shipping_mobile': strPhone,
-        'shipping_email':strEmail,
+        'shipping_email': strEmail,
         'shipping_post': "200",
-        'shipping_town':strAddOne,
+        'shipping_town': strAddOne,
         'shipping_country_id': "104",
-        'address_line_one':strAddOne,
-        'shipping_town':strAddOne,
+        'address_line_one': strAddOne,
+        'shipping_town': strAddOne,
         'shipping_country_id': '104',
-        'address_line_one':strAddOne,
+        'address_line_one': strAddOne,
         'payment_by': payment,
         'subTotal': subTotal,
         'totalShipping': totalShipping,
         'total': total,
-        'currency[id]':model.currency?.id,
+        'currency[id]': model.currency?.id,
         'currency[exchange_rate]': '1.35',
-        'cart[0][id]':model.cart?[0].id,
-        'cart[0][price]':model.cart?[0].price,
-        'cart[0][quantity]':model.cart?[0].quantity,
-        'cart[0][shipping_cost]':model.cart?[0].shippingCost,
-        'cart[0][product_price_total]':model.cart?[0].productPriceTotal,
-        'cart[0][estimated_shipping_days]':model.cart?[0].estimatedShippingDays
+        'cart[0][id]': model.cart?[0].id,
+        'cart[0][price]': model.cart?[0].price,
+        'cart[0][quantity]': model.cart?[0].quantity,
+        'cart[0][shipping_cost]': model.cart?[0].shippingCost,
+        'cart[0][product_price_total]': model.cart?[0].productPriceTotal,
+        'cart[0][estimated_shipping_days]': model.cart?[0].estimatedShippingDays
       },
     );
 
@@ -612,7 +605,6 @@ class ApiManager {
   Future<OrderTimelinesModel> getDeliveryStatus(int id, String token) async {
     final response = await http.get(
       Uri.parse(apiUrl + 'order_timelines/$id'),
-
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',

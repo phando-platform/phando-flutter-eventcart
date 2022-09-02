@@ -174,7 +174,6 @@ class _AddBillingState extends State<AddBilling> {
                 buttontext: 'Add Shipping',
                 buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
                 onPressed: () async {
-
                   if (addressOneController.text.isEmpty) {
                     toast("Please input your Address to Signup");
                   } else if (cityController.text.isEmpty) {
@@ -204,8 +203,9 @@ class _AddBillingState extends State<AddBilling> {
                               : addressTwoController.text.toString(),
                           cityController.text.toString(),
                           postalController.text.toString(),
-                          "104", /*India*/
-                        //  widget.country.toString(),
+                          "104",
+                          /*India*/
+                          //  widget.country.toString(),
                           widget.mobile.toString(),
                         );
 
@@ -218,19 +218,25 @@ class _AddBillingState extends State<AddBilling> {
                             cityController.text.toString(),
                             postalController.text.toString(),
                             "104");
-                           /* widget.country.toString());*/
+                        /* widget.country.toString());*/
                         print("billing response");
                         print(billing.success);
                         if (billing.success == true &&
                             shipping.success == true) {
                           final SharedPreferences prefs = await _prefs;
-                          prefs.setString('postal_Code', postalController.text.toString() ?? '000000');
-                          prefs.setString('user_city', cityController.text.toString() ?? 'xyz');
-                          prefs.setString('add_one', addressOneController.text.toString() ?? 'xyz');
-                          prefs.setString('add_two', addressTwoController.text.toString() ?? 'xyz');
+                          prefs.setString(
+                              'postal_Code', postalController.text.toString());
+                          prefs.setString(
+                              'user_city', cityController.text.toString());
+                          prefs.setString(
+                              'add_one', addressOneController.text.toString());
+                          prefs.setString(
+                              'add_two', addressTwoController.text.toString());
                           EasyLoading.showSuccess(
                               'Shipping Address Successfully Saved');
-                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => Home()),
                               ModalRoute.withName("/Home"));
                         } else {
                           EasyLoading.showError(billing.message.toString());
@@ -251,6 +257,4 @@ class _AddBillingState extends State<AddBilling> {
       ),
     );
   }
-
-
 }

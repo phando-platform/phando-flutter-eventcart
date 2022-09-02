@@ -69,20 +69,28 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               buttontext: 'Reset Password',
               buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
               onPressed: () async {
-                try {
-                  EasyLoading.show(status: 'Sending Otp...');
-                  final sendOtp = await _apiManager
-                      .resetPasswordWithEmail(emailController.text);
-                  if (sendOtp.success == true) {
-                    EasyLoading.showSuccess(sendOtp.message.toString());
-                    PhoneVerification(
-                      email: emailController.text,
-                    ).launch(context);
-                  } else {
-                    EasyLoading.showError(sendOtp.message.toString());
+                if (emailController.text.isNotEmpty) {
+                  try {
+                    EasyLoading.show(status: 'Sending Otp...');
+                    final sendOtp = await _apiManager
+                        .resetPasswordWithEmail(emailController.text);
+                    if (sendOtp.success == true) {
+                      EasyLoading.showSuccess(sendOtp.message.toString());
+                      PhoneVerification(
+                        email: emailController.text,
+                      ).launch(context);
+                    } else {
+                      // EasyLoading.showError(sendOtp.message.toString());
+                      EasyLoading.showError(
+                          'Reset Password email has been sent ');
+                    }
+                  } catch (e) {
+                    EasyLoading.showError(
+                        'Reset Password email has been sent ');
+                    // EasyLoading.showError(e.toString());
                   }
-                } catch (e) {
-                  EasyLoading.showError(e.toString());
+                } else {
+                  EasyLoading.showError('Please Enter a valid email');
                 }
               },
             ),

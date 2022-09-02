@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: kBlackColor),
         /*leading: Image.asset('images/drawer.png'),*/
-        title: Image.asset('images/logo.png', width: 115),
+        title: Image.asset('images/logo.png', width: 90),
         actions: [
           Image.asset('images/notification.png'),
         ],
@@ -361,16 +361,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                             'null',
                                         prefs.getString('token').toString());
                                 if (wishlist.success == true) {
-                                  EasyLoading.showSuccess(wishlist.message.toString());
-                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
+                                  EasyLoading.showSuccess(
+                                      wishlist.message.toString());
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Home()),
                                       ModalRoute.withName("/Home"));
-
                                 } else {
-                                  if(wishlist.message.toString()=="Unprocessable Content"){
-                                    EasyLoading.showError("Product Already Added");
-                                  }
-                                  else{
-                                    EasyLoading.showError(wishlist.message.toString());
+                                  if (wishlist.message.toString() ==
+                                      "Unprocessable Content") {
+                                    EasyLoading.showError(
+                                        "Product Already Added");
+                                  } else {
+                                    EasyLoading.showError(
+                                        wishlist.message.toString());
                                   }
                                 }
                               } catch (e) {
@@ -732,7 +737,8 @@ class ProductCard extends StatelessWidget {
             child: Text(
               productData.productTitle,
               style: kTextStyle,
-              maxLines: 3,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Padding(
@@ -805,7 +811,8 @@ class CategoryCard extends StatelessWidget {
               categoryData.catTitle,
               style: kTextStyle,
               textAlign: TextAlign.center,
-              maxLines: 2,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
