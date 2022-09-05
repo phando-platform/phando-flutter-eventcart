@@ -1,10 +1,13 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:event_app/Helpers/helper.functions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:icon_badge/icon_badge.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../GlobalComponents/colors.dart';
 import '../../Screens/Authentication/signin.dart';
 import '../../Screens/Checkout/cart_screen.dart';
 import '../../Screens/Home%20Screen/all_products.dart';
@@ -50,59 +53,64 @@ class _HomeState extends State<Home> {
     });
   }
 
+  _willscrop() {
+    showAppExitPopup(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: Consumer(builder: (_, ref, watch) {
-        List<Cart> cartItems = ref.watch(cartProvider).cartItems;
-        return FloatingActionButton(
-          onPressed: () {
-            cartItems.isEmpty
-                ? EasyLoading.showError('No items in the Cart')
-                : const CartScreen().launch(context);
-          },
-          backgroundColor: kMainColor,
-          child: IconBadge(
-            icon: const Icon(Icons.shopping_cart),
-            itemCount: cartItems.length,
-            badgeColor: kMainColor,
-            itemColor: Colors.white,
-            hideZero: true,
-            onTap: () {
+    return WillPopScope(
+      onWillPop: () => _willscrop(),
+      child: Scaffold(
+        floatingActionButton: Consumer(builder: (_, ref, watch) {
+          List<Cart> cartItems = ref.watch(cartProvider).cartItems;
+          return FloatingActionButton(
+            onPressed: () {
               cartItems.isEmpty
                   ? EasyLoading.showError('No items in the Cart')
                   : const CartScreen().launch(context);
             },
-          ),
-        );
-      }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: [
-          const HomeScreen(),
-          const AllProducts(page: 1),
-          const WishList(),
-          username == 'Guest' ? const SignIn() : const ProfileScreen()
-        ],
-      ),
-      bottomNavigationBar: AnimatedBottomNavigationBar(
-        elevation: 6.0,
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.smoothEdge,
-        activeColor: kMainColor,
-        inactiveColor: kGreyTextColor,
-        // ignore: prefer_const_literals_to_create_immutables
-        icons: [
-          Icons.home,
-          Icons.shopping_basket,
-          Icons.favorite,
-          Icons.person
-        ],
-        activeIndex: _selectedIndex,
-        onTap: _onItemTapped,
+            backgroundColor: kMainColor,
+            child: IconBadge(
+              icon: const Icon(Icons.shopping_cart),
+              itemCount: cartItems.length,
+              badgeColor: kMainColor,
+              itemColor: Colors.white,
+              hideZero: true,
+              onTap: () {
+                cartItems.isEmpty
+                    ? EasyLoading.showError('No items in the Cart')
+                    : const CartScreen().launch(context);
+              },
+            ),
+          );
+        }),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: [
+            const HomeScreen(),
+            const AllProducts(page: 1),
+            const WishList(),
+            username == 'Guest' ? const SignIn() : const ProfileScreen()
+          ],
+        ),
+        bottomNavigationBar: AnimatedBottomNavigationBar(
+          elevation: 6.0,
+          gapLocation: GapLocation.center,
+          notchSmoothness: NotchSmoothness.smoothEdge,
+          activeColor: kMainColor,
+          inactiveColor: kGreyTextColor,
+          // ignore: prefer_const_literals_to_create_immutables
+          icons: [
+            Icons.home,
+            Icons.shopping_basket,
+            Icons.favorite,
+            Icons.person
+          ],
+          activeIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }

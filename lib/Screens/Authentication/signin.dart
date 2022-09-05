@@ -1,3 +1,4 @@
+import 'package:event_app/session/app_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -159,14 +160,11 @@ class _SignInState extends State<SignIn> {
                 onPressed: () async {
                   if (emailController.text.isEmpty) {
                     toast("Please input your username to login");
-                  }
-                  else if (passwordController.text.isEmpty) {
+                  } else if (passwordController.text.isEmpty) {
                     toast("Please input your password to login");
-                  }
-                  else if (passwordController.text.length < 6) {
+                  } else if (passwordController.text.length < 6) {
                     toast("Password must be more than 6 characters");
-                  }
-                  else if (emailController.text.isNotEmpty &&
+                  } else if (emailController.text.isNotEmpty &&
                       passwordController.text.isNotEmpty &&
                       passwordController.text.length > 5) {
                     try {
@@ -183,12 +181,28 @@ class _SignInState extends State<SignIn> {
                         print(login.customer?.mobile);
                         print(login.customer?.username);
 
-                        prefs.setString('token', login.accessToken?.toString() ?? 'Guest');
-                        prefs.setString('firstName', login.customer?.firstName ?? 'Guest');
-                        prefs.setString('lastName', login.customer?.lastName ?? 'Guest');
-                        prefs.setString('email', login.customer?.email ?? 'Guest');
-                        prefs.setString('phone', login.customer?.mobile ?? 'Guest');
-                        prefs.setString('username', login.customer?.username ?? 'Guest');
+                        AppSession.storeUserProfile(
+                            firstName: login.customer?.firstName ?? 'Guest',
+                            lastName: login.customer?.lastName ?? 'Guest',
+                            email: login.customer?.email ?? 'Guest',
+                            phone: login.customer?.mobile ?? 'Guest',
+                            country: 'Guest',
+                            username: login.customer?.username ?? 'Guest',
+                            token: login.accessToken?.toString() ?? 'Guest',
+                            autoLogin: isChecked);
+
+                        prefs.setString(
+                            'token', login.accessToken?.toString() ?? 'Guest');
+                        prefs.setString(
+                            'firstName', login.customer?.firstName ?? 'Guest');
+                        prefs.setString(
+                            'lastName', login.customer?.lastName ?? 'Guest');
+                        prefs.setString(
+                            'email', login.customer?.email ?? 'Guest');
+                        prefs.setString(
+                            'phone', login.customer?.mobile ?? 'Guest');
+                        prefs.setString(
+                            'username', login.customer?.username ?? 'Guest');
                         prefs.setBool('autoLogin', isChecked);
 
                         print("User name: ");
@@ -196,8 +210,10 @@ class _SignInState extends State<SignIn> {
 
                         print(prefs.getString('firstName'));
                         print(prefs.getString('lastName'));
-                       // const Home().launch(context);
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
+                        // const Home().launch(context);
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
                             ModalRoute.withName("/Home"));
                       } else {
                         EasyLoading.showError(login.error.toString());

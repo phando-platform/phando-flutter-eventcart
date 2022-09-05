@@ -54,7 +54,9 @@ class _ChatInboxState extends State<ChatInbox> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            CircleAvatar(radius: 20, backgroundImage: NetworkImage(widget.img.validate())),
+            CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(widget.img.validate())),
             8.width,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,10 +101,14 @@ class _ChatInboxState extends State<ChatInbox> {
                               borderRadius: radius(12.0),
                             ),
                             padding: const EdgeInsets.all(12.0),
-                            child: Text((data[index].message).validate(), style: primaryTextStyle(color: white)),
+                            child: Text((data[index].message).validate(),
+                                style: primaryTextStyle(color: white)),
                           ),
                           8.width,
-                          CircleAvatar(radius: 20, backgroundImage: NetworkImage(widget.img.validate())),
+                          CircleAvatar(
+                              radius: 20,
+                              backgroundImage:
+                                  NetworkImage(widget.img.validate())),
                         ],
                       ),
                     ],
@@ -115,7 +121,10 @@ class _ChatInboxState extends State<ChatInbox> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CircleAvatar(radius: 20, backgroundImage: NetworkImage(widget.img.validate())),
+                          CircleAvatar(
+                              radius: 20,
+                              backgroundImage:
+                                  NetworkImage(widget.img.validate())),
                           8.width,
                           Container(
                             decoration: boxDecorationWithRoundedCorners(
@@ -123,7 +132,8 @@ class _ChatInboxState extends State<ChatInbox> {
                               backgroundColor: Colors.grey.shade100,
                             ),
                             padding: const EdgeInsets.all(16.0),
-                            child: Text((data[index].message).validate(), style: primaryTextStyle()),
+                            child: Text((data[index].message).validate(),
+                                style: primaryTextStyle()),
                           ).paddingOnly(right: 42.0).expand(),
                         ],
                       ),
@@ -147,7 +157,8 @@ class _ChatInboxState extends State<ChatInbox> {
           child: Row(
             children: [
               8.width,
-              Icon(CupertinoIcons.smiley, size: 22, color: Colors.grey.shade600),
+              Icon(CupertinoIcons.smiley,
+                  size: 22, color: Colors.grey.shade600),
               4.width,
               Icon(Icons.image_outlined, size: 22, color: Colors.grey.shade600),
               4.width,
@@ -165,8 +176,10 @@ class _ChatInboxState extends State<ChatInbox> {
                   hintStyle: secondaryTextStyle(size: 16),
                 ),
               ).expand(),
-              const Icon(Icons.send_outlined, size: 24, color: kMainColor).paddingAll(4.0).onTap(
-                    () {
+              const Icon(Icons.send_outlined, size: 24, color: kMainColor)
+                  .paddingAll(4.0)
+                  .onTap(
+                () {
                   if (messageController.text.isNotEmpty) {
                     addMessage();
                     messageController.clear();
@@ -184,7 +197,7 @@ class _ChatInboxState extends State<ChatInbox> {
   void addMessage() {
     hideKeyboard(context);
     setState(
-          () {
+      () {
         data.insert(0, LMSInboxData(id: 0, message: messageController.text));
         if (mounted) scrollController.animToTop();
         FocusScope.of(context).requestFocus(msgFocusNode);

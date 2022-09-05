@@ -62,7 +62,6 @@ class _OrderListState extends State<OrderList> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
             const SizedBox(
               height: 20.0,
             ),
@@ -100,7 +99,7 @@ class _OrderListState extends State<OrderList> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(10.0),
                                           child: ListTile(
-                                           /* leading: Image.network(snapshot
+                                            /* leading: Image.network(snapshot
                                                     .data
                                                     ?.value
                                                     ?.data?[index]
@@ -113,7 +112,7 @@ class _OrderListState extends State<OrderList> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                               /* Text(
+                                                /* Text(
                                                   snapshot
                                                           .data
                                                           ?.value

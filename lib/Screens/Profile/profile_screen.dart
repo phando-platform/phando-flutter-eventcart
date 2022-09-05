@@ -29,7 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     SharedPreferences preferences = await _prefs;
 
     setState(() {
-      token = preferences.getString('token')??"";
+      token = preferences.getString('token') ?? "";
       country = preferences.getInt('country');
       mobile = preferences.getString('phone');
       print(country);
@@ -55,6 +55,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     const SignIn().launch(context, isNewTask: true);
   }
 
+  Future<ProfileModel> getProfiledata() async {
+    var data = _apiManager.getProfileInfo(token);
+    return data;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,12 +75,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
       body: FutureBuilder<ProfileModel>(
-        future: _apiManager.getProfileInfo(token),
+        future: getProfiledata(),
         builder: (_, snapshot) {
-          if(snapshot.hasData){
-            if(snapshot.data?.value?.shipping == null){
+          if (snapshot.hasData) {
+            if (snapshot.data?.value?.shipping == null) {
               return Center(
-                child: SizedBox(height:60.0,child: ButtonGlobal(buttontext: 'Add Shipping Id', buttonDecoration: kButtonDecoration.copyWith(color: kMainColor), onPressed: () => AddBilling(country: country, mobile: mobile).launch(context))),
+                child: SizedBox(
+                    height: 60.0,
+                    child: ButtonGlobal(
+                        buttontext: 'Add Shipping Id',
+                        buttonDecoration:
+                            kButtonDecoration.copyWith(color: kMainColor),
+                        onPressed: () =>
+                            AddBilling(country: country, mobile: mobile)
+                                .launch(context))),
               );
             }
             return SingleChildScrollView(
@@ -96,7 +109,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           height: 10.0,
                         ),
                         Text(
-                          snapshot.data!.value!.customer!.firstName! + ' ' + snapshot.data!.value!.customer!.lastName!,
+                          snapshot.data!.value!.customer!.firstName! +
+                              ' ' +
+                              snapshot.data!.value!.customer!.lastName!,
                           style: kTextStyle.copyWith(
                               color: Colors.white, fontSize: 18.0),
                         ),
@@ -180,7 +195,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   ListTile(
                     onTap: () {
-                      PersonalSettings(firstName: snapshot.data!.value!.customer!.firstName!, lastName: snapshot.data!.value!.customer!.lastName!,mobile: snapshot.data!.value!.customer!.mobile!,email: snapshot.data!.value!.customer!.email!,).launch(context);
+                      PersonalSettings(
+                        firstName: snapshot.data!.value!.customer!.firstName!,
+                        lastName: snapshot.data!.value!.customer!.lastName!,
+                        mobile: snapshot.data!.value!.customer!.mobile!,
+                        email: snapshot.data!.value!.customer!.email!,
+                      ).launch(context);
                     },
                     leading: Container(
                       padding: const EdgeInsets.all(5.0),
@@ -203,7 +223,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   ListTile(
-                    onTap: (){
+                    onTap: () {
                       toast('Coming soon');
                     },
                     leading: Container(
@@ -253,7 +273,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   ListTile(
-                    onTap: (){
+                    onTap: () {
                       toast('Coming soon');
                     },
                     leading: Container(
@@ -277,7 +297,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   ListTile(
-                    onTap: (){
+                    onTap: () {
                       toast('Coming soon');
                     },
                     leading: Container(
@@ -325,11 +345,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             );
-          }
-          else{
-            return  Center(
-
-              child: SizedBox(height:60.0,child: ButtonGlobal(buttontext: 'Add Shipping Id', buttonDecoration: kButtonDecoration.copyWith(color: kMainColor), onPressed: () => AddBilling(country: country, mobile: mobile).launch(context))),
+          } else {
+            return Center(
+              child: SizedBox(
+                  height: 60.0,
+                  child: ButtonGlobal(
+                      buttontext: 'Add Shipping Id',
+                      buttonDecoration:
+                          kButtonDecoration.copyWith(color: kMainColor),
+                      onPressed: () =>
+                          AddBilling(country: country, mobile: mobile)
+                              .launch(context))),
             );
 
             /*return const Center(

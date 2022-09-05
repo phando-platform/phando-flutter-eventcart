@@ -47,12 +47,12 @@ class Value {
       });
     }
     billing =
-    json['billing'] != null ? new Billing.fromJson(json['billing']) : null;
+        json['billing'] != null ? new Billing.fromJson(json['billing']) : null;
     shipping = json['shipping'] != null
         ? new Shipping.fromJson(json['shipping'])
         : null;
     country =
-    json['country'] != null ? new Country.fromJson(json['country']) : null;
+        json['country'] != null ? new Country.fromJson(json['country']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -85,20 +85,20 @@ class Customer {
   String? username;
   String? email;
   String? image;
-  Null? gender;
-  Null? dob;
+  String? gender;
+  String? dob;
 
   Customer(
       {this.id,
-        this.firstName,
-        this.lastName,
-        this.address,
-        this.mobile,
-        this.username,
-        this.email,
-        this.image,
-        this.gender,
-        this.dob});
+      this.firstName,
+      this.lastName,
+      this.address,
+      this.mobile,
+      this.username,
+      this.email,
+      this.image,
+      this.gender,
+      this.dob});
 
   Customer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -109,8 +109,8 @@ class Customer {
     username = json['username'];
     email = json['email'];
     image = json['image'];
-    gender = json['gender'];
-    dob = json['dob'];
+    gender = json['gender'].toString();
+    dob = json['dob'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -138,8 +138,8 @@ class Orders {
   int? productId;
   int? salePrice;
   int? qty;
-  Null? color;
-  Null? size;
+  String? color;
+  String? size;
   int? discount;
   int? tax;
   int? shippingCost;
@@ -148,32 +148,32 @@ class Orders {
   int? grandTotal;
   int? currencyId;
   double? exchangeRate;
-  Null? estimatedShippingDays;
+  String? estimatedShippingDays;
   String? createdAt;
   String? updatedAt;
 
   Orders(
       {this.id,
-        this.sellerId,
-        this.userId,
-        this.orderId,
-        this.orderStat,
-        this.productId,
-        this.salePrice,
-        this.qty,
-        this.color,
-        this.size,
-        this.discount,
-        this.tax,
-        this.shippingCost,
-        this.totalShippingCost,
-        this.totalPrice,
-        this.grandTotal,
-        this.currencyId,
-        this.exchangeRate,
-        this.estimatedShippingDays,
-        this.createdAt,
-        this.updatedAt});
+      this.sellerId,
+      this.userId,
+      this.orderId,
+      this.orderStat,
+      this.productId,
+      this.salePrice,
+      this.qty,
+      this.color,
+      this.size,
+      this.discount,
+      this.tax,
+      this.shippingCost,
+      this.totalShippingCost,
+      this.totalPrice,
+      this.grandTotal,
+      this.currencyId,
+      this.exchangeRate,
+      this.estimatedShippingDays,
+      this.createdAt,
+      this.updatedAt});
 
   Orders.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -193,7 +193,7 @@ class Orders {
     totalPrice = json['total_price'];
     grandTotal = json['grand_total'];
     currencyId = json['currency_id'];
-    exchangeRate = json['exchange_rate'];
+    exchangeRate = double.parse(json['exchange_rate'].toString());
     estimatedShippingDays = json['estimated_shipping_days'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -245,20 +245,20 @@ class Billing {
 
   Billing(
       {this.id,
-        this.userId,
-        this.firstName,
-        this.lastName,
-        this.address1,
-        this.postCode,
-        this.userCity,
-        this.countryId,
-        this.mobile,
-        this.email,
-        this.isActive,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt,
-        this.country});
+      this.userId,
+      this.firstName,
+      this.lastName,
+      this.address1,
+      this.postCode,
+      this.userCity,
+      this.countryId,
+      this.mobile,
+      this.email,
+      this.isActive,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      this.country});
 
   Billing.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -276,7 +276,7 @@ class Billing {
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
     country =
-    json['country'] != null ? new Country.fromJson(json['country']) : null;
+        json['country'] != null ? new Country.fromJson(json['country']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -316,15 +316,15 @@ class Country {
 
   Country(
       {this.id,
-        this.name,
-        this.nickName,
-        this.isoNo,
-        this.iso3No,
-        this.numCode,
-        this.phoneCode,
-        this.isActive,
-        this.createdAt,
-        this.updatedAt});
+      this.name,
+      this.nickName,
+      this.isoNo,
+      this.iso3No,
+      this.numCode,
+      this.phoneCode,
+      this.isActive,
+      this.createdAt,
+      this.updatedAt});
 
   Country.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -373,19 +373,19 @@ class Shipping {
 
   Shipping(
       {this.id,
-        this.userId,
-        this.shippingName,
-        this.addressLineOne,
-        this.addressLineTwo,
-        this.shippingMobile,
-        this.shippingEmail,
-        this.shippingTown,
-        this.shippingPost,
-        this.shippingCountryId,
-        this.note,
-        this.createdAt,
-        this.updatedAt,
-        this.country});
+      this.userId,
+      this.shippingName,
+      this.addressLineOne,
+      this.addressLineTwo,
+      this.shippingMobile,
+      this.shippingEmail,
+      this.shippingTown,
+      this.shippingPost,
+      this.shippingCountryId,
+      this.note,
+      this.createdAt,
+      this.updatedAt,
+      this.country});
 
   Shipping.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -402,7 +402,7 @@ class Shipping {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     country =
-    json['country'] != null ? new Country.fromJson(json['country']) : null;
+        json['country'] != null ? new Country.fromJson(json['country']) : null;
   }
 
   Map<String, dynamic> toJson() {

@@ -201,9 +201,21 @@ class _CartScreenState extends State<CartScreen> {
                                             Icons.remove,
                                             color: kTitleColor,
                                           ).onTap(() {
-                                            ref.read(cartItemUiProvider.notifier).decreaseQuantity(cartItemUi[index].id ?? 0);
-                                            ref.read(cartProvider.notifier).updatePrice(cartItemUi[index].id ?? 0,
-                                                ref.read(cartItemUiProvider.notifier).cartItemUis[index].productQuantity!.toInt());
+                                            ref
+                                                .read(
+                                                    cartItemUiProvider.notifier)
+                                                .decreaseQuantity(
+                                                    cartItemUi[index].id ?? 0);
+                                            ref
+                                                .read(cartProvider.notifier)
+                                                .updatePrice(
+                                                    cartItemUi[index].id ?? 0,
+                                                    ref
+                                                        .read(cartItemUiProvider
+                                                            .notifier)
+                                                        .cartItemUis[index]
+                                                        .productQuantity!
+                                                        .toInt());
                                           }),
                                           const SizedBox(
                                             width: 10.0,

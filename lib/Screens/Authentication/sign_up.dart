@@ -1,5 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:event_app/GlobalComponents/form_errors_list.dart';
+import 'package:event_app/session/app_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -31,7 +32,7 @@ class _SignUpState extends State<SignUp> {
 
   // default country id = India
   int countryId = 104;
-   String countryCode="IN";
+  String countryCode = "IN";
 
   @override
   Widget build(BuildContext context) {
@@ -182,8 +183,8 @@ class _SignUpState extends State<SignUp> {
                         print(country.code);
                         setState(() {
                           String name = country.name?.toUpperCase() ?? 'INDIA';
-                            countryCode = country.code?.toUpperCase() ?? 'IN';
-                            countryId = countries.indexOf(name, 0) + 1;
+                          countryCode = country.code?.toUpperCase() ?? 'IN';
+                          countryId = countries.indexOf(name, 0) + 1;
                         });
                       },
                       initialSelection: 'IN',
@@ -238,10 +239,6 @@ class _SignUpState extends State<SignUp> {
     print(mobileController.text);
     print(countryCode);
 
-
-
-
-
     if (firstNameController.text.length < 3) {
       toast("Please enter a valid First Name");
     } else if (lastNameController.text.length < 3) {
@@ -254,12 +251,10 @@ class _SignUpState extends State<SignUp> {
       toast("Please add a valid Mobile no.");
     } else if (!isPasswordValid(passwordController.text)) {
       toast("Password must have at least 8 characters");
-    }
-    else if (mobileController.text.length==10) {
-      if(countryCode!="IN"){
+    } else if (mobileController.text.length == 10) {
+      if (countryCode != "IN") {
         toast("Please Select Valid Country");
-      }
-      else {
+      } else {
         try {
           print("country");
           print(countries[countryId - 1]);
@@ -279,6 +274,16 @@ class _SignUpState extends State<SignUp> {
               _errorsList = [];
             });
             EasyLoading.showSuccess('Sign up Successful...');
+            AppSession.storeUserProfile(
+                firstName: signUp.customer?.firstName ?? 'Guest',
+                lastName: signUp.customer?.lastName ?? 'Guest',
+                email: signUp.customer?.email ?? 'Guest',
+                phone: signUp.customer?.mobile ?? 'Guest',
+                country: countryId.toString(),
+                username: signUp.customer?.username ?? 'Guest',
+                token: signUp.accessToken?.toString() ?? 'Guest',
+                autoLogin: true);
+
             final SharedPreferences prefs = await _prefs;
             prefs.setString('token', signUp.accessToken?.toString() ?? 'Guest');
             prefs.setString('lastName', signUp.customer?.lastName ?? 'Guest');
@@ -288,12 +293,12 @@ class _SignUpState extends State<SignUp> {
             prefs.setString('username', signUp.customer?.username ?? 'Guest');
             prefs.setBool('autoLogin', true);
 
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
-                country: countryId,
-                mobile: mobileController.text
-            )),
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddBilling(
+                        country: countryId, mobile: mobileController.text)),
                 ModalRoute.withName("/AddBilling"));
-
 
             /* AddBilling(
             country: countryId,
@@ -317,8 +322,7 @@ class _SignUpState extends State<SignUp> {
           EasyLoading.showError(e.toString());
         }
       }
-    }
-    else {
+    } else {
       try {
         print("country");
         print(countries[countryId - 1]);
@@ -347,14 +351,14 @@ class _SignUpState extends State<SignUp> {
           prefs.setString('username', signUp.customer?.username ?? 'Guest');
           prefs.setBool('autoLogin', true);
 
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
-              country: countryId,
-              mobile: mobileController.text
-          )),
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddBilling(
+                      country: countryId, mobile: mobileController.text)),
               ModalRoute.withName("/AddBilling"));
 
-
-         /* AddBilling(
+          /* AddBilling(
             country: countryId,
             mobile: mobileController.text,
           ).launch(context);*/

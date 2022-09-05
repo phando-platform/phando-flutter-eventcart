@@ -1,9 +1,9 @@
 import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:nb_utils/nb_utils.dart';
 import '../../GlobalComponents/button_global.dart';
 import './signin.dart';
-import 'package:nb_utils/nb_utils.dart';
 
 import '../../Services/api_manager.dart';
 import '../../constant.dart';
@@ -215,44 +215,56 @@ class _PhoneVerificationState extends State<PhoneVerification> {
             ),
           ).visible(isVerified),
           Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: ArgonTimerButton(
-              initialTimer: 30,
-              // Optional
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              minWidth: MediaQuery.of(context).size.width,
-              color: Colors.white,
-              borderRadius: 0.0,
-              elevation: 0.0,
-              child: Text(
-                "Resend OTP",
-                style: kTextStyle,
-              ),
-              loader: (timeLeft) {
-                return Text(
-                  "Try again in $timeLeft seconds",
-                  style: kTextStyle.copyWith(color: kGreyTextColor),
-                );
-              },
-              onTap: (startTimer, btnState) async {
-                if (btnState == ButtonState.Idle) {
-                  startTimer(30);
-                }
-                try {
-                  final sendOtp =
-                      await _apiManager.resetPasswordWithEmail(widget.email);
-                  if (sendOtp.success == true) {
-                    toast(sendOtp.message);
-                  } else {
-                    toast(sendOtp.message);
-                  }
-                } catch (e) {
-                  toast(e.toString());
-                }
-              },
-            ),
-          ).visible(!isVerified),
+              padding: const EdgeInsets.all(20.0),
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.white,
+                  child: Text(
+                    "Resend OTP",
+                    style: kTextStyle,
+                  ),
+                ),
+              )
+              // ArgonTimerButton(
+              //   initialTimer: 30,
+              //   // Optional
+              //   height: 50,
+              //   width: MediaQuery.of(context).size.width,
+              //   minWidth: MediaQuery.of(context).size.width,
+              //   color: Colors.white,
+              //   borderRadius: 0.0,
+              //   elevation: 0.0,
+              //   child: Text(
+              //     "Resend OTP",
+              //     style: kTextStyle,
+              //   ),
+              //   loader: (timeLeft) {
+              //     return Text(
+              //       "Try again in $timeLeft seconds",
+              //       style: kTextStyle.copyWith(color: kGreyTextColor),
+              //     );
+              //   },
+              //   onTap: (startTimer, btnState) async {
+              //     if (btnState == ButtonState.Idle) {
+              //       startTimer(30);
+              //     }
+              //     try {
+              //       final sendOtp =
+              //           await _apiManager.resetPasswordWithEmail(widget.email);
+              //       if (sendOtp.success == true) {
+              //         toast(sendOtp.message);
+              //       } else {
+              //         toast(sendOtp.message);
+              //       }
+              //     } catch (e) {
+              //       toast(e.toString());
+              //     }
+              //   },
+              // ),
+              ).visible(!isVerified),
           const CircularProgressIndicator().visible(isLoading),
           Padding(
             padding: const EdgeInsets.only(left: 10.0, right: 10.0),

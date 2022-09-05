@@ -746,6 +746,10 @@ class _OrderReviewState extends State<OrderReview> {
                                                       EasyLoading.showError(
                                                           e.toString());
                                                     }
+                                                    // ref
+                                                    //     .read(cartProvider
+                                                    //         .notifier)
+                                                    //     .removeAllItem();
                                                     OrderSuccessful(
                                                       orderNumber:
                                                           orderNo.toString(),

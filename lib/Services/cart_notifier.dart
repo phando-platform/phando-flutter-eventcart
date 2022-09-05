@@ -34,6 +34,11 @@ class CartNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeAllItem() {
+    cartItems.clear();
+    notifyListeners();
+  }
+
   bool checkCart(int id, String size, String color) {
     bool isAdded = false;
     for (var item in cartItems) {
@@ -57,25 +62,25 @@ class CartNotifier extends ChangeNotifier {
 
   double getTotalCharge() {
     double charge = 0.0;
-    for(var item in cartItems){
+    for (var item in cartItems) {
       charge = item.productPriceTotal + charge;
     }
     notifyListeners();
     return charge;
   }
 
-  double getSubTotal(){
+  double getSubTotal() {
     double subTotal = 0.0;
-    for(var item in cartItems){
+    for (var item in cartItems) {
       subTotal = double.parse(item.price * item.quantity);
     }
     notifyListeners();
     return subTotal;
   }
 
-  void updatePrice(int itemId, int quantity){
-    for(final item in cartItems){
-      if(item.id == itemId){
+  void updatePrice(int itemId, int quantity) {
+    for (final item in cartItems) {
+      if (item.id == itemId) {
         item.productPriceTotal = item.price * quantity;
         item.quantity = quantity;
         notifyListeners();
@@ -83,14 +88,14 @@ class CartNotifier extends ChangeNotifier {
     }
   }
 
-  void couponForProduct(List<String> productId, int discount, String type){
-    for(var item in cartItems){
-      for(var id in productId){
-        if(item.id == id){
-          if(type == 'percent'){
+  void couponForProduct(List<String> productId, int discount, String type) {
+    for (var item in cartItems) {
+      for (var id in productId) {
+        if (item.id == id) {
+          if (type == 'percent') {
             item.productPriceTotal = item.productPriceTotal * (discount / 100);
-          } else{
-            item.productPriceTotal = item.productPriceTotal - discount ;
+          } else {
+            item.productPriceTotal = item.productPriceTotal - discount;
           }
         }
       }
@@ -98,19 +103,18 @@ class CartNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  double couponForCart(int total, int min, int max, int discount, String type){
+  double couponForCart(int total, int min, int max, int discount, String type) {
     double disc = 0.0;
-    if(total > min){
-      if(type == 'percent'){
+    if (total > min) {
+      if (type == 'percent') {
         disc = total * (discount / 100);
-      } else{
+      } else {
         disc = discount.toDouble();
       }
     }
     notifyListeners();
     return disc > 100.0 ? 100.0 : disc;
   }
-
 }
 
 final cartProvider = ChangeNotifierProvider<CartNotifier>((ref) {
