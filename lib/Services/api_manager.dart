@@ -331,6 +331,7 @@ class ApiManager {
     );
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
+      print('product details data $data');
       return ProductDetailsModel.fromJson(data);
     } else {
       final data = jsonDecode(response.body);
@@ -552,6 +553,8 @@ class ApiManager {
     );
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
+      print('order Token $token');
+      print('order List $data');
       return OrderListModel.fromJson(data);
     } else {
       final data = jsonDecode(response.body);

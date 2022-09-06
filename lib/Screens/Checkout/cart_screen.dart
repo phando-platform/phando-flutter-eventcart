@@ -357,84 +357,91 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                 ).onTap(() async {
                                   try {
-                                    int total = ref
-                                        .read(cartProvider.notifier)
-                                        .getTotalCharge()
-                                        .toInt();
-                                    EasyLoading.show(status: 'Applying Coupon');
-                                    final coupon = await _apiManager.addCoupon(
-                                        couponController.text, token);
-                                    if (coupon.success == true) {
-                                      if (coupon.coupon?.type == 'product' &&
-                                          coupon.coupon!.details!.productId!
-                                              .contains(cartItems[0].id)) {
-                                        ref
-                                            .read(cartProvider.notifier)
-                                            .couponForProduct(
-                                                coupon.coupon!.details!
-                                                    .productId!,
-                                                coupon.coupon!.discount!,
-                                                coupon.coupon!.discountType!);
-                                        ref
-                                            .read(fetDiscountInfoProvider)
-                                            .getCouponCode(
-                                                coupon.coupon!.code!);
-                                        ref
-                                            .read(fetDiscountInfoProvider)
-                                            .getCouponId(coupon.coupon!.id!);
-                                        ref
-                                            .read(fetDiscountInfoProvider)
-                                            .getDiscountAmount(discount);
-                                        EasyLoading.showSuccess(
-                                            'Coupon Applied');
-                                      } else if (coupon.coupon?.type ==
-                                              'product' &&
-                                          !coupon.coupon!.details!.productId!
-                                              .contains(cartItems[0].id)) {
-                                        EasyLoading.showError(
-                                            'Your Cart is not Eligible For the Coupon');
-                                      } else if (coupon.coupon?.type ==
-                                              'cart' &&
-                                          total >
-                                              coupon.coupon!.details!.minBuy!
-                                                  .toInt()) {
-                                        EasyLoading.showSuccess(
-                                            'Coupon Applied');
-                                        setState(() {
-                                          discount = ref
-                                              .read(cartProvider)
-                                              .couponForCart(
-                                                  total,
-                                                  coupon
-                                                      .coupon!.details!.minBuy!
-                                                      .toInt(),
+                                    if (couponController.text.isEmpty) {
+                                      toast('Please enter a valid Coupon');
+                                    } else {
+                                      int total = ref
+                                          .read(cartProvider.notifier)
+                                          .getTotalCharge()
+                                          .toInt();
+                                      EasyLoading.show(
+                                          status: 'Applying Coupon');
+                                      final coupon =
+                                          await _apiManager.addCoupon(
+                                              couponController.text, token);
+                                      if (coupon.success == true) {
+                                        if (coupon.coupon?.type == 'product' &&
+                                            coupon.coupon!.details!.productId!
+                                                .contains(cartItems[0].id)) {
+                                          ref
+                                              .read(cartProvider.notifier)
+                                              .couponForProduct(
                                                   coupon.coupon!.details!
-                                                      .maxDiscount!
-                                                      .toInt(),
+                                                      .productId!,
                                                   coupon.coupon!.discount!,
                                                   coupon.coupon!.discountType!);
-                                        });
-                                        ref
-                                            .read(fetDiscountInfoProvider)
-                                            .getCouponCode(
-                                                coupon.coupon!.code!);
-                                        ref
-                                            .read(fetDiscountInfoProvider)
-                                            .getCouponId(coupon.coupon!.id!);
-                                        ref
-                                            .read(fetDiscountInfoProvider)
-                                            .getDiscountAmount(discount);
-                                      } else if (coupon.coupon?.type ==
-                                              'cart' &&
-                                          total <
-                                              coupon.coupon!.details!.minBuy!
-                                                  .toInt()) {
+                                          ref
+                                              .read(fetDiscountInfoProvider)
+                                              .getCouponCode(
+                                                  coupon.coupon!.code!);
+                                          ref
+                                              .read(fetDiscountInfoProvider)
+                                              .getCouponId(coupon.coupon!.id!);
+                                          ref
+                                              .read(fetDiscountInfoProvider)
+                                              .getDiscountAmount(discount);
+                                          EasyLoading.showSuccess(
+                                              'Coupon Applied');
+                                        } else if (coupon.coupon?.type ==
+                                                'product' &&
+                                            !coupon.coupon!.details!.productId!
+                                                .contains(cartItems[0].id)) {
+                                          EasyLoading.showError(
+                                              'Your Cart is not Eligible For the Coupon');
+                                        } else if (coupon.coupon?.type ==
+                                                'cart' &&
+                                            total >
+                                                coupon.coupon!.details!.minBuy!
+                                                    .toInt()) {
+                                          EasyLoading.showSuccess(
+                                              'Coupon Applied');
+                                          setState(() {
+                                            discount = ref
+                                                .read(cartProvider)
+                                                .couponForCart(
+                                                    total,
+                                                    coupon.coupon!.details!
+                                                        .minBuy!
+                                                        .toInt(),
+                                                    coupon.coupon!.details!
+                                                        .maxDiscount!
+                                                        .toInt(),
+                                                    coupon.coupon!.discount!,
+                                                    coupon
+                                                        .coupon!.discountType!);
+                                          });
+                                          ref
+                                              .read(fetDiscountInfoProvider)
+                                              .getCouponCode(
+                                                  coupon.coupon!.code!);
+                                          ref
+                                              .read(fetDiscountInfoProvider)
+                                              .getCouponId(coupon.coupon!.id!);
+                                          ref
+                                              .read(fetDiscountInfoProvider)
+                                              .getDiscountAmount(discount);
+                                        } else if (coupon.coupon?.type ==
+                                                'cart' &&
+                                            total <
+                                                coupon.coupon!.details!.minBuy!
+                                                    .toInt()) {
+                                          EasyLoading.showError(
+                                              'Please shop $currencyIcon ${coupon.coupon!.details!.minBuy!.toInt() - total} more to use this coupon');
+                                        }
+                                      } else {
                                         EasyLoading.showError(
-                                            'Please shop $currencyIcon ${coupon.coupon!.details!.minBuy!.toInt() - total} more to use this coupon');
+                                            coupon.message.toString());
                                       }
-                                    } else {
-                                      EasyLoading.showError(
-                                          coupon.message.toString());
                                     }
                                   } catch (e) {
                                     EasyLoading.showError(e.toString());

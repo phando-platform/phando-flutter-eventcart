@@ -15,14 +15,14 @@ import '../Authentication/sign_up.dart';
 import 'home.dart';
 
 class WishList extends StatefulWidget {
-  const WishList({Key? key}) : super(key: key);
+  VoidCallback callback;
+  WishList({Key? key, required this.callback}) : super(key: key);
 
   @override
   _WishListState createState() => _WishListState();
 }
 
 class _WishListState extends State<WishList> {
-
   final ApiManager _apiManager = ApiManager();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   String? token;
@@ -34,7 +34,6 @@ class _WishListState extends State<WishList> {
       token = prefs.getString('token');
     });
   }
-
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
@@ -51,25 +50,23 @@ class _WishListState extends State<WishList> {
         backgroundColor: kWhiteColor,
         elevation: 0.0,
         centerTitle: true,
+        leading: const Icon(Icons.arrow_back).onTap(() => widget.callback()),
         iconTheme: const IconThemeData(color: kBlackColor),
         title: Text(
           'WishListed products',
           style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
-
       body: RefreshIndicator(
         onRefresh: () {
           return Future(() {
             EasyLoading.showSuccess("Please wait..");
-            setState(() {
-            });
+            setState(() {});
           });
         },
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Column(
-
             children: [
               const SizedBox(
                 height: 4.0,
@@ -92,7 +89,7 @@ class _WishListState extends State<WishList> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                             SvgPicture.asset(
+                              SvgPicture.asset(
                                 'images/emptycart.svg',
                                 height: context.height() / 2,
                                 width: context.width(),
@@ -114,7 +111,8 @@ class _WishListState extends State<WishList> {
                                   buttontext: 'Shop Now',
                                   buttonDecoration: kButtonDecoration.copyWith(
                                       color: kMainColor),
-                                  onPressed: () => const Home().launch(context)),
+                                  onPressed: () =>
+                                      const Home().launch(context)),
                             ],
                           );
                         }
@@ -168,7 +166,8 @@ class _WishListState extends State<WishList> {
                                               'null');
                                   if (wishlist.success == true) {
                                     setState(() {});
-                                    EasyLoading.showSuccess(wishlist.message.toString());
+                                    EasyLoading.showSuccess(
+                                        wishlist.message.toString());
                                   } else {
                                     setState(() {});
                                     EasyLoading.showError(

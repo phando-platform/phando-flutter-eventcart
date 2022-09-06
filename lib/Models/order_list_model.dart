@@ -39,18 +39,18 @@ class Value {
 
   Value(
       {this.currentPage,
-        this.data,
-        this.firstPageUrl,
-        this.from,
-        this.lastPage,
-        this.lastPageUrl,
-        this.links,
-        this.nextPageUrl,
-        this.path,
-        this.perPage,
-        this.prevPageUrl,
-        this.to,
-        this.total});
+      this.data,
+      this.firstPageUrl,
+      this.from,
+      this.lastPage,
+      this.lastPageUrl,
+      this.links,
+      this.nextPageUrl,
+      this.path,
+      this.perPage,
+      this.prevPageUrl,
+      this.to,
+      this.total});
 
   Value.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
@@ -103,13 +103,14 @@ class Value {
 
 class Data {
   int? id;
-  String? orderNo;
-  Null? discount;
-  Null? couponDiscount;
-  Null? tax;
+  int? orderNo;
+  int? discount;
+  int? couponDiscount;
+  int? tax;
   int? shippingCost;
   int? totalPrice;
-  Null? couponId;
+  int? grandTotal;
+  String? couponId;
   int? currencyId;
   double? exchangeRate;
   String? shippingName;
@@ -137,46 +138,48 @@ class Data {
 
   Data(
       {this.id,
-        this.orderNo,
-        this.discount,
-        this.couponDiscount,
-        this.tax,
-        this.shippingCost,
-        this.totalPrice,
-        this.couponId,
-        this.currencyId,
-        this.exchangeRate,
-        this.shippingName,
-        this.shippingAddress1,
-        this.shippingAddress2,
-        this.shippingMobile,
-        this.shippingEmail,
-        this.shippingPost,
-        this.shippingTown,
-        this.shippingCountryId,
-        this.shippingNote,
-        this.paymentBy,
-        this.userId,
-        this.userFirstName,
-        this.userLastName,
-        this.userAddress1,
-        this.userPostCode,
-        this.userCity,
-        this.userCountryId,
-        this.userMobile,
-        this.userEmail,
-        this.createdAt,
-        this.updatedAt,
-        this.details});
+      this.orderNo,
+      this.discount,
+      this.couponDiscount,
+      this.tax,
+      this.shippingCost,
+      this.totalPrice,
+      this.grandTotal,
+      this.couponId,
+      this.currencyId,
+      this.exchangeRate,
+      this.shippingName,
+      this.shippingAddress1,
+      this.shippingAddress2,
+      this.shippingMobile,
+      this.shippingEmail,
+      this.shippingPost,
+      this.shippingTown,
+      this.shippingCountryId,
+      this.shippingNote,
+      this.paymentBy,
+      this.userId,
+      this.userFirstName,
+      this.userLastName,
+      this.userAddress1,
+      this.userPostCode,
+      this.userCity,
+      this.userCountryId,
+      this.userMobile,
+      this.userEmail,
+      this.createdAt,
+      this.updatedAt,
+      this.details});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    orderNo = json['order_no'];
+    orderNo = json['order_id'];
     discount = json['discount'];
     couponDiscount = json['coupon_discount'];
-    tax = json['tax'];
+    tax = int.parse(json['tax'].toString());
     shippingCost = json['shipping_cost'];
     totalPrice = json['total_price'];
+    grandTotal = json['grand_total'];
     couponId = json['coupon_id'];
     currencyId = json['currency_id'];
     exchangeRate = json['exchange_rate'];
@@ -274,26 +277,26 @@ class Details {
 
   Details(
       {this.id,
-        this.sellerId,
-        this.userId,
-        this.orderId,
-        this.orderStat,
-        this.productId,
-        this.salePrice,
-        this.qty,
-        this.color,
-        this.size,
-        this.discount,
-        this.tax,
-        this.shippingCost,
-        this.totalShippingCost,
-        this.totalPrice,
-        this.grandTotal,
-        this.currencyId,
-        this.exchangeRate,
-        this.estimatedShippingDays,
-        this.createdAt,
-        this.updatedAt});
+      this.sellerId,
+      this.userId,
+      this.orderId,
+      this.orderStat,
+      this.productId,
+      this.salePrice,
+      this.qty,
+      this.color,
+      this.size,
+      this.discount,
+      this.tax,
+      this.shippingCost,
+      this.totalShippingCost,
+      this.totalPrice,
+      this.grandTotal,
+      this.currencyId,
+      this.exchangeRate,
+      this.estimatedShippingDays,
+      this.createdAt,
+      this.updatedAt});
 
   Details.fromJson(Map<String, dynamic> json) {
     id = json['id'];

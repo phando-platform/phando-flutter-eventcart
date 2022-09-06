@@ -148,7 +148,7 @@ class Value {
     _sizes = sizes;
   }
 
-  Value.fromJson(dynamic json) {
+  Value.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _sellerId = json['seller_id'];
     _categoryId = json['category_id'];

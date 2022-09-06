@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../Models/profile_model.dart';
+import '../Home Screen/home.dart';
 import './order_list.dart';
 import '../../Screens/Profile/personal_settings.dart';
 import '../../constant.dart';
@@ -11,7 +12,8 @@ import '../Authentication/add_billing.dart';
 import '../Authentication/signin.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  VoidCallback callback;
+  ProfileScreen({Key? key, required this.callback}) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -67,6 +69,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: kMainColor,
         elevation: 0.0,
         centerTitle: true,
+        leading: const Icon(Icons.arrow_back)
+            // .onTap(() => const Home().launch(context)),
+            .onTap(() => widget.callback()),
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           'Profile',

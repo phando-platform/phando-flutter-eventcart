@@ -27,6 +27,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
+  int _previousIndex = 0;
   String? username;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   String? token;
@@ -53,8 +54,27 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void refresh() {
+    setState(() {
+      _selectedIndex = _previousIndex;
+    });
+  }
+
   _willscrop() {
-    showAppExitPopup(context);
+    if (_selectedIndex == 0) {
+      if (username == 'Guest') {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const SignIn()),
+            ModalRoute.withName("/Login"));
+      } else {
+        showAppExitPopup(context);
+      }
+    } else {
+      setState(() {
+        _selectedIndex = 0;
+      });
+    }
   }
 
   @override
@@ -90,9 +110,17 @@ class _HomeState extends State<Home> {
           index: _selectedIndex,
           children: [
             const HomeScreen(),
-            const AllProducts(page: 1),
-            const WishList(),
-            username == 'Guest' ? const SignIn() : const ProfileScreen()
+            const AllProducts(
+              page: 1,
+            ),
+            WishList(
+              callback: refresh,
+            ),
+            username == 'Guest'
+                ? const SignIn()
+                : ProfileScreen(
+                    callback: refresh,
+                  )
           ],
         ),
         bottomNavigationBar: AnimatedBottomNavigationBar(
