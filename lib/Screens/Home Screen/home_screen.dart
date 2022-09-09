@@ -118,10 +118,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     suffixIcon: const Icon(
                                       Icons.search,
                                       color: kTitleColor,
-                                    ).onTap(() => SearchResult(
+                                    ).onTap(() {
+                                      if (searchController.text.isNotEmpty) {
+                                        SearchResult(
                                           query: searchController.text,
                                           page: 1,
-                                        ).launch(context)),
+                                        ).launch(context);
+                                      }
+                                    }),
                                     border: InputBorder.none,
                                     fillColor: const Color(0xFFF7F5F2),
                                     contentPadding: const EdgeInsets.all(10.0),

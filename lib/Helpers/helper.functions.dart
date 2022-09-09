@@ -1,8 +1,11 @@
 import 'package:event_app/GlobalComponents/colors.dart';
+import 'package:event_app/Services/api_manager.dart';
 import 'package:event_app/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:validators/validators.dart';
 import 'package:flutter_share/flutter_share.dart';
 

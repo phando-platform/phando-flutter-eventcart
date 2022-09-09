@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../Helpers/helper.functions.dart';
@@ -33,6 +34,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       final SharedPreferences prefs = await _prefs;
       final wishlist = await _apiManager.addToWishList(
           id, prefs.getString('token').toString());
+          
       if (wishlist.success == true) {
         EasyLoading.showSuccess(wishlist.message.toString());
       } else {
@@ -448,16 +450,22 @@ class _ProductDetailsState extends State<ProductDetails> {
                           const SizedBox(
                             height: 10.0,
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                (snapshot.data?.value?.name.toString() ??
-                                    'T-Shirt'),
-                                style: kTextStyle.copyWith(fontSize: 18.0),
-                                maxLines: 2,
-                              ),
-                            ],
+                          Text(
+                            (snapshot.data?.value?.name.toString() ??
+                                '-------'),
+                            style: GoogleFonts.manrope(
+                                textStyle: const TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 18.0,
+                            )),
+                            //  kTextStyle.copyWith(fontSize: 18.0),
+                            maxLines: 2,
                           ),
+                          // Row(
+                          //   children: [
+
+                          //   ],
+                          // ),
                           const SizedBox(
                             height: 10.0,
                           ),
@@ -475,110 +483,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                             ],
                           ).visible(false),
-                          // Row(
-                          //   children: [
-                          //     Column(
-                          //       crossAxisAlignment: CrossAxisAlignment.start,
-                          //       children: [
-                          //         Text(
-                          //           'Color',
-                          //           style: kTextStyle,
-                          //         ).visible(snapshot
-                          //                 .data?.value?.colors?.isNotEmpty ??
-                          //             false),
-                          //         SizedBox(
-                          //           width: context.width() / 1.5,
-                          //           child: HorizontalList(
-                          //             spacing: 0,
-                          //             itemCount: snapshot
-                          //                     .data?.value?.colors?.length ??
-                          //                 10,
-                          //             itemBuilder: (_, i) {
-                          //               return Padding(
-                          //                 padding:
-                          //                     const EdgeInsets.only(right: 4.0),
-                          //                 child: Container(
-                          //                   padding: const EdgeInsets.all(3.0),
-                          //                   decoration: BoxDecoration(
-                          //                     borderRadius:
-                          //                         BorderRadius.circular(30.0),
-                          //                     border: Border.all(
-                          //                         color: selectedColorIndex == i
-                          //                             ? kBlackColor
-                          //                             : kWhiteColor),
-                          //                   ),
-                          //                   child: CircleAvatar(
-                          //                     backgroundColor: Color(int.parse(
-                          //                         snapshot.data!.value!
-                          //                             .colors![i].hex!
-                          //                             .replaceAll(
-                          //                                 '#', '0xFF'))),
-                          //                     radius: 12.0,
-                          //                   ).onTap(
-                          //                     () {
-                          //                       setState(() {
-                          //                         selectedColorIndex = i;
-                          //                       });
-                          //                     },
-                          //                     highlightColor: context.cardColor,
-                          //                   ),
-                          //                 ),
-                          //               );
-                          //             },
-                          //           ),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //     const Spacer(),
-                          //     Container(
-                          //       padding: const EdgeInsets.all(4.0),
-                          //       decoration: BoxDecoration(
-                          //         borderRadius: BorderRadius.circular(10.0),
-                          //         border: Border.all(
-                          //             color: const Color(0xFFE9E9E9)),
-                          //       ),
-                          //       child: Column(
-                          //         children: [
-                          //           const Icon(
-                          //             Icons.minimize_rounded,
-                          //             color: kTitleColor,
-                          //           ).onTap(() {
-                          //             setState(() {
-                          //               productQuantity > 1
-                          //                   ? productQuantity--
-                          //                   : productQuantity == 1;
-                          //             });
-                          //           }),
-                          //           const SizedBox(
-                          //             height: 6.0,
-                          //           ),
-                          //           Text(
-                          //             productQuantity.toString(),
-                          //             style: kTextStyle.copyWith(
-                          //                 color: kMainColor, fontSize: 18.0),
-                          //           ),
-                          //           const SizedBox(
-                          //             height: 4.0,
-                          //           ),
-                          //           const Icon(
-                          //             Icons.add,
-                          //             color: kTitleColor,
-                          //           ).onTap(() {
-                          //             setState(() {
-                          //               productQuantity < 10
-                          //                   ? productQuantity++
-                          //                   : productQuantity = 10;
-                          //               if (productQuantity == 10) {
-                          //                 toast(
-                          //                     'You can\'t buy more than 10 products');
-                          //               }
-                          //             });
-                          //           }),
-                          //         ],
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
                           Row(
                             children: [
                               Column(

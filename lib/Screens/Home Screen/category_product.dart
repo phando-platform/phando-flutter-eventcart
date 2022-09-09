@@ -43,8 +43,6 @@ class _CategoryProductState extends State<CategoryProduct> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kWhiteColor,
@@ -54,8 +52,9 @@ class _CategoryProductState extends State<CategoryProduct> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
-                  ModalRoute.withName("/Home"));
+              Navigator.pop(context);
+              // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
+              //     ModalRoute.withName("/Home"));
             }),
         title: Text(
           widget.catName,
@@ -140,20 +139,29 @@ class _CategoryProductState extends State<CategoryProduct> {
                                 onBookMarkPressed: () async {
                                   try {
                                     EasyLoading.show(status: 'Adding...');
-                                    final SharedPreferences prefs = await _prefs;
-                                    final wishlist = await _apiManager.addToWishList(snapshot.data?.value?.data![i].id.toString() ?? 'null', prefs.getString('token').toString());
+                                    final SharedPreferences prefs =
+                                        await _prefs;
+                                    final wishlist =
+                                        await _apiManager.addToWishList(
+                                            snapshot.data?.value?.data![i].id
+                                                    .toString() ??
+                                                'null',
+                                            prefs
+                                                .getString('token')
+                                                .toString());
                                     if (wishlist.success == true) {
-                                      EasyLoading.showSuccess(wishlist.message.toString());
-
+                                      EasyLoading.showSuccess(
+                                          wishlist.message.toString());
                                     } else {
                                       print(wishlist.message.toString());
-                                      if(wishlist.message.toString()=="Unprocessable Content"){
-                                        EasyLoading.showError("Product Already Added");
+                                      if (wishlist.message.toString() ==
+                                          "Unprocessable Content") {
+                                        EasyLoading.showError(
+                                            "Product Already Added");
+                                      } else {
+                                        EasyLoading.showError(
+                                            wishlist.message.toString());
                                       }
-                                      else{
-                                        EasyLoading.showError(wishlist.message.toString());
-                                      }
-
                                     }
                                   } catch (e) {
                                     toast(e.toString());

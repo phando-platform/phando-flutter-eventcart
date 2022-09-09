@@ -1,3 +1,4 @@
+import 'package:event_app/Screens/Checkout/order_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -13,11 +14,16 @@ import '../Home Screen/home.dart';
 
 // ignore: must_be_immutable
 class AddBilling extends StatefulWidget {
-  AddBilling({Key? key, required this.country, required this.mobile})
+  AddBilling(
+      {Key? key,
+      required this.country,
+      required this.mobile,
+      this.isBilling = false})
       : super(key: key);
 
   // ignore: prefer_typing_uninitialized_variables
   var mobile, country;
+  bool isBilling;
 
   @override
   _AddBillingState createState() => _AddBillingState();
@@ -237,10 +243,15 @@ class _AddBillingState extends State<AddBilling> {
                               'add_two', addressTwoController.text.toString());
                           EasyLoading.showSuccess(
                               'Shipping Address Successfully Saved');
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) => Home()),
-                              ModalRoute.withName("/Home"));
+
+                          if (widget.isBilling) {
+                            OrderReview().launch(context);
+                          } else {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => Home()),
+                                ModalRoute.withName("/Home"));
+                          }
                         } else {
                           EasyLoading.showError(billing.message.toString());
                           print(shipping.toString());

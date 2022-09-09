@@ -79,8 +79,9 @@ class _ManageOrderState extends State<ManageOrder> {
                               token,
                               widget.orderId,
                               widget.details.id.toString(),
-                            // widget.details.product!.id.toString(),
-                              widget.details.id.toString(),/*need to remove*/
+                              // widget.details.product!.id.toString(),
+                              widget.details.id.toString(),
+                              /*need to remove*/
                               reasonController.text);
                           if (cancel.success == true) {
                             EasyLoading.showSuccess(cancel.message.toString());
@@ -145,7 +146,7 @@ class _ManageOrderState extends State<ManageOrder> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: ListTile(
-                       /* leading: Image.network(
+                        /* leading: Image.network(
                             widget.details.product!.images![0].image!),*/
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

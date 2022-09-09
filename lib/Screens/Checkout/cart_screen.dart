@@ -290,269 +290,512 @@ class _CartScreenState extends State<CartScreen> {
                       );
                     }),
               ),
-              DraggableScrollableSheet(
-                initialChildSize: 0.35,
-                maxChildSize: 0.35,
-                minChildSize: 0.05,
-                builder:
-                    (BuildContext context, ScrollController scrollController) {
-                  return SingleChildScrollView(
-                    controller: scrollController,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30.0),
-                            topRight: Radius.circular(30.0),
-                          ),
-                          color: Colors.white),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          children: [
-                            Stack(
-                              alignment: Alignment.centerRight,
-                              children: [
-                                AppTextField(
-                                  textFieldType: TextFieldType.NAME,
-                                  controller: couponController,
-                                  decoration: InputDecoration(
-                                    fillColor: const Color(0xFFFFEAEA),
-                                    focusColor: const Color(0xFFFFEAEA),
-                                    filled: true,
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.never,
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.white),
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    hintText: 'Enter Promo Code',
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                        color: Colors.white,
-                                      ),
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.all(10.0),
-                                  height: 60.0,
-                                  width: 100.0,
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      bottomRight: Radius.circular(30.0),
-                                      topRight: Radius.circular(30.0),
-                                    ),
-                                    color: Colors.red,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Apply',
-                                      style: kTextStyle.copyWith(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18.0),
-                                    ),
-                                  ),
-                                ).onTap(() async {
-                                  try {
-                                    if (couponController.text.isEmpty) {
-                                      toast('Please enter a valid Coupon');
-                                    } else {
-                                      int total = ref
-                                          .read(cartProvider.notifier)
-                                          .getTotalCharge()
-                                          .toInt();
-                                      EasyLoading.show(
-                                          status: 'Applying Coupon');
-                                      final coupon =
-                                          await _apiManager.addCoupon(
-                                              couponController.text, token);
-                                      if (coupon.success == true) {
-                                        if (coupon.coupon?.type == 'product' &&
-                                            coupon.coupon!.details!.productId!
-                                                .contains(cartItems[0].id)) {
-                                          ref
-                                              .read(cartProvider.notifier)
-                                              .couponForProduct(
-                                                  coupon.coupon!.details!
-                                                      .productId!,
-                                                  coupon.coupon!.discount!,
-                                                  coupon.coupon!.discountType!);
-                                          ref
-                                              .read(fetDiscountInfoProvider)
-                                              .getCouponCode(
-                                                  coupon.coupon!.code!);
-                                          ref
-                                              .read(fetDiscountInfoProvider)
-                                              .getCouponId(coupon.coupon!.id!);
-                                          ref
-                                              .read(fetDiscountInfoProvider)
-                                              .getDiscountAmount(discount);
-                                          EasyLoading.showSuccess(
-                                              'Coupon Applied');
-                                        } else if (coupon.coupon?.type ==
-                                                'product' &&
-                                            !coupon.coupon!.details!.productId!
-                                                .contains(cartItems[0].id)) {
-                                          EasyLoading.showError(
-                                              'Your Cart is not Eligible For the Coupon');
-                                        } else if (coupon.coupon?.type ==
-                                                'cart' &&
-                                            total >
-                                                coupon.coupon!.details!.minBuy!
-                                                    .toInt()) {
-                                          EasyLoading.showSuccess(
-                                              'Coupon Applied');
-                                          setState(() {
-                                            discount = ref
-                                                .read(cartProvider)
-                                                .couponForCart(
-                                                    total,
-                                                    coupon.coupon!.details!
-                                                        .minBuy!
-                                                        .toInt(),
-                                                    coupon.coupon!.details!
-                                                        .maxDiscount!
-                                                        .toInt(),
-                                                    coupon.coupon!.discount!,
-                                                    coupon
-                                                        .coupon!.discountType!);
-                                          });
-                                          ref
-                                              .read(fetDiscountInfoProvider)
-                                              .getCouponCode(
-                                                  coupon.coupon!.code!);
-                                          ref
-                                              .read(fetDiscountInfoProvider)
-                                              .getCouponId(coupon.coupon!.id!);
-                                          ref
-                                              .read(fetDiscountInfoProvider)
-                                              .getDiscountAmount(discount);
-                                        } else if (coupon.coupon?.type ==
-                                                'cart' &&
-                                            total <
-                                                coupon.coupon!.details!.minBuy!
-                                                    .toInt()) {
-                                          EasyLoading.showError(
-                                              'Please shop $currencyIcon ${coupon.coupon!.details!.minBuy!.toInt() - total} more to use this coupon');
-                                        }
-                                      } else {
-                                        EasyLoading.showError(
-                                            coupon.message.toString());
-                                      }
-                                    }
-                                  } catch (e) {
-                                    EasyLoading.showError(e.toString());
-                                  }
-                                }),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 20.0,
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  'SubTotal: ',
-                                  style: kTextStyle.copyWith(
-                                      color: kGreyTextColor),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  currencyIcon +
-                                      (discount > 0.0
-                                              ? ref
-                                                      .read(
-                                                          cartProvider.notifier)
-                                                      .getTotalCharge() -
-                                                  discount
-                                              : ref
-                                                  .read(cartProvider.notifier)
-                                                  .getTotalCharge())
-                                          .toString(),
-                                  style: kTextStyle,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  'Delivery Fee: ',
-                                  style: kTextStyle.copyWith(
-                                      color: kGreyTextColor),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  currencyIcon +
-                                      ref
-                                          .read(cartProvider.notifier)
-                                          .getShippingCharge()
-                                          .toString(),
-                                  style: kTextStyle,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            Divider(
-                              color: kGreyTextColor.withOpacity(0.2),
-                            ),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  'Total Amount: ',
-                                  style: kTextStyle.copyWith(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  currencyIcon +
-                                      ((ref
-                                                      .read(
-                                                          cartProvider.notifier)
-                                                      .getTotalCharge() -
-                                                  discount) +
-                                              ref
-                                                  .read(cartProvider.notifier)
-                                                  .getShippingCharge())
-                                          .toString(),
-                                  style: kTextStyle,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 20.0,
-                            ),
-                            ButtonGlobal(
-                              buttontext: 'Checkout',
-                              buttonDecoration:
-                                  kButtonDecoration.copyWith(color: kMainColor),
-                              onPressed: () {
-                                if (username != 'Guest') {
-                                  const OrderReview().launch(context);
-                                } else {
-                                  toast('Please sign In to Checkout');
-                                  const SignIn().launch(context);
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+
+              // DraggableScrollableSheet(
+              //   initialChildSize: 0.35,
+              //   maxChildSize: 0.35,
+              //   minChildSize: 0.05,
+              //   builder:
+              //       (BuildContext context, ScrollController scrollController) {
+              //     return SingleChildScrollView(
+              //       controller: scrollController,
+              //       child: Container(
+              //         decoration: const BoxDecoration(
+              //             borderRadius: BorderRadius.only(
+              //               topLeft: Radius.circular(30.0),
+              //               topRight: Radius.circular(30.0),
+              //             ),
+              //             color: Colors.white),
+              //         child: Padding(
+              //           padding: const EdgeInsets.all(10.0),
+              //           child: Column(
+              //             children: [
+              //               Stack(
+              //                 alignment: Alignment.centerRight,
+              //                 children: [
+              //                   AppTextField(
+              //                     textFieldType: TextFieldType.NAME,
+              //                     controller: couponController,
+              //                     decoration: InputDecoration(
+              //                       fillColor: const Color(0xFFFFEAEA),
+              //                       focusColor: const Color(0xFFFFEAEA),
+              //                       filled: true,
+              //                       floatingLabelBehavior:
+              //                           FloatingLabelBehavior.never,
+              //                       focusedBorder: OutlineInputBorder(
+              //                         borderSide:
+              //                             const BorderSide(color: Colors.white),
+              //                         borderRadius: BorderRadius.circular(30.0),
+              //                       ),
+              //                       hintText: 'Enter Promo Code',
+              //                       enabledBorder: OutlineInputBorder(
+              //                         borderSide: const BorderSide(
+              //                           color: Colors.white,
+              //                         ),
+              //                         borderRadius: BorderRadius.circular(30.0),
+              //                       ),
+              //                     ),
+              //                   ),
+              //                   Container(
+              //                     padding: const EdgeInsets.all(10.0),
+              //                     height: 60.0,
+              //                     width: 100.0,
+              //                     decoration: const BoxDecoration(
+              //                       borderRadius: BorderRadius.only(
+              //                         bottomRight: Radius.circular(30.0),
+              //                         topRight: Radius.circular(30.0),
+              //                       ),
+              //                       color: Colors.red,
+              //                     ),
+              //                     child: Center(
+              //                       child: Text(
+              //                         'Apply',
+              //                         style: kTextStyle.copyWith(
+              //                             color: Colors.white,
+              //                             fontWeight: FontWeight.bold,
+              //                             fontSize: 18.0),
+              //                       ),
+              //                     ),
+              //                   ).onTap(() async {
+              //                     try {
+              //                       if (couponController.text.isEmpty) {
+              //                         toast('Please enter a valid Coupon');
+              //                       } else {
+              //                         int total = ref
+              //                             .read(cartProvider.notifier)
+              //                             .getTotalCharge()
+              //                             .toInt();
+              //                         EasyLoading.show(
+              //                             status: 'Applying Coupon');
+              //                         final coupon =
+              //                             await _apiManager.addCoupon(
+              //                                 couponController.text, token);
+              //                         if (coupon.success == true) {
+              //                           if (coupon.coupon?.type == 'product' &&
+              //                               coupon.coupon!.details!.productId!
+              //                                   .contains(cartItems[0].id)) {
+              //                             ref
+              //                                 .read(cartProvider.notifier)
+              //                                 .couponForProduct(
+              //                                     coupon.coupon!.details!
+              //                                         .productId!,
+              //                                     coupon.coupon!.discount!,
+              //                                     coupon.coupon!.discountType!);
+              //                             ref
+              //                                 .read(fetDiscountInfoProvider)
+              //                                 .getCouponCode(
+              //                                     coupon.coupon!.code!);
+              //                             ref
+              //                                 .read(fetDiscountInfoProvider)
+              //                                 .getCouponId(coupon.coupon!.id!);
+              //                             ref
+              //                                 .read(fetDiscountInfoProvider)
+              //                                 .getDiscountAmount(discount);
+              //                             EasyLoading.showSuccess(
+              //                                 'Coupon Applied');
+              //                           } else if (coupon.coupon?.type ==
+              //                                   'product' &&
+              //                               !coupon.coupon!.details!.productId!
+              //                                   .contains(cartItems[0].id)) {
+              //                             EasyLoading.showError(
+              //                                 'Your Cart is not Eligible For the Coupon');
+              //                           } else if (coupon.coupon?.type ==
+              //                                   'cart' &&
+              //                               total >
+              //                                   coupon.coupon!.details!.minBuy!
+              //                                       .toInt()) {
+              //                             EasyLoading.showSuccess(
+              //                                 'Coupon Applied');
+              //                             setState(() {
+              //                               discount = ref
+              //                                   .read(cartProvider)
+              //                                   .couponForCart(
+              //                                       total,
+              //                                       coupon.coupon!.details!
+              //                                           .minBuy!
+              //                                           .toInt(),
+              //                                       coupon.coupon!.details!
+              //                                           .maxDiscount!
+              //                                           .toInt(),
+              //                                       coupon.coupon!.discount!,
+              //                                       coupon
+              //                                           .coupon!.discountType!);
+              //                             });
+              //                             ref
+              //                                 .read(fetDiscountInfoProvider)
+              //                                 .getCouponCode(
+              //                                     coupon.coupon!.code!);
+              //                             ref
+              //                                 .read(fetDiscountInfoProvider)
+              //                                 .getCouponId(coupon.coupon!.id!);
+              //                             ref
+              //                                 .read(fetDiscountInfoProvider)
+              //                                 .getDiscountAmount(discount);
+              //                           } else if (coupon.coupon?.type ==
+              //                                   'cart' &&
+              //                               total <
+              //                                   coupon.coupon!.details!.minBuy!
+              //                                       .toInt()) {
+              //                             EasyLoading.showError(
+              //                                 'Please shop $currencyIcon ${coupon.coupon!.details!.minBuy!.toInt() - total} more to use this coupon');
+              //                           }
+              //                         } else {
+              //                           EasyLoading.showError(
+              //                               coupon.message.toString());
+              //                         }
+              //                       }
+              //                     } catch (e) {
+              //                       EasyLoading.showError(e.toString());
+              //                     }
+              //                   }),
+              //                 ],
+              //               ),
+              //               const SizedBox(
+              //                 height: 20.0,
+              //               ),
+              //               Row(
+              //                 children: [
+              //                   Text(
+              //                     'SubTotal: ',
+              //                     style: kTextStyle.copyWith(
+              //                         color: kGreyTextColor),
+              //                   ),
+              //                   const Spacer(),
+              //                   Text(
+              //                     currencyIcon +
+              //                         (discount > 0.0
+              //                                 ? ref
+              //                                         .read(
+              //                                             cartProvider.notifier)
+              //                                         .getTotalCharge() -
+              //                                     discount
+              //                                 : ref
+              //                                     .read(cartProvider.notifier)
+              //                                     .getTotalCharge())
+              //                             .toString(),
+              //                     style: kTextStyle,
+              //                   ),
+              //                 ],
+              //               ),
+              //               const SizedBox(
+              //                 height: 5.0,
+              //               ),
+              //               Row(
+              //                 children: [
+              //                   Text(
+              //                     'Delivery Fee: ',
+              //                     style: kTextStyle.copyWith(
+              //                         color: kGreyTextColor),
+              //                   ),
+              //                   const Spacer(),
+              //                   Text(
+              //                     currencyIcon +
+              //                         ref
+              //                             .read(cartProvider.notifier)
+              //                             .getShippingCharge()
+              //                             .toString(),
+              //                     style: kTextStyle,
+              //                   ),
+              //                 ],
+              //               ),
+              //               const SizedBox(
+              //                 height: 5.0,
+              //               ),
+              //               Divider(
+              //                 color: kGreyTextColor.withOpacity(0.2),
+              //               ),
+              //               const SizedBox(
+              //                 height: 5.0,
+              //               ),
+              //               Row(
+              //                 children: [
+              //                   Text(
+              //                     'Total Amount: ',
+              //                     style: kTextStyle.copyWith(
+              //                         fontWeight: FontWeight.bold),
+              //                   ),
+              //                   const Spacer(),
+              //                   Text(
+              //                     currencyIcon +
+              //                         ((ref
+              //                                         .read(
+              //                                             cartProvider.notifier)
+              //                                         .getTotalCharge() -
+              //                                     discount) +
+              //                                 ref
+              //                                     .read(cartProvider.notifier)
+              //                                     .getShippingCharge())
+              //                             .toString(),
+              //                     style: kTextStyle,
+              //                   ),
+              //                 ],
+              //               ),
+              //               const SizedBox(
+              //                 height: 20.0,
+              //               ),
+              //               ButtonGlobal(
+              //                 buttontext: 'Checkout',
+              //                 buttonDecoration:
+              //                     kButtonDecoration.copyWith(color: kMainColor),
+              //                 onPressed: () {
+              //                   if (username != 'Guest') {
+              //                     const OrderReview().launch(context);
+              //                   } else {
+              //                     toast('Please sign In to Checkout');
+              //                     const SignIn().launch(context);
+              //                   }
+              //                 },
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //       ),
+              //     );
+              //   },
+              // ),
             ],
+          ),
+          bottomNavigationBar: Container(
+            height: 255,
+            child: Expanded(
+                child: SingleChildScrollView(
+              // controller: scrollController,
+              child: Container(
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30.0),
+                      topRight: Radius.circular(30.0),
+                    ),
+                    color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.centerRight,
+                        children: [
+                          AppTextField(
+                            textFieldType: TextFieldType.NAME,
+                            controller: couponController,
+                            decoration: InputDecoration(
+                              fillColor: const Color(0xFFFFEAEA),
+                              focusColor: const Color(0xFFFFEAEA),
+                              filled: true,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              hintText: 'Enter Promo Code',
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.white,
+                                ),
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(10.0),
+                            height: 60.0,
+                            width: 100.0,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(30.0),
+                                topRight: Radius.circular(30.0),
+                              ),
+                              color: Colors.red,
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Apply',
+                                style: kTextStyle.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0),
+                              ),
+                            ),
+                          ).onTap(() async {
+                            try {
+                              if (couponController.text.isEmpty) {
+                                toast('Please enter a valid Coupon');
+                              } else {
+                                int total = ref
+                                    .read(cartProvider.notifier)
+                                    .getTotalCharge()
+                                    .toInt();
+                                EasyLoading.show(status: 'Applying Coupon');
+                                final coupon = await _apiManager.addCoupon(
+                                    couponController.text, token);
+                                if (coupon.success == true) {
+                                  if (coupon.coupon?.type == 'product' &&
+                                      coupon.coupon!.details!.productId!
+                                          .contains(cartItems[0].id)) {
+                                    ref
+                                        .read(cartProvider.notifier)
+                                        .couponForProduct(
+                                            coupon.coupon!.details!.productId!,
+                                            coupon.coupon!.discount!,
+                                            coupon.coupon!.discountType!);
+                                    ref
+                                        .read(fetDiscountInfoProvider)
+                                        .getCouponCode(coupon.coupon!.code!);
+                                    ref
+                                        .read(fetDiscountInfoProvider)
+                                        .getCouponId(coupon.coupon!.id!);
+                                    ref
+                                        .read(fetDiscountInfoProvider)
+                                        .getDiscountAmount(discount);
+                                    EasyLoading.showSuccess('Coupon Applied');
+                                  } else if (coupon.coupon?.type == 'product' &&
+                                      !coupon.coupon!.details!.productId!
+                                          .contains(cartItems[0].id)) {
+                                    EasyLoading.showError(
+                                        'Your Cart is not Eligible For the Coupon');
+                                  } else if (coupon.coupon?.type == 'cart' &&
+                                      total >
+                                          coupon.coupon!.details!.minBuy!
+                                              .toInt()) {
+                                    EasyLoading.showSuccess('Coupon Applied');
+                                    setState(() {
+                                      discount = ref
+                                          .read(cartProvider)
+                                          .couponForCart(
+                                              total,
+                                              coupon.coupon!.details!.minBuy!
+                                                  .toInt(),
+                                              coupon
+                                                  .coupon!.details!.maxDiscount!
+                                                  .toInt(),
+                                              coupon.coupon!.discount!,
+                                              coupon.coupon!.discountType!);
+                                    });
+                                    ref
+                                        .read(fetDiscountInfoProvider)
+                                        .getCouponCode(coupon.coupon!.code!);
+                                    ref
+                                        .read(fetDiscountInfoProvider)
+                                        .getCouponId(coupon.coupon!.id!);
+                                    ref
+                                        .read(fetDiscountInfoProvider)
+                                        .getDiscountAmount(discount);
+                                  } else if (coupon.coupon?.type == 'cart' &&
+                                      total <
+                                          coupon.coupon!.details!.minBuy!
+                                              .toInt()) {
+                                    EasyLoading.showError(
+                                        'Please shop $currencyIcon ${coupon.coupon!.details!.minBuy!.toInt() - total} more to use this coupon');
+                                  }
+                                } else {
+                                  EasyLoading.showError(
+                                      coupon.message.toString());
+                                }
+                              }
+                            } catch (e) {
+                              EasyLoading.showError(e.toString());
+                            }
+                          }),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'SubTotal: ',
+                            style: kTextStyle.copyWith(color: kGreyTextColor),
+                          ),
+                          const Spacer(),
+                          Text(
+                            currencyIcon +
+                                (discount > 0.0
+                                        ? ref
+                                                .read(cartProvider.notifier)
+                                                .getTotalCharge() -
+                                            discount
+                                        : ref
+                                            .read(cartProvider.notifier)
+                                            .getTotalCharge())
+                                    .toString(),
+                            style: kTextStyle,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Delivery Fee: ',
+                            style: kTextStyle.copyWith(color: kGreyTextColor),
+                          ),
+                          const Spacer(),
+                          Text(
+                            currencyIcon +
+                                ref
+                                    .read(cartProvider.notifier)
+                                    .getShippingCharge()
+                                    .toString(),
+                            style: kTextStyle,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      Divider(
+                        color: kGreyTextColor.withOpacity(0.2),
+                      ),
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Total Amount: ',
+                            style: kTextStyle.copyWith(
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const Spacer(),
+                          Text(
+                            currencyIcon +
+                                ((ref
+                                                .read(cartProvider.notifier)
+                                                .getTotalCharge() -
+                                            discount) +
+                                        ref
+                                            .read(cartProvider.notifier)
+                                            .getShippingCharge())
+                                    .toString(),
+                            style: kTextStyle,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      ButtonGlobal(
+                        buttontext: 'Checkout',
+                        buttonDecoration:
+                            kButtonDecoration.copyWith(color: kMainColor),
+                        onPressed: () {
+                          if (username != 'Guest') {
+                            const OrderReview().launch(context);
+                          } else {
+                            toast('Please sign In to Checkout');
+                            const SignIn().launch(context);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )),
           ),
         );
       }

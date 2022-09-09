@@ -56,6 +56,7 @@ class CartNotifier extends ChangeNotifier {
     for (var item in cartItems) {
       charge = item.shippingCost + charge;
     }
+
     notifyListeners();
     return charge;
   }

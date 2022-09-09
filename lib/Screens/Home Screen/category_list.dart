@@ -104,7 +104,9 @@ class _CategoryListState extends State<CategoryList> {
                       Text(
                         snapshot.data?.value?.data?[index].name.toString() ??
                             'Null',
+                        maxLines: 2,
                         style: kTextStyle,
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),

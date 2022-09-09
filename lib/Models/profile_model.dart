@@ -43,7 +43,7 @@ class Value {
     if (json['orders'] != null) {
       orders = <Orders>[];
       json['orders'].forEach((v) {
-        orders!.add(new Orders.fromJson(v));
+        orders!.add(Orders.fromJson(v));
       });
     }
     billing =
@@ -51,8 +51,12 @@ class Value {
     shipping = json['shipping'] != null
         ? new Shipping.fromJson(json['shipping'])
         : null;
-    country =
-        json['country'] != null ? new Country.fromJson(json['country']) : null;
+
+    country = (json['country'] != null &&
+            json['country'].isNotEmpty &&
+            json['country'] != '')
+        ? new Country.fromJson(json['country'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -260,7 +264,7 @@ class Billing {
       this.deletedAt,
       this.country});
 
-  Billing.fromJson(Map<String, dynamic> json) {
+  Billing.fromJson(dynamic json) {
     id = json['id'];
     userId = json['user_id'];
     firstName = json['first_name'];
@@ -311,7 +315,7 @@ class Country {
   int? numCode;
   String? phoneCode;
   int? isActive;
-  Null? createdAt;
+  String? createdAt;
   String? updatedAt;
 
   Country(
@@ -362,11 +366,11 @@ class Shipping {
   String? addressLineOne;
   String? addressLineTwo;
   String? shippingMobile;
-  Null? shippingEmail;
+  String? shippingEmail;
   String? shippingTown;
   String? shippingPost;
   int? shippingCountryId;
-  Null? note;
+  String? note;
   String? createdAt;
   String? updatedAt;
   Country? country;

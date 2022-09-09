@@ -1,3 +1,4 @@
+import 'package:event_app/Screens/Checkout/order_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -5,11 +6,21 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../GlobalComponents/button_global.dart';
 import '../../Services/api_manager.dart';
 import '../../constant.dart';
+import '../Profile/profile_screen.dart';
 
 // ignore: must_be_immutable
 class UpdateShipping extends StatefulWidget {
-  UpdateShipping({Key? key, required this.shipping}) : super(key: key);
+  UpdateShipping(
+      {Key? key,
+      required this.shipping,
+      this.isBilling = false,
+      this.isProfile = false,
+      this.callback})
+      : super(key: key);
   ShippingUpdate shipping;
+  bool isBilling;
+  bool isProfile;
+  VoidCallback? callback;
 
   @override
   _UpdateShippingState createState() => _UpdateShippingState();
@@ -45,7 +56,7 @@ class _UpdateShippingState extends State<UpdateShipping> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
-          'Shipping Address',
+          widget.isBilling ? 'Billing Address' : 'Shipping Address',
           style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
@@ -216,35 +227,51 @@ class _UpdateShippingState extends State<UpdateShipping> {
                       if (token == '') {
                         EasyLoading.showError('Token Not Found');
                       } else {
-                        final shipping = await _apiManager.setShippingInfo(
-                          token.toString(),
-                          fullNameOneController.text.toString(),
-                          addressOneController.text.toString(),
-                          addressTwoController.text.toString(),
-                          cityController.text.toString(),
-                          postalController.text.toString(),
-                          widget.shipping.countryId.toString(),
-                          mobileController.text.toString(),
-                        );
-                        final billing = await _apiManager.setBillingInfo(
-                          token.toString(),
-                          addressOneController.text.toString(),
-                          widget.shipping.mobile.toString(),
-                          cityController.text.toString(),
-                          postalController.text.toString(),
-                          widget.shipping.countryId.toString(),
-                        );
-                        if (billing.success == true &&
-                            shipping.success == true) {
-                          EasyLoading.showSuccess(
-                              'Shipping Address Successfully Saved');
-                          Navigator.pop(context);
+                        if (widget.isBilling) {
+                          final billing = await _apiManager.setBillingInfo(
+                            token.toString(),
+                            addressOneController.text.toString(),
+                            widget.shipping.mobile.toString(),
+                            cityController.text.toString(),
+                            postalController.text.toString(),
+                            widget.shipping.countryId.toString(),
+                          );
+                          if (billing.success == true) {
+                            EasyLoading.showSuccess(
+                                'Billing Address Successfully Saved');
+
+                            OrderReview().launch(context);
+                          } else {
+                            EasyLoading.showError(billing.message.toString());
+                          }
                         } else {
-                          EasyLoading.showError(billing.message.toString());
+                          final shipping = await _apiManager.setShippingInfo(
+                            token.toString(),
+                            fullNameOneController.text.toString(),
+                            addressOneController.text.toString(),
+                            addressTwoController.text.toString(),
+                            cityController.text.toString(),
+                            postalController.text.toString(),
+                            widget.shipping.countryId.toString(),
+                            mobileController.text.toString(),
+                          );
+
+                          if (shipping.success == true) {
+                            EasyLoading.showSuccess(
+                                'Shipping Address Successfully Saved');
+
+                            if (widget.isProfile)
+                              ProfileScreen().launch(context);
+                            else
+                              OrderReview().launch(context);
+                          } else {
+                            EasyLoading.showError(shipping.message.toString());
+                          }
                         }
                       }
                     } catch (e) {
                       EasyLoading.showError(e.toString() + 'Catch');
+                      // Navigator.pop(context);
                     }
                   }
                 },

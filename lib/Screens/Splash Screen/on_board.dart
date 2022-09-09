@@ -35,12 +35,12 @@ class _OnBoardState extends State<OnBoard> {
   List<Map<String, dynamic>> sliderList = [
     {
       "icon": 'images/new_onboard_1.png',
-      "title": 'Welcome to Event App',
+      "title": 'Welcome to Event Cart',
       "description": 'Lorem ipsum dolor sit amet, consectetuer adipisci elit',
     },
     {
       "icon": 'images/new_onboard_2.png',
-      "title": 'Find Your Fa vorite Item Here',
+      "title": 'Find Your Favourite Item Here',
       "description": 'Lorem ipsum dolor sit amet, consectetuer adipisci elit',
     },
     {

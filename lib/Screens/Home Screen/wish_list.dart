@@ -53,7 +53,7 @@ class _WishListState extends State<WishList> {
         leading: const Icon(Icons.arrow_back).onTap(() => widget.callback()),
         iconTheme: const IconThemeData(color: kBlackColor),
         title: Text(
-          'WishListed products',
+          'Wishlisted products',
           style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
@@ -300,6 +300,8 @@ class WishListProductCard extends StatelessWidget {
             child: Text(
               productData.productTitle,
               style: kTextStyle,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
           Padding(
