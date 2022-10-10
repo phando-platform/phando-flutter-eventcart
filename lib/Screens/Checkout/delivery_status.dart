@@ -587,7 +587,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                               height: 20.0,
                             ),
                             ListTile(
-                             /* leading: Image.network(
+                              /* leading: Image.network(
                                 widget.details.product?.images?[0].image ?? '',
                                 height: 60.0,
                                 width: 60.0,
