@@ -91,15 +91,16 @@ class _OrderListState extends State<OrderList> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: ListTile(
-                                      /* leading: Image.network(snapshot
-                                                    .data
-                                                    ?.value
-                                                    ?.data?[index]
-                                                    .details?[i]
-                                                    .product
-                                                    ?.images?[0]
-                                                    .image ??
-                                                ''),*/
+                                      // leading: Image.network(snapshot
+                                      //         .data
+                                      //         ?.value
+                                      //         ?.data?[index]
+                                      //         .details
+                                      //         ?.first
+                                      //         .images
+                                      //         ?.first
+                                      //         .image ??
+                                      //     ''),
                                       title: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -166,6 +167,13 @@ class _OrderListState extends State<OrderList> {
                                           ],
                                         ),
                                       ),
+                                      // onTap: () => DeliveryStatus(
+                                      //   details: snapshot.data!.value!
+                                      //       .data![index].details!.first,
+                                      //   orderId: snapshot
+                                      //       .data!.value!.data![index].id
+                                      //       .toString(),
+                                      // ).launch(context),
                                     ),
                                   ),
                                 );

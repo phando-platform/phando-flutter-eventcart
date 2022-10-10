@@ -15,6 +15,7 @@ import '../../Services/api_manager.dart';
 import '../../Services/cart_item_notifier.dart';
 import '../../Services/cart_notifier.dart';
 import '../../constant.dart';
+import '../Authentication/signin.dart';
 
 // ignore: must_be_immutable
 class ProductDetails extends StatefulWidget {
@@ -34,7 +35,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       final SharedPreferences prefs = await _prefs;
       final wishlist = await _apiManager.addToWishList(
           id, prefs.getString('token').toString());
-          
+
       if (wishlist.success == true) {
         EasyLoading.showSuccess(wishlist.message.toString());
       } else {
@@ -54,6 +55,22 @@ class _ProductDetailsState extends State<ProductDetails> {
   PageController pageController = PageController(initialPage: 0);
   int currentIndexPage = 0;
   final ApiManager _apiManager = ApiManager();
+  late String username;
+
+  @override
+  void initState() {
+    getUsername();
+
+    super.initState();
+  }
+
+  getUsername() async {
+    SharedPreferences preferences = await _prefs;
+    var user = preferences.getString('username')!;
+    setState(() {
+      username = user;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,94 +145,103 @@ class _ProductDetailsState extends State<ProductDetails> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                if (ref.read(cartProvider.notifier).checkCart(
-                                        snapshot.data?.value?.id ?? 10,
-                                        snapshot.data!.value!.sizes!.isEmpty
-                                            ? 'Null'
-                                            : snapshot
-                                                    .data
-                                                    ?.value
-                                                    ?.sizes?[selectedSizeIndex]
-                                                    .name ??
-                                                'Null',
-                                        snapshot.data!.value!.colors!.isEmpty
-                                            ? 'Null'
-                                            : snapshot
-                                                    .data
-                                                    ?.value
-                                                    ?.colors?[
-                                                        selectedColorIndex]
-                                                    .name ??
-                                                'Null') ==
-                                    false) {
-                                  EasyLoading.show(
-                                      status: 'Adding To The Cart');
-                                  Cart cartItem = Cart(
-                                      id: snapshot.data?.value?.id ?? 'Null',
-                                      price: snapshot.data?.value?.salePrice ??
-                                          0.0,
-                                      quantity: productQuantity,
-                                      size: snapshot.data!.value!.sizes!.isEmpty
-                                          ? 'Null'
-                                          : snapshot.data?.value
-                                              ?.sizes?[selectedSizeIndex].name,
-                                      color:
-                                          snapshot.data!.value!.colors!.isEmpty
-                                              ? 'Null'
-                                              : snapshot
-                                                  .data
-                                                  ?.value
-                                                  ?.colors?[selectedColorIndex]
-                                                  .hex,
-                                      shippingCost:
-                                          snapshot.data?.value?.shippingCost ??
-                                              'Null',
-                                      estimatedShippingDays: snapshot
-                                              .data
-                                              ?.value
-                                              ?.details
-                                              ?.estimatedShippingDays
-                                              .toString() ??
-                                          'Null',
-                                      productPriceTotal:
-                                          snapshot.data?.value?.salePrice *
-                                                  productQuantity ??
-                                              'Null');
-                                  CartItemUi cartUi = CartItemUi(
-                                      id: snapshot.data?.value?.id ?? 0,
-                                      productName: snapshot.data?.value?.name,
-                                      productImage: snapshot
-                                          .data?.value?.images?[0].image,
-                                      productQuantity: productQuantity,
-                                      productPrice:
-                                          snapshot.data?.value?.salePrice ??
-                                              0.00,
-                                      productColor:
-                                          snapshot.data!.value!.colors!.isEmpty
-                                              ? 'Null'
-                                              : snapshot
-                                                  .data
-                                                  ?.value
-                                                  ?.colors?[selectedColorIndex]
-                                                  .hex,
-                                      productSize:
+                                if (username == 'Guest') {
+                                  const SignIn().launch(context);
+                                } else {
+                                  if (ref.read(cartProvider.notifier).checkCart(
+                                          snapshot.data?.value?.id ?? 10,
                                           snapshot.data!.value!.sizes!.isEmpty
                                               ? 'Null'
                                               : snapshot
-                                                  .data
-                                                  ?.value
-                                                  ?.sizes?[selectedSizeIndex]
-                                                  .name);
-                                  ref
-                                      .read(cartProvider.notifier)
-                                      .addItem(cartItem);
-                                  ref
-                                      .read(cartItemUiProvider.notifier)
-                                      .addUiItem(cartUi);
-                                  EasyLoading.showSuccess('Added To Cart');
-                                  setState(() {});
-                                } else {
-                                  const CartScreen().launch(context);
+                                                      .data
+                                                      ?.value
+                                                      ?.sizes?[
+                                                          selectedSizeIndex]
+                                                      .name ??
+                                                  'Null',
+                                          snapshot.data!.value!.colors!.isEmpty
+                                              ? 'Null'
+                                              : snapshot
+                                                      .data
+                                                      ?.value
+                                                      ?.colors?[
+                                                          selectedColorIndex]
+                                                      .name ??
+                                                  'Null') ==
+                                      false) {
+                                    EasyLoading.show(
+                                        status: 'Adding To The Cart');
+                                    Cart cartItem = Cart(
+                                        id: snapshot.data?.value?.id ?? 'Null',
+                                        price: snapshot.data?.value?.salePrice ??
+                                            0.0,
+                                        quantity: productQuantity,
+                                        size:
+                                            snapshot.data!.value!.sizes!.isEmpty
+                                                ? 'Null'
+                                                : snapshot
+                                                    .data
+                                                    ?.value
+                                                    ?.sizes?[selectedSizeIndex]
+                                                    .name,
+                                        color: snapshot
+                                                .data!.value!.colors!.isEmpty
+                                            ? 'Null'
+                                            : snapshot
+                                                .data
+                                                ?.value
+                                                ?.colors?[selectedColorIndex]
+                                                .hex,
+                                        shippingCost: snapshot
+                                                .data?.value?.shippingCost ??
+                                            'Null',
+                                        estimatedShippingDays: snapshot
+                                                .data
+                                                ?.value
+                                                ?.details
+                                                ?.estimatedShippingDays
+                                                .toString() ??
+                                            'Null',
+                                        productPriceTotal:
+                                            snapshot.data?.value?.salePrice *
+                                                    productQuantity ??
+                                                'Null');
+                                    CartItemUi cartUi = CartItemUi(
+                                        id: snapshot.data?.value?.id ?? 0,
+                                        productName: snapshot.data?.value?.name,
+                                        productImage: snapshot
+                                            .data?.value?.images?[0].image,
+                                        productQuantity: productQuantity,
+                                        productPrice:
+                                            snapshot.data?.value?.salePrice ??
+                                                0.00,
+                                        productColor: snapshot
+                                                .data!.value!.colors!.isEmpty
+                                            ? 'Null'
+                                            : snapshot
+                                                .data
+                                                ?.value
+                                                ?.colors?[selectedColorIndex]
+                                                .hex,
+                                        productSize:
+                                            snapshot.data!.value!.sizes!.isEmpty
+                                                ? 'Null'
+                                                : snapshot
+                                                    .data
+                                                    ?.value
+                                                    ?.sizes?[selectedSizeIndex]
+                                                    .name);
+                                    ref
+                                        .read(cartProvider.notifier)
+                                        .addItem(cartItem);
+                                    ref
+                                        .read(cartItemUiProvider.notifier)
+                                        .addUiItem(cartUi);
+                                    EasyLoading.showSuccess('Added To Cart');
+                                    setState(() {});
+                                  } else {
+                                    const CartScreen().launch(context);
+                                  }
                                 }
                               },
                               child: Padding(

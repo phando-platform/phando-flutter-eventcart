@@ -187,12 +187,12 @@ class _ManageOrderState extends State<ManageOrder> {
                                 ).onTap(() => showPopUp()),
                               ),
                               const Spacer(),
-                              Text(
-                                widget.details.createdAt?.substring(0, 10) ??
-                                    '',
-                                style:
-                                    kTextStyle.copyWith(color: kGreyTextColor),
-                              ),
+                              // Text(
+                              //   widget.details.createdAt?.substring(0, 10) ??
+                              //       '',
+                              //   style:
+                              //       kTextStyle.copyWith(color: kGreyTextColor),
+                              // ),
                             ],
                           ),
                         ),

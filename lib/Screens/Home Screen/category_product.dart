@@ -1,7 +1,9 @@
+import 'package:event_app/GlobalComponents/button_global.dart';
 import 'package:event_app/Screens/Home%20Screen/home.dart';
 import 'package:event_app/Screens/Home%20Screen/wish_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../GlobalComponents/product_data.dart';
@@ -96,6 +98,37 @@ class _CategoryProductState extends State<CategoryProduct> {
                       _apiManager.categoryProduct(widget.catId, widget.page),
                   builder: (BuildContext context, snapshot) {
                     if (snapshot.hasData && snapshot.data != null) {
+                      if (snapshot.data?.value?.data?.length == 0) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'images/emptycart.svg',
+                              height: context.height() / 2,
+                              width: context.width(),
+                            ),
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                            Text(
+                              'No Category found',
+                              style: kTextStyle.copyWith(
+                                  color: kTitleColor,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                            // ButtonGlobal(
+                            //     buttontext: 'Reload App',
+                            //     buttonDecoration: kButtonDecoration.copyWith(
+                            //         color: kMainColor),
+                            //     onPressed: () => const Home().launch(context)),
+                          ],
+                        );
+                      }
                       return Column(
                         children: [
                           GridView.builder(

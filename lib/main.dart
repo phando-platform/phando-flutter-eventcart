@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import './constant.dart';
@@ -15,12 +17,21 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  OneSignal.shared.setAppId(oneSignalAppId);
+
+  OneSignal.shared.setAppId(
+    oneSignalAppId,
+  );
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

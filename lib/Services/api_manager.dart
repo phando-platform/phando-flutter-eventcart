@@ -242,9 +242,12 @@ class ApiManager {
   }
 
   Future<TrendsModel> categoryProduct(int id, int page) async {
+    print('this is category Id $id and this is page no $page ==========');
     final response = await http.get(
         Uri.parse(apiUrl + 'category/${id.toString()}/products?page=$page'));
     final data = jsonDecode(response.body);
+    print("=================== Data ==========");
+    print(data);
     if (response.statusCode == 200) {
       return TrendsModel.fromJson(data);
     } else {
