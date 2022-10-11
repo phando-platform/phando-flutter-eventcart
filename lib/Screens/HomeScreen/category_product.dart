@@ -1,25 +1,51 @@
+import 'package:event_app/GlobalComponents/button_global.dart';
+import 'package:event_app/Screens/HomeScreen/home.dart';
+import 'package:event_app/Screens/HomeScreen/wish_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../Screens/Home%20Screen/home.dart';
-import '../../Screens/Home%20Screen/product_details.dart';
 import '../../GlobalComponents/product_data.dart';
 import '../../Models/trends_model.dart';
+import './product_details.dart';
 import '../../Services/api_manager.dart';
 import '../../constant.dart';
 import 'home_screen.dart';
 
-class AllProducts extends StatefulWidget {
-  const AllProducts({Key? key, required this.page}) : super(key: key);
-  final int page;
+class CategoryProduct extends StatefulWidget {
+  const CategoryProduct(
+      {Key? key,
+      required this.catId,
+      required this.page,
+      required this.catName,
+      this.subCatId,
+      this.isSubcategory = false})
+      : super(key: key);
+  final int catId, page;
+  final String catName;
+  final bool isSubcategory;
+  final int? subCatId;
+
   @override
-  _AllProductsState createState() => _AllProductsState();
+  _CategoryProductState createState() => _CategoryProductState();
 }
 
-class _AllProductsState extends State<AllProducts> {
+class _CategoryProductState extends State<CategoryProduct> {
+  int selectedIndex = 0;
   final ApiManager _apiManager = ApiManager();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  @override
+  void initState() {
+    getProduct();
+    super.initState();
+  }
+
+  bool isLoading = false;
+  getProduct() async {
+    final value = await _apiManager.categoryProduct(widget.catId, widget.page);
+    toast(value.message.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,48 +54,65 @@ class _AllProductsState extends State<AllProducts> {
         backgroundColor: kWhiteColor,
         elevation: 0.0,
         centerTitle: true,
-        leading: const Icon(Icons.arrow_back)
-            .onTap(() => const Home().launch(context)),
         iconTheme: const IconThemeData(color: kBlackColor),
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+              // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
+              //     ModalRoute.withName("/Home"));
+            }),
         title: Text(
-          'All Products',
+          widget.catName,
           style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // HorizontalList(
-            //   spacing: 0,
-            //   itemCount: catData.length,
-            //   itemBuilder: (_, i) {
-            //     return Padding(
-            //       padding: const EdgeInsets.all(5.0),
-            //       child: Container(
-            //         padding: const EdgeInsets.all(10.0),
-            //         decoration: BoxDecoration(
-            //           borderRadius: BorderRadius.circular(10.0),
-            //           border: Border.all(color: kGreyTextColor.withOpacity(0.2),),
-            //           color: selectedIndex == i ? kMainColor : kWhiteColor,
-            //         ),
-            //         child: Text(catData[i].catTitle,style: kTextStyle.copyWith(color: selectedIndex == i ? kWhiteColor : kTitleColor,),),
-            //       ).onTap((){
-            //         setState(() {
-            //           selectedIndex = i;
-            //         });
-            //       }),
-            //     );
-            //   },
-            // ),
             const SizedBox(
               height: 20.0,
             ),
             Container(
               padding: const EdgeInsets.all(10.0),
               child: FutureBuilder<TrendsModel>(
-                  future: _apiManager.allProduct(widget.page),
+                  future: (widget.isSubcategory)
+                      ? _apiManager.categoryProduct(
+                          widget.subCatId ?? 0, widget.page)
+                      : _apiManager.categoryProduct(widget.catId, widget.page),
                   builder: (BuildContext context, snapshot) {
                     if (snapshot.hasData && snapshot.data != null) {
+                      if (snapshot.data?.value?.data?.length == 0) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'images/emptycart.svg',
+                              height: context.height() / 2,
+                              width: context.width(),
+                            ),
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                            Text(
+                              'No Category found',
+                              style: kTextStyle.copyWith(
+                                  color: kTitleColor,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                            // ButtonGlobal(
+                            //     buttontext: 'Reload App',
+                            //     buttonDecoration: kButtonDecoration.copyWith(
+                            //         color: kMainColor),
+                            //     onPressed: () => const Home().launch(context)),
+                          ],
+                        );
+                      }
                       return Column(
                         children: [
                           GridView.builder(
@@ -127,6 +170,7 @@ class _AllProductsState extends State<AllProducts> {
                                       EasyLoading.showSuccess(
                                           wishlist.message.toString());
                                     } else {
+                                      print(wishlist.message.toString());
                                       if (wishlist.message.toString() ==
                                           "Unprocessable Content") {
                                         EasyLoading.showError(
@@ -154,7 +198,11 @@ class _AllProductsState extends State<AllProducts> {
                           GestureDetector(
                               onTap: () {
                                 int page = widget.page + 1;
-                                AllProducts(page: page).launch(context);
+                                CategoryProduct(
+                                  catName: widget.catName,
+                                  page: page,
+                                  catId: widget.catId,
+                                ).launch(context);
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
@@ -168,7 +216,10 @@ class _AllProductsState extends State<AllProducts> {
                         ],
                       );
                     } else {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                          child: CircularProgressIndicator(
+                        color: kMainColor,
+                      ));
                     }
                   }),
             ),

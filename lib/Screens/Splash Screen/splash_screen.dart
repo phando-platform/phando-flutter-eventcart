@@ -4,7 +4,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:simple_connection_checker/simple_connection_checker.dart';
 
 import '../../constant.dart';
-import '../Home Screen/home.dart';
+import '../HomeScreen/home.dart';
 import './on_board.dart';
 
 class SplashScreen extends StatefulWidget {

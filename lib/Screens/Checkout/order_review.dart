@@ -15,7 +15,7 @@ import '../../Services/discount_provider.dart';
 import '../../Services/cart_notifier.dart';
 import '../../constant.dart';
 import '../Authentication/update_shipping.dart';
-import '../Home Screen/home.dart';
+import '../HomeScreen/home.dart';
 import '../Profile/order_list.dart';
 
 class OrderReview extends StatefulWidget {

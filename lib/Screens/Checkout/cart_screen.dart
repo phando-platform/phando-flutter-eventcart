@@ -12,7 +12,7 @@ import '../../Models/order_create_model.dart';
 import '../../Services/api_manager.dart';
 import '../../Services/cart_notifier.dart';
 import '../../constant.dart';
-import '../Home Screen/home.dart';
+import '../HomeScreen/home.dart';
 import 'order_review.dart';
 
 class CartScreen extends StatefulWidget {

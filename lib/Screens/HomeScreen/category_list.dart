@@ -1,3 +1,4 @@
+import 'package:event_app/Screens/HomeScreen/subcategory_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -112,13 +113,29 @@ class _CategoryListState extends State<CategoryList> {
                   ),
                 ).onTap(
                   () {
-                    CategoryProduct(
-                      catName:
-                          snapshot.data?.value?.data?[index].name.toString() ??
-                              'NA',
-                      catId: snapshot.data?.value?.data?[index].id ?? 2,
-                      page: 1,
-                    ).launch(context);
+                    if (snapshot.data?.value?.data?[index].subCategories !=
+                            null &&
+                        snapshot.data?.value?.data?[index].subCategories
+                                ?.length !=
+                            0) {
+                      SubCategoryList(
+                              catName: snapshot.data?.value?.data?[index].name
+                                      .toString() ??
+                                  'NA',
+                              catId: snapshot.data?.value?.data?[index].id ?? 2,
+                              page: 1,
+                              subCategory: snapshot
+                                  .data?.value?.data?[index].subCategories)
+                          .launch(context);
+                    } else {
+                      CategoryProduct(
+                        catName: snapshot.data?.value?.data?[index].name
+                                .toString() ??
+                            'NA',
+                        catId: snapshot.data?.value?.data?[index].id ?? 2,
+                        page: 1,
+                      ).launch(context);
+                    }
                   },
                   highlightColor: context.cardColor,
                 );

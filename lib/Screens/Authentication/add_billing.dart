@@ -10,7 +10,7 @@ import '../../GlobalComponents/button_global.dart';
 import '../../Helpers/helper.functions.dart';
 import '../../Services/api_manager.dart';
 import '../../constant.dart';
-import '../Home Screen/home.dart';
+import '../HomeScreen/home.dart';
 
 // ignore: must_be_immutable
 class AddBilling extends StatefulWidget {

@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../Models/profile_model.dart';
-import '../Home Screen/home.dart';
+import '../HomeScreen/home.dart';
 import './order_list.dart';
 import '../../Screens/Profile/personal_settings.dart';
 import '../../constant.dart';

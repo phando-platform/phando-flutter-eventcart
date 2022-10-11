@@ -8,7 +8,7 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../../GlobalComponents/button_global.dart';
 import '../../constant.dart';
 import '../../Services/api_manager.dart';
-import '../Home Screen/home.dart';
+import '../HomeScreen/home.dart';
 import './sign_up.dart';
 import './forgot_password.dart';
 

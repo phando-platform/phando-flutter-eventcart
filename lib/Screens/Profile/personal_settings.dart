@@ -4,7 +4,7 @@ import 'package:nb_utils/nb_utils.dart';
 
 import '../../GlobalComponents/button_global.dart';
 import '../../Screens/Authentication/signin.dart';
-import '../../Screens/Home%20Screen/home.dart';
+import '../HomeScreen/home.dart';
 import '../../Services/api_manager.dart';
 import '../../constant.dart';
 

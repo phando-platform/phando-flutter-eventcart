@@ -10,12 +10,13 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../Helpers/helper.functions.dart';
 import '../../Models/order_create_model.dart';
 import '../../Models/product_details_model.dart';
-import '../../Screens/Checkout/cart_screen.dart';
+import '../Checkout/cart_screen.dart';
 import '../../Services/api_manager.dart';
 import '../../Services/cart_item_notifier.dart';
 import '../../Services/cart_notifier.dart';
 import '../../constant.dart';
 import '../Authentication/signin.dart';
+import 'package:html/parser.dart';
 
 // ignore: must_be_immutable
 class ProductDetails extends StatefulWidget {
@@ -70,6 +71,14 @@ class _ProductDetailsState extends State<ProductDetails> {
     setState(() {
       username = user;
     });
+  }
+
+  String _parseHtmlString(String? htmlString) {
+    final document = parse(htmlString);
+    final String parsedString =
+        parse(document.body!.text).documentElement!.text;
+
+    return parsedString;
   }
 
   @override
@@ -585,44 +594,46 @@ class _ProductDetailsState extends State<ProductDetails> {
                                           : kGreyTextColor),
                                 ),
                               ).onTap(() {
-                                setState(() {
-                                  description = !description;
-                                });
+                                // setState(() {
+                                //   description = !description;
+                                // });
                               }),
                               const SizedBox(
                                 width: 5.0,
                               ),
-                              Container(
-                                padding: const EdgeInsets.all(4.0),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: !description
-                                          ? kMainColor
-                                          : kWhiteColor,
-                                    ),
-                                  ),
-                                ),
-                                child: Text(
-                                  'Reviews',
-                                  style: kTextStyle.copyWith(
-                                      color: !description
-                                          ? kTitleColor
-                                          : kGreyTextColor),
-                                ),
-                              ).visible(false).onTap(() {
-                                setState(() {
-                                  description = !description;
-                                });
-                              }),
+                              // Container(
+                              //   padding: const EdgeInsets.all(4.0),
+                              //   decoration: BoxDecoration(
+                              //     border: Border(
+                              //       bottom: BorderSide(
+                              //         color: !description
+                              //             ? kMainColor
+                              //             : kWhiteColor,
+                              //       ),
+                              //     ),
+                              //   ),
+                              //   child: Text(
+                              //     'Reviews',
+                              //     style: kTextStyle.copyWith(
+                              //         color: !description
+                              //             ? kTitleColor
+                              //             : kGreyTextColor),
+                              //   ),
+                              // ).visible(false).onTap(() {
+                              //   // setState(() {
+                              //   //   description = !description;
+                              //   // });
+                              // }),
                             ],
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              snapshot.data?.value?.description.toString() ??
-                                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit pharetra eu ut ut enim laoreet. Scel eri sque vitae, dui tortor tortor.',
+                              _parseHtmlString(snapshot.data?.value?.description
+                                      .toString()) ??
+                                  '',
                               style: kTextStyle,
+                              textAlign: TextAlign.justify,
                               maxLines: 5,
                             ).visible(description),
                           ),

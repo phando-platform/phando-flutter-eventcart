@@ -8,7 +8,7 @@ import '../../Screens/Checkout/delivery_status.dart';
 import '../../Services/api_manager.dart';
 import '../../GlobalComponents/button_global.dart';
 import '../../constant.dart';
-import '../Home Screen/home.dart';
+import '../HomeScreen/home.dart';
 
 // ignore: must_be_immutable
 class OrderList extends StatefulWidget {

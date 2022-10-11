@@ -6,7 +6,7 @@ import 'package:simple_connection_checker/simple_connection_checker.dart';
 
 import '../../../GlobalComponents/button_global.dart';
 import '../Authentication/signin.dart';
-import '../Home%20Screen/home.dart';
+import '../HomeScreen/home.dart';
 import '../../constant.dart';
 
 class OnBoard extends StatefulWidget {

@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:event_app/Models/category_model.dart';
+import 'package:event_app/Screens/HomeScreen/subcategory_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
@@ -41,6 +43,18 @@ class _HomeScreenState extends State<HomeScreen> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   PageController pageController = PageController(initialPage: 0);
   int currentIndexPage = 0;
+
+  List<SubCategories> getSubCategory(List? data) {
+    List<SubCategories> subcategory = [];
+    if (data != null) {
+      data.forEach((element) {
+        subcategory.add(SubCategories.fromJson(element));
+      });
+      return subcategory;
+    } else {
+      return subcategory;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -271,15 +285,50 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ).onTap(
                             () {
-                              CategoryProduct(
-                                catName: snapshot
-                                        .data?.value?.category?.data?[i].name ??
-                                    "NA",
-                                catId: snapshot
-                                        .data?.value?.category?.data?[i].id ??
-                                    2,
-                                page: 1,
-                              ).launch(context);
+                              print(snapshot.data?.value?.category?.data?[i]
+                                  .subCategories);
+                              // CategoryProduct(
+                              //   catName: snapshot
+                              //           .data?.value?.category?.data?[i].name ??
+                              //       "NA",
+                              //   catId: snapshot
+                              //           .data?.value?.category?.data?[i].id ??
+                              //       2,
+                              //   page: 1,
+                              // ).launch(context);
+                              if (snapshot.data?.value?.category?.data?[i]
+                                      .subCategories?.length !=
+                                  0) {
+                                print('i am here  =========');
+                                SubCategoryList(
+                                        catName: snapshot.data?.value?.category
+                                                ?.data?[i].name
+                                                .toString() ??
+                                            'NA',
+                                        catId: snapshot.data?.value?.category
+                                                ?.data?[i].id ??
+                                            2,
+                                        page: 1,
+                                        subCategory: getSubCategory(snapshot
+                                            .data
+                                            ?.value
+                                            ?.category
+                                            ?.data?[i]
+                                            .subCategories))
+                                    .launch(context);
+                              } else {
+                                print('i am here33333  =========');
+                                CategoryProduct(
+                                  catName: snapshot
+                                          .data?.value?.category?.data?[i].name
+                                          .toString() ??
+                                      'NA',
+                                  catId: snapshot
+                                          .data?.value?.category?.data?[i].id ??
+                                      2,
+                                  page: 1,
+                                ).launch(context);
+                              }
                             },
                             highlightColor: context.cardColor,
                           );
@@ -791,19 +840,27 @@ class ProductCard extends StatelessWidget {
 }
 
 class CategoryCard extends StatelessWidget {
-  const CategoryCard({Key? key, required this.categoryData}) : super(key: key);
+  const CategoryCard({Key? key, required this.categoryData, this.maxLine = 1})
+      : super(key: key);
   final CategoryData categoryData;
-
+  final int maxLine;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Column(
         children: [
-          Image.network(
-            categoryData.catIcon,
-            height: 80.0,
+          Container(
+            padding: const EdgeInsets.all(0),
+            height: 70,
             width: 80.0,
+            color: Colors.grey,
+            child: Image.network(
+              categoryData.catIcon,
+              height: 80.0,
+              width: 80.0,
+              fit: BoxFit.cover,
+            ),
           ),
           // SvgPicture.network(categoryData.catIcon),
           const SizedBox(
@@ -815,7 +872,7 @@ class CategoryCard extends StatelessWidget {
               categoryData.catTitle,
               style: kTextStyle,
               textAlign: TextAlign.center,
-              maxLines: 1,
+              maxLines: maxLine,
               overflow: TextOverflow.ellipsis,
             ),
           ),

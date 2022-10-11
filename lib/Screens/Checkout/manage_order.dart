@@ -7,7 +7,7 @@ import '../../Models/order_list_model.dart';
 import '../../Models/profile_model.dart';
 import '../../Services/api_manager.dart';
 import '../../constant.dart';
-import '../Home Screen/home.dart';
+import '../HomeScreen/home.dart';
 
 class ManageOrder extends StatefulWidget {
   const ManageOrder({Key? key, required this.details, required this.orderId})

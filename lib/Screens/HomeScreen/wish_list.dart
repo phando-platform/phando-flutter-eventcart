@@ -6,7 +6,7 @@ import 'package:nb_utils/nb_utils.dart';
 
 import '../../GlobalComponents/product_data.dart';
 import '../../Models/wish_list_model.dart';
-import '../../Screens/Authentication/signin.dart';
+import '../Authentication/signin.dart';
 import './product_details.dart';
 import '../../GlobalComponents/button_global.dart';
 import '../../Services/api_manager.dart';

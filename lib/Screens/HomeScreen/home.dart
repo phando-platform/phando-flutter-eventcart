@@ -8,12 +8,12 @@ import 'package:icon_badge/icon_badge.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../GlobalComponents/colors.dart';
-import '../../Screens/Authentication/signin.dart';
-import '../../Screens/Checkout/cart_screen.dart';
-import '../../Screens/Home%20Screen/all_products.dart';
-import '../../Screens/Home%20Screen/home_screen.dart';
-import '../../Screens/Home%20Screen/wish_list.dart';
-import '../../Screens/Profile/profile_screen.dart';
+import '../Authentication/signin.dart';
+import '../Checkout/cart_screen.dart';
+import '../../Screens/HomeScreen/all_products.dart';
+import '../../Screens/HomeScreen/home_screen.dart';
+import '../../Screens/HomeScreen/wish_list.dart';
+import '../Profile/profile_screen.dart';
 import '../../Services/cart_notifier.dart';
 import '../../Models/order_create_model.dart';
 import '../../constant.dart';

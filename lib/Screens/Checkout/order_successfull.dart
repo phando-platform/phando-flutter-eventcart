@@ -2,7 +2,7 @@ import 'package:event_app/Services/cart_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../../GlobalComponents/button_global.dart';
-import '../../Screens/Home%20Screen/home.dart';
+import '../HomeScreen/home.dart';
 import '../../Screens/Profile/order_list.dart';
 import '../../constant.dart';
 
