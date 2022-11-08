@@ -30,8 +30,9 @@ const String companyName = 'Event Cart';
 const String razorPayApiKey = 'rzp_test_BWqfBmcCYhpsci';
 const String companyDescription = 'Event Company';
 
-final kTextStyle = GoogleFonts.manrope(
+final kTextStyle = GoogleFonts.openSans(
   color: kTitleColor,
+
 );
 
 const kButtonDecoration = BoxDecoration(

@@ -37,6 +37,8 @@ class _CategoryProductState extends State<CategoryProduct> {
 
   bool isLoading = false;
   getProduct() async {
+    print(widget.catId);
+    print(widget.page);
     final value = await _apiManager.categoryProduct(widget.catId, widget.page);
     toast(value.message.toString());
   }
@@ -93,8 +95,7 @@ class _CategoryProductState extends State<CategoryProduct> {
             Container(
               padding: const EdgeInsets.all(10.0),
               child: FutureBuilder<TrendsModel>(
-                  future:
-                      _apiManager.categoryProduct(widget.catId, widget.page),
+                  future: _apiManager.categoryProduct(widget.catId, widget.page),
                   builder: (BuildContext context, snapshot) {
                     if (snapshot.hasData && snapshot.data != null) {
                       return Column(

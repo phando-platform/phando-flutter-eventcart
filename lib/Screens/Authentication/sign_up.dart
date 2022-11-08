@@ -28,11 +28,40 @@ class _SignUpState extends State<SignUp> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController otpController = TextEditingController();
 
   // default country id = India
   int countryId = 104;
-   String countryCode="IN";
+  String countryCode="IN";
+  bool otpVisible=false;
+  String  strOTP='';
 
+
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is disposed
+    mobileController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    mobileController.addListener((){
+      print("value: ${mobileController.text}");
+      String number=mobileController.text;
+      if(number.length==10){
+        otpVisible=true;
+      }
+      else{
+        otpVisible=false;
+      }
+
+      setState(() {
+
+      });
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -195,6 +224,40 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
               ),
+
+              Visibility(
+                visible: otpVisible,
+                  child: Column(
+                children: [
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  SizedBox(
+                    height: 60.0,
+                    child: AppTextField(
+                      textFieldType: TextFieldType.NUMBER,
+                      controller: otpController,
+                      enabled: true,
+                      decoration: InputDecoration(
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: kMainColor),
+                        ),
+                        labelText: 'OTP',
+                        hintText: 'Enter your OTP',
+                        labelStyle: kTextStyle,
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFFE8E7E5),
+                          ),
+                        ),
+
+                      ),
+                    ),
+                  ),
+                ],
+              )),
+
               const SizedBox(
                 height: 20.0,
               ),
@@ -237,10 +300,6 @@ class _SignUpState extends State<SignUp> {
   _onFormSubmit() async {
     print(mobileController.text);
     print(countryCode);
-
-
-
-
 
     if (firstNameController.text.length < 3) {
       toast("Please enter a valid First Name");
@@ -290,7 +349,8 @@ class _SignUpState extends State<SignUp> {
 
             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
                 country: countryId,
-                mobile: mobileController.text
+                mobile: mobileController.text,
+                status: 1
             )),
                 ModalRoute.withName("/AddBilling"));
 
@@ -349,7 +409,8 @@ class _SignUpState extends State<SignUp> {
 
           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
               country: countryId,
-              mobile: mobileController.text
+              mobile: mobileController.text,
+              status: 1
           )),
               ModalRoute.withName("/AddBilling"));
 

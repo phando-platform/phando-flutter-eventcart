@@ -24,6 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int wishLength = 0;
   int? country;
   String? mobile;
+  String? strUserImage;
 
   Future<void> getToken() async {
     SharedPreferences preferences = await _prefs;
@@ -32,6 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       token = preferences.getString('token')??"";
       country = preferences.getInt('country');
       mobile = preferences.getString('phone');
+      strUserImage = preferences.getString('userImage')??"https://cdn-icons-png.flaticon.com/512/149/149071.png";
       print(country);
       print(mobile);
     });
@@ -75,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if(snapshot.hasData){
             if(snapshot.data?.value?.shipping == null){
               return Center(
-                child: SizedBox(height:60.0,child: ButtonGlobal(buttontext: 'Add Shipping Id', buttonDecoration: kButtonDecoration.copyWith(color: kMainColor), onPressed: () => AddBilling(country: country, mobile: mobile).launch(context))),
+                child: SizedBox(height:60.0,child: ButtonGlobal(buttontext: 'Add Shipping Id', buttonDecoration: kButtonDecoration.copyWith(color: kMainColor), onPressed: () => AddBilling(country: country, mobile: mobile,status: 3).launch(context))),
               );
             }
             return SingleChildScrollView(
@@ -87,10 +89,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: kMainColor,
                     child: Column(
                       children: [
-                        const CircleAvatar(
-                          radius: 60.0,
-                          backgroundColor: kBgColor,
-                          backgroundImage: AssetImage('images/avatar.jpg'),
+                        ClipOval(
+
+                          child: Image.network(strUserImage??"strUserImage",
+                            fit: BoxFit.cover,
+                            width: 90.0,
+                            height: 90.0
+                          ),
                         ),
                         const SizedBox(
                           height: 10.0,
@@ -328,8 +333,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
           else{
             return  Center(
-
-              child: SizedBox(height:60.0,child: ButtonGlobal(buttontext: 'Add Shipping Id', buttonDecoration: kButtonDecoration.copyWith(color: kMainColor), onPressed: () => AddBilling(country: country, mobile: mobile).launch(context))),
+              child: SizedBox(height:60.0,child: ButtonGlobal(buttontext: 'Add Shipping Id', buttonDecoration: kButtonDecoration.copyWith(color: kMainColor), onPressed: () => AddBilling(country: country, mobile: mobile,status: 3).launch(context))),
             );
 
             /*return const Center(

@@ -239,7 +239,6 @@ class ApiManager {
       return WishListModel.fromJson(data);
     }
   }
-
   Future<TrendsModel> categoryProduct(int id, int page) async {
     final response = await http.get(
         Uri.parse(apiUrl + 'category/${id.toString()}/products?page=$page'));

@@ -689,12 +689,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              snapshot.data?.value?.description.toString() ??
-                                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit pharetra eu ut ut enim laoreet. Scel eri sque vitae, dui tortor tortor.',
-                              style: kTextStyle,
-                              maxLines: 5,
-                            ).visible(description),
+                            child: Container(
+                              child: Flexible(
+                                child: Text(
+                                  snapshot.data?.value?.description.toString() ??'',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                  maxLines: 20,
+                                ).visible(description),
+                              )),
+
                           ),
                           Card(
                             elevation: 1.0,

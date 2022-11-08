@@ -252,13 +252,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       HorizontalList(
                         spacing: 0,
-                        itemCount:
-                            snapshot.data?.value?.category?.data?.length ?? 10,
+                       // itemCount: snapshot.data?.value?.category?.data?.length ?? 10,
+                        itemCount: 2,
                         itemBuilder: (_, i) {
                           return CategoryCard(
                             categoryData: CategoryData(
-                              catTitle: snapshot
-                                      .data?.value?.category?.data?[i].name ??
+                              catTitle: snapshot.data?.value?.category?.data?[i].name ??
                                   'Null',
                               catIcon: snapshot
                                       .data?.value?.category?.data?[i].banner
@@ -285,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 20.0,
                       ),
                       //Flash Deals Section
-                      Padding(
+                     /* Padding(
                         padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                         child: Row(
                           children: [
@@ -316,8 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-                      ).visible(
-                          snapshot.data?.value?.flashSale?.isNotEmpty ?? false),
+                      ).visible(snapshot.data?.value?.flashSale?.isNotEmpty ?? false),
                       HorizontalList(
                         spacing: 10,
                         itemCount:
@@ -382,7 +380,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             highlightColor: context.cardColor,
                           );
                         },
-                      ),
+                      ),*/
                       const SizedBox(
                         height: 10.0,
                       ),
@@ -412,8 +410,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       HorizontalList(
                         spacing: 0,
-                        itemCount:
-                            snapshot.data?.value?.trendsProducts?.length ?? 10,
+
+                        itemCount:2,
                         itemBuilder: (_, i) {
                           return ProductCard(
                             productData: ProductData(
@@ -684,92 +682,101 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0.0,
-      color: kWhiteColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            alignment: Alignment.topRight,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(10.0),
-                  topLeft: Radius.circular(10.0),
+    return Padding(
+      padding: EdgeInsets.only(right: 20),
+      child: Card(
+        elevation: 0.0,
+        color: kWhiteColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              alignment: Alignment.topRight,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(10.0),
+                    topLeft: Radius.circular(10.0),
+                    bottomLeft: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0),
+                  ),
+                  child: Image(
+                    image: CachedNetworkImageProvider(productData.productImage),
+                    height: 160.0,
+                    width: 160,
+                    fit: BoxFit.fill,
+                  ),
                 ),
-                child: Image(
-                  image: CachedNetworkImageProvider(productData.productImage),
-                  height: 140.0,
-                  width: context.width() / 2,
-                  fit: BoxFit.cover,
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: const CircleAvatar(
+                    backgroundColor: kWhiteColor,
+                    radius: 15.0,
+                    child: Center(
+                        child: Icon(
+                      Icons.favorite_border_outlined,
+                      color: kMainColor,
+                    )),
+                  ).onTap(onBookMarkPressed),
+                )
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+              child: Container(
+                width: 150,
+                child: Text(
+                  productData.productTitle,
+                  style: kTextStyle,
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: const CircleAvatar(
-                  backgroundColor: kWhiteColor,
-                  radius: 15.0,
-                  child: Center(
-                      child: Icon(
-                    Icons.favorite_border_outlined,
-                    color: kMainColor,
-                  )),
-                ).onTap(onBookMarkPressed),
-              )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-            child: Text(
-              productData.productTitle,
-              style: kTextStyle,
-              maxLines: 3,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
-            child: Row(
-              children: [
-                RatingBarWidget(
-                  activeColor: const Color(0xFFFACA51),
-                  onRatingChanged: null,
-                  rating: productData.productRating.toDouble(),
-                  size: 12.0,
-                ),
-                Text(
-                  '(${productData.productRating})',
-                  style: kTextStyle.copyWith(
-                      color: kGreyTextColor, fontSize: 10.0),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
+              child: Row(
+                children: [
+                  RatingBarWidget(
+                    activeColor: const Color(0xFFFACA51),
+                    onRatingChanged: null,
+                    rating: productData.productRating.toDouble(),
+                    size: 12.0,
+                  ),
+                  Text(
+                    '(${productData.productRating})',
+                    style: kTextStyle.copyWith(
+                        color: kGreyTextColor, fontSize: 10.0),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
-            child: Row(
-              children: [
-                Text(
-                  currencyIcon + productData.productPrice,
-                  style: kTextStyle.copyWith(color: kMainColor, fontSize: 18.0),
-                ),
-                const SizedBox(
-                  width: 5.0,
-                ),
-                Text(
-                  currencyIcon + productData.productDiscount,
-                  style: kTextStyle.copyWith(
-                      color: kGreyTextColor,
-                      fontSize: 12.0,
-                      decoration: TextDecoration.lineThrough),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
+              child: Row(
+                children: [
+                  Text(
+                    currencyIcon + productData.productPrice,
+                    style: kTextStyle.copyWith(color: kMainColor, fontSize: 18.0),
+                  ),
+                  const SizedBox(
+                    width: 5.0,
+                  ),
+                  Text(
+                    currencyIcon + productData.productDiscount,
+                    style: kTextStyle.copyWith(
+                        color: kGreyTextColor,
+                        fontSize: 12.0,
+                        decoration: TextDecoration.lineThrough),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -781,14 +788,67 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Padding(
+       padding: EdgeInsets.only(right: 20),
+      child: Card(
+        elevation: 0.0,
+        color: kWhiteColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              alignment: Alignment.topRight,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(10.0),
+                    topLeft: Radius.circular(10.0),
+                    bottomLeft: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0),
+                  ),
+                  child: Image(
+                    image: CachedNetworkImageProvider(categoryData.catIcon),
+                    height: 160.0,
+                    width: 160,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+              child: Container(
+                width: 150,
+                child: Text(
+                  categoryData.catTitle,
+                  style: kTextStyle,
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                ),
+              ),
+            ),
+
+          ],
+        ),
+      ),
+    );
+
+
+    /*return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Column(
         children: [
           Image.network(
             categoryData.catIcon,
-            height: 80.0,
-            width: 80.0,
+            height: 90.0,
+            width: 90.0,
+            fit: BoxFit.cover,
           ),
           // SvgPicture.network(categoryData.catIcon),
           const SizedBox(
@@ -805,6 +865,6 @@ class CategoryCard extends StatelessWidget {
           ),
         ],
       ),
-    );
+    );*/
   }
 }

@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../GlobalComponents/button_global.dart';
@@ -33,12 +38,17 @@ class _PersonalSettingsState extends State<PersonalSettings> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   String token = '';
+  String strAttachmentImageName = 'Attachment';
+  File? attachmentFile;
+  String attachmentBytedata="";
+  String strUserImage="https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
   Future<void> getToken() async {
     SharedPreferences preferences = await _prefs;
 
     setState(() {
       token = preferences.getString('token')!;
+      strUserImage = preferences.getString('userImage')??"https://cdn-icons-png.flaticon.com/512/149/149071.png";
     });
   }
 
@@ -61,10 +71,10 @@ class _PersonalSettingsState extends State<PersonalSettings> {
               topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
         ),
         builder: (BuildContext contextModel) {
-          return Padding(
-            padding: MediaQuery.of(context).viewInsets,
+          return FractionallySizedBox(
+            heightFactor: 0.9,
             child: Container(
-              height: 450.0,
+              height: 450,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(20.0),
@@ -87,6 +97,34 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                     const Divider(
                       color: kBgColor,
                       thickness: 1.0,
+                    ),
+
+                    ClipOval(
+
+                      child: Image.network(strUserImage??"strUserImage",
+                          fit: BoxFit.cover,
+                          width: 90.0,
+                          height: 90.0
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 40,right: 40),
+                      child: ButtonGlobal(
+                          buttontext: 'Select Image',
+                          buttonDecoration: kButtonDecoration.copyWith(
+                              color: kGreyTextColor),
+                          onPressed: () async {
+                            ImageFromGallery();
+
+
+                          }
+                          ),
+                    ),
+                    const SizedBox(
+                      height: 20.0,
                     ),
                     AppTextField(
                       textFieldType: TextFieldType.NAME,
@@ -171,7 +209,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                     ButtonGlobal(
                         buttontext: 'Update',
                         buttonDecoration:
-                            kButtonDecoration.copyWith(color: kMainColor),
+                        kButtonDecoration.copyWith(color: kMainColor),
                         onPressed: () async {
                           try {
                             EasyLoading.show(status: 'Updating Profile');
@@ -194,6 +232,8 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                         }),
                   ],
                 ),
+
+
               ),
             ),
           );
@@ -456,5 +496,60 @@ class _PersonalSettingsState extends State<PersonalSettings> {
         ],
       ),
     );
+  }
+  ImageFromGallery() async {
+    PickedFile? pickedFile = await ImagePicker()
+        .getImage(source: ImageSource.gallery, maxHeight: 200, maxWidth: 200);
+    if (pickedFile != null) {
+      setState(() {
+        attachmentFile = File(pickedFile.path);
+        print(attachmentFile.toString());
+        strAttachmentImageName = pickedFile.path.split('/').last;
+        final bytes =File(pickedFile.path).readAsBytesSync();
+        attachmentBytedata=base64Encode(bytes);
+        print(strAttachmentImageName);
+        print(attachmentBytedata);
+        updateUserImage(pickedFile);
+      });
+    }
+  }
+
+
+  Future<void>  updateUserImage(PickedFile pickedFile) async {
+
+    FormData formData = new FormData.fromMap({
+
+      'image': await MultipartFile.fromFile(pickedFile.path,
+          filename: strAttachmentImageName),
+    });
+    try {
+      Dio dio = Dio();
+      Response response = await dio.post(
+          ApiManager.apiUrl+"profile/image",
+          data: formData,
+          options: Options(
+              headers: {
+                'Authorization':'Bearer '+' '+token,
+              })
+      );
+
+      if (response.data['message'] == 'Image has been updated') {
+        Fluttertoast.showToast(msg: 'User Image Updated');
+        Navigator.pop(context); //pop dialog
+        strUserImage=response.data['value'];
+        final SharedPreferences prefs = await _prefs;
+        prefs.setString('userImage', strUserImage ?? 'Guest');
+        setState(() {
+
+        });
+
+      } else {
+        //Navigator.pop(context);
+        Fluttertoast.showToast(msg: "Something went wrong! Try after sometime.");
+      }
+    } on DioError catch (e) {
+      // Navigator.pop(context);
+      Fluttertoast.showToast(msg: e.message);
+    }
   }
 }

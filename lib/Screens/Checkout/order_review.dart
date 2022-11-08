@@ -125,7 +125,7 @@ class _OrderReviewState extends State<OrderReview> {
                             buttonDecoration:
                                 kButtonDecoration.copyWith(color: kMainColor),
                             onPressed: () =>
-                                AddBilling(country: country, mobile: mobile)
+                                AddBilling(country: country, mobile: mobile,status: 2)
                                     .launch(context))),
                   );
                 }
@@ -452,8 +452,7 @@ class _OrderReviewState extends State<OrderReview> {
                                       color: kMainColor),
                                   onPressed: () async {
                                     try {
-                                      EasyLoading.show(
-                                          status: 'Creating Order');
+                                      EasyLoading.show(status: 'Creating Order');
                                       double subtotal = (ref.read(cartProvider.notifier).getTotalCharge() - discount);
                                       double shipping = ref.read(cartProvider.notifier).getShippingCharge();
                                       double total = (subtotal + shipping);
