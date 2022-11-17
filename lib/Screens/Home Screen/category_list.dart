@@ -4,14 +4,16 @@ import 'package:nb_utils/nb_utils.dart';
 
 import '../../Models/category_model.dart';
 import '../../GlobalComponents/button_global.dart';
+import '../../Models/home_model.dart';
 import '../../Services/api_manager.dart';
 import '../../constant.dart';
 import 'category_product.dart';
 import 'home.dart';
 
 class CategoryList extends StatefulWidget {
-  const CategoryList({Key? key}) : super(key: key);
-
+  const CategoryList({Key? key,
+    required this.subCatModel,}) : super(key: key);
+  final HomeModel? subCatModel;
   @override
   _CategoryListState createState() => _CategoryListState();
 }
@@ -113,9 +115,9 @@ class _CategoryListState extends State<CategoryList> {
                   ).onTap(
                     () {
                       CategoryProduct(
-                        catName: snapshot.data?.value?.data?[index].name
-                                .toString() ??
-                            'NA',
+                        subCatModel: widget.subCatModel,
+                        clickIndex: index,
+                        catName: snapshot.data?.value?.data?[index].name.toString() ?? 'NA',
                         catId: snapshot.data?.value?.data?[index].id ?? 2,
                         page: 1,
                       ).launch(context);

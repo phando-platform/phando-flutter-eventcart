@@ -9,6 +9,7 @@ class CartItemUi {
   dynamic productPrice;
   String? productColor;
   String? productSize;
+  String? minimumQtd;
 
   CartItemUi({
     required this.id,
@@ -18,6 +19,7 @@ class CartItemUi {
     required this.productPrice,
     required this.productColor,
     required this.productSize,
+    required this.minimumQtd,
   });
 }
 

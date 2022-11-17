@@ -38,6 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       print(mobile);
     });
     final wish = await _apiManager.wishList(token);
+    final value = await _apiManager.getProfileInfo(token);
     setState(() {
       wishLength = wish.value!.data!.length;
     });

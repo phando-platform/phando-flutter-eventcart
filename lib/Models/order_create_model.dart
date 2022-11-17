@@ -112,6 +112,7 @@ class Carts {
     String? shippingCost,
     String? productPriceTotal,
     String? estimatedShippingDays,
+    String? minQuantity,
   }) {
     _id = id;
     _price = price;
@@ -121,6 +122,7 @@ class Carts {
     _shippingCost = shippingCost;
     _productPriceTotal = productPriceTotal;
     _estimatedShippingDays = estimatedShippingDays;
+    _minQuantity = minQuantity;
   }
 
   Carts.fromJson(dynamic json) {
@@ -132,6 +134,7 @@ class Carts {
     _shippingCost = json['shipping_cost'];
     _productPriceTotal = json['product_price_total'];
     _estimatedShippingDays = json['estimated_shipping_days'];
+    _minQuantity = json['minimum_qty'];
   }
 
   String? _id;
@@ -142,6 +145,7 @@ class Carts {
   String? _shippingCost;
   String? _productPriceTotal;
   String? _estimatedShippingDays;
+  String? _minQuantity;
 
   String? get id => _id;
 
@@ -159,6 +163,7 @@ class Carts {
   String? get productPriceTotal => _productPriceTotal;
 
   String? get estimatedShippingDays => _estimatedShippingDays;
+  String? get  minQuantity => _minQuantity;
 
   set productPriceTotal(dynamic p) {
     _productPriceTotal = p;
@@ -174,6 +179,7 @@ class Carts {
     map['shipping_cost'] = _shippingCost!;
     map['product_price_total'] = _productPriceTotal!;
     map['estimated_shipping_days'] = _estimatedShippingDays!;
+    map['minimum_qty'] = _minQuantity!;
     return map;
   }
 }
@@ -188,6 +194,7 @@ class Cart {
     dynamic shippingCost,
     dynamic productPriceTotal,
     dynamic estimatedShippingDays,
+    dynamic minQuantity,
   }) {
     _id = id;
     _price = price;
@@ -197,6 +204,7 @@ class Cart {
     _shippingCost = shippingCost;
     _productPriceTotal = productPriceTotal;
     _estimatedShippingDays = estimatedShippingDays;
+    _minQuantity = minQuantity;
   }
 
   Cart.fromJson(dynamic json) {
@@ -208,6 +216,7 @@ class Cart {
     _shippingCost = json['shipping_cost'];
     _productPriceTotal = json['product_price_total'];
     _estimatedShippingDays = json['estimated_shipping_days'];
+    _minQuantity = json['minimum_qty'];
   }
 
   dynamic _id;
@@ -218,6 +227,7 @@ class Cart {
   dynamic _shippingCost;
   dynamic _productPriceTotal;
   dynamic _estimatedShippingDays;
+  dynamic _minQuantity;
 
   dynamic get id => _id;
 
@@ -236,6 +246,7 @@ class Cart {
   dynamic get productPriceTotal => _productPriceTotal;
 
   dynamic get estimatedShippingDays => _estimatedShippingDays;
+  dynamic get minQuantity => _minQuantity;
 
   set productPriceTotal(dynamic p) {
     _productPriceTotal = p;
@@ -255,6 +266,7 @@ class Cart {
     map['shipping_cost'] = _shippingCost;
     map['product_price_total'] = _productPriceTotal;
     map['estimated_shipping_days'] = _estimatedShippingDays;
+    map['minimum_qty'] = _minQuantity;
     return map;
   }
 }

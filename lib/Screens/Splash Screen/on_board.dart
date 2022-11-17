@@ -185,15 +185,7 @@ class _OnBoardState extends State<OnBoard> {
                 buttontext: 'Get Started',
                 buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
                 onPressed: () async {
-                  bool isConnected =
-                      await SimpleConnectionChecker.isConnectedToInternet();
-                  if (isConnected) {
-                    const SignIn().launch(context, isNewTask: true);
-                  } else {
-                    EasyLoading.showError(
-                        'Please check your internet connection',
-                        duration: const Duration(seconds: 5));
-                  }
+                  const SignIn().launch(context, isNewTask: true);
                 },
               ),
             ).visible(currentIndexPage == 2),

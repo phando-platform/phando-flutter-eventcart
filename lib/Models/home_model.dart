@@ -1369,6 +1369,7 @@ class Data {
     dynamic commissionRate,
     int? showInHome,
     int? isActive,
+    List<Subcat>? subCat,
   }) {
     _id = id;
     _name = name;
@@ -1382,6 +1383,7 @@ class Data {
     _commissionRate = commissionRate;
     _showInHome = showInHome;
     _isActive = isActive;
+    _subCat = subCat;
   }
 
   Data.fromJson(dynamic json) {
@@ -1397,6 +1399,12 @@ class Data {
     _commissionRate = json['commission_rate'];
     _showInHome = json['show_in_home'];
     _isActive = json['is_active'];
+    if (json['sub_categories'] != null) {
+      _subCat = [];
+      json['sub_categories'].forEach((v) {
+        _subCat?.add(Subcat.fromJson(v));
+      });
+    }
   }
 
   int? _id;
@@ -1411,6 +1419,7 @@ class Data {
   dynamic _commissionRate;
   int? _showInHome;
   int? _isActive;
+  List<Subcat>? _subCat;
 
   int? get id => _id;
 
@@ -1435,6 +1444,7 @@ class Data {
   int? get showInHome => _showInHome;
 
   int? get isActive => _isActive;
+  List<Subcat>? get subcat => _subCat;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -1450,6 +1460,72 @@ class Data {
     map['commission_rate'] = _commissionRate;
     map['show_in_home'] = _showInHome;
     map['is_active'] = _isActive;
+    if (_subCat != null) {
+      map['sub_categories'] = _subCat?.map((v) => v.toJson()).toList();
+    }
     return map;
+  }
+
+}
+
+
+class Subcat {
+  int? id;
+  String? name;
+  int? categoryId;
+  int? order;
+  String? icon;
+  String? banner;
+  String? metaTitle;
+  String? metaDescription;
+  String? slug;
+  int? commissionRate;
+  int? showInHome;
+  int? isActive;
+
+  Subcat(
+      {this.id,
+        this.name,
+        this.categoryId,
+        this.order,
+        this.icon,
+        this.banner,
+        this.metaTitle,
+        this.metaDescription,
+        this.slug,
+        this.commissionRate,
+        this.showInHome,
+        this.isActive});
+
+  Subcat.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    categoryId = json['category_id'];
+    order = json['order'];
+    icon = json['icon'];
+    banner = json['banner'];
+    metaTitle = json['meta_title'];
+    metaDescription = json['meta_description'];
+    slug = json['slug'];
+    commissionRate = json['commission_rate'];
+    showInHome = json['show_in_home'];
+    isActive = json['is_active'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> datad = new Map<String, dynamic>();
+    datad['id'] = this.id;
+    datad['name'] = this.name;
+    datad['category_id'] = this.categoryId;
+    datad['order'] = this.order;
+    datad['icon'] = this.icon;
+    datad['banner'] = this.banner;
+    datad['meta_title'] = this.metaTitle;
+    datad['meta_description'] = this.metaDescription;
+    datad['slug'] = this.slug;
+    datad['commission_rate'] = this.commissionRate;
+    datad['show_in_home'] = this.showInHome;
+    datad['is_active'] = this.isActive;
+    return datad;
   }
 }

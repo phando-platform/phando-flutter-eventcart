@@ -1,4 +1,4 @@
-import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../GlobalComponents/button_global.dart';
@@ -214,7 +214,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
               ),
             ),
           ).visible(isVerified),
-          Padding(
+          /*Padding(
             padding: const EdgeInsets.all(20.0),
             child: ArgonTimerButton(
               initialTimer: 30,
@@ -252,7 +252,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                 }
               },
             ),
-          ).visible(!isVerified),
+          ).visible(!isVerified),*/
           const CircularProgressIndicator().visible(isLoading),
           Padding(
             padding: const EdgeInsets.only(left: 10.0, right: 10.0),

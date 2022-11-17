@@ -18,8 +18,10 @@ import '../../constant.dart';
 // ignore: must_be_immutable
 class ProductDetails extends StatefulWidget {
   ProductDetails({Key? key, @required this.productId}) : super(key: key);
+
   // ignore: prefer_typing_uninitialized_variables
   var productId;
+
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
@@ -178,38 +180,32 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       productPriceTotal:
                                           snapshot.data?.value?.salePrice *
                                                   productQuantity ??
-                                              'Null');
+                                              'Null',
+                                    minQuantity:
+                                    snapshot.data?.value?.minimumQty ??
+                                        'Null',);
                                   CartItemUi cartUi = CartItemUi(
                                       id: snapshot.data?.value?.id ?? 0,
                                       productName: snapshot.data?.value?.name,
-                                      productImage: snapshot
-                                          .data?.value?.images?[0].image,
+                                      productImage: snapshot.data?.value?.images?[0].image,
                                       productQuantity: productQuantity,
-                                      productPrice:
-                                          snapshot.data?.value?.salePrice ??
-                                              0.00,
-                                      productColor:
-                                          snapshot.data!.value!.colors!.isEmpty
-                                              ? 'Null'
+                                      productPrice: snapshot.data?.value?.salePrice ?? 0.00,
+                                      productColor: snapshot.data!.value!.colors!.isEmpty ? 'Null'
                                               : snapshot
                                                   .data
                                                   ?.value
                                                   ?.colors?[selectedColorIndex]
                                                   .hex,
-                                      productSize:
-                                          snapshot.data!.value!.sizes!.isEmpty
+                                      productSize: snapshot.data!.value!.sizes!.isEmpty
                                               ? 'Null'
                                               : snapshot
                                                   .data
                                                   ?.value
                                                   ?.sizes?[selectedSizeIndex]
-                                                  .name);
-                                  ref
-                                      .read(cartProvider.notifier)
-                                      .addItem(cartItem);
-                                  ref
-                                      .read(cartItemUiProvider.notifier)
-                                      .addUiItem(cartUi);
+                                                  .name,
+                                      minimumQtd: snapshot.data!.value!.minimumQty.toString());
+                                  ref.read(cartProvider.notifier).addItem(cartItem);
+                                  ref.read(cartItemUiProvider.notifier).addUiItem(cartUi);
                                   EasyLoading.showSuccess('Added To Cart');
                                   setState(() {});
                                 } else {
@@ -309,14 +305,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                   ?.value
                                                   ?.colors?[selectedColorIndex]
                                                   .hex,
-                                      productSize:
-                                          snapshot.data!.value!.sizes!.isEmpty
+                                      productSize: snapshot.data!.value!.sizes!.isEmpty
                                               ? 'Null'
                                               : snapshot
                                                   .data
                                                   ?.value
                                                   ?.sizes?[selectedSizeIndex]
-                                                  .name);
+                                                  .name,
+                                      minimumQtd: snapshot.data!.value!.minimumQty.toString());
                                   ref
                                       .read(cartProvider.notifier)
                                       .addItem(cartItem);
@@ -438,7 +434,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 icon: Icon(Icons.share),
                                 color: kGreyTextColor,
                                 onPressed: () => shareProductLink(
-                                    "Some Title", "www.google.com"),
+                                    "Event Cart", "https://eventcart.co.in/p/"+(snapshot.data?.value?.slug??'')),
                               ),
                               const SizedBox(
                                 width: 5.0,
@@ -688,8 +684,21 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ],
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: snapshot.data?.value?.description
+                                              .toString() ?? '',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              )
+
+                              /*Container(
                               child: Flexible(
                                 child: Text(
                                   snapshot.data?.value?.description.toString() ??'',
@@ -698,9 +707,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   ),
                                   maxLines: 20,
                                 ).visible(description),
-                              )),
+                              )),*/
 
-                          ),
+                              ),
                           Card(
                             elevation: 1.0,
                             shape: RoundedRectangleBorder(

@@ -85,8 +85,8 @@ class Customer {
   String? username;
   String? email;
   String? image;
-  Null? gender;
-  Null? dob;
+  String? gender;
+  String? dob;
 
   Customer(
       {this.id,
@@ -109,8 +109,8 @@ class Customer {
     username = json['username'];
     email = json['email'];
     image = json['image'];
-    gender = json['gender'];
-    dob = json['dob'];
+    gender = json['gender']??'';
+    dob = json['dob']??'';
   }
 
   Map<String, dynamic> toJson() {
@@ -138,8 +138,8 @@ class Orders {
   int? productId;
   int? salePrice;
   int? qty;
-  Null? color;
-  Null? size;
+  String? color;
+  String? size;
   int? discount;
   int? tax;
   int? shippingCost;
@@ -148,7 +148,7 @@ class Orders {
   int? grandTotal;
   int? currencyId;
   double? exchangeRate;
-  Null? estimatedShippingDays;
+  String? estimatedShippingDays;
   String? createdAt;
   String? updatedAt;
 
@@ -184,8 +184,8 @@ class Orders {
     productId = json['product_id'];
     salePrice = json['sale_price'];
     qty = json['qty'];
-    color = json['color'];
-    size = json['size'];
+    color = json['color']??'';
+    size = json['size']??'';
     discount = json['discount'];
     tax = json['tax'];
     shippingCost = json['shipping_cost'];
@@ -193,10 +193,10 @@ class Orders {
     totalPrice = json['total_price'];
     grandTotal = json['grand_total'];
     currencyId = json['currency_id'];
-    exchangeRate = json['exchange_rate'];
-    estimatedShippingDays = json['estimated_shipping_days'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    exchangeRate = json['exchange_rate'].toDouble();
+    estimatedShippingDays = json['estimated_shipping_days']??'';
+    createdAt = json['created_at']??'';
+    updatedAt = json['updated_at']??'';
   }
 
   Map<String, dynamic> toJson() {
@@ -236,11 +236,11 @@ class Billing {
   String? userCity;
   int? countryId;
   String? mobile;
-  Null? email;
+  String? email;
   int? isActive;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
   Country? country;
 
   Billing(
@@ -311,7 +311,7 @@ class Country {
   int? numCode;
   String? phoneCode;
   int? isActive;
-  Null? createdAt;
+  String? createdAt;
   String? updatedAt;
 
   Country(
@@ -362,11 +362,11 @@ class Shipping {
   String? addressLineOne;
   String? addressLineTwo;
   String? shippingMobile;
-  Null? shippingEmail;
+  String? shippingEmail;
   String? shippingTown;
   String? shippingPost;
   int? shippingCountryId;
-  Null? note;
+  String? note;
   String? createdAt;
   String? updatedAt;
   Country? country;
@@ -394,13 +394,13 @@ class Shipping {
     addressLineOne = json['address_line_one'];
     addressLineTwo = json['address_line_two'];
     shippingMobile = json['shipping_mobile'];
-    shippingEmail = json['shipping_email'];
+    shippingEmail = json['shipping_email']??'';
     shippingTown = json['shipping_town'];
     shippingPost = json['shipping_post'];
     shippingCountryId = json['shipping_country_id'];
-    note = json['note'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    note = json['note']??'';
+    createdAt = json['created_at']??'';
+    updatedAt = json['updated_at']??'';
     country =
     json['country'] != null ? new Country.fromJson(json['country']) : null;
   }

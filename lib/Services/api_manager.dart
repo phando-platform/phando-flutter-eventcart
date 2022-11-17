@@ -58,7 +58,8 @@ class ApiManager {
       String phoneNumber,
       String passwordUser) async {
     final response = await http.post(
-      Uri.parse(apiUrl + 'register'),
+     // Uri.parse(apiUrl + 'register'),
+      Uri.parse(apiUrl + 'register_with_email_verification'),
       headers: <String, String>{
         'Accept': 'application/json',
       },
@@ -240,6 +241,9 @@ class ApiManager {
     }
   }
   Future<TrendsModel> categoryProduct(int id, int page) async {
+    print('DONE');
+    print(id);
+    print(page);
     final response = await http.get(
         Uri.parse(apiUrl + 'category/${id.toString()}/products?page=$page'));
     final data = jsonDecode(response.body);

@@ -232,6 +232,7 @@ class _AddBillingState extends State<AddBilling> {
                             prefs.setString('user_city', cityController.text.toString() ?? 'xyz');
                             prefs.setString('add_one', addressOneController.text.toString() ?? 'xyz');
                             prefs.setString('add_two', addressTwoController.text.toString() ?? 'xyz');
+                            prefs.setString('detailedFilled', "1");
                             EasyLoading.showSuccess(
                                 'Shipping Address Successfully Saved');
 

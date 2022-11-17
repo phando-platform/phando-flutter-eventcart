@@ -9,6 +9,7 @@ import '../../Services/api_manager.dart';
 import '../Home Screen/home.dart';
 import './sign_up.dart';
 import './forgot_password.dart';
+import 'add_billing.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _SignInState extends State<SignIn> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
+  int countryId = 104;
   Future<void> setToken() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
@@ -190,15 +191,21 @@ class _SignInState extends State<SignIn> {
                         prefs.setString('phone', login.customer?.mobile ?? 'Guest');
                         prefs.setString('username', login.customer?.username ?? 'Guest');
                         prefs.setBool('autoLogin', isChecked);
+                        String? detailFilled= prefs.getString('detailedFilled');
+                        countryId=prefs.getInt('country')??0;
 
-                        print("User name: ");
-                        // final SharedPreferences _prefs = await SharedPreferences.getInstance();
-
-                        print(prefs.getString('firstName'));
-                        print(prefs.getString('lastName'));
-                       // const Home().launch(context);
+                       if(detailFilled==1){
                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
                             ModalRoute.withName("/Home"));
+                       }
+                       else{
+                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
+                             country: countryId,
+                             mobile: login.customer?.mobile,
+                             status: 1
+                         )),
+                             ModalRoute.withName("/AddBilling"));
+                       }
                       } else {
                         EasyLoading.showError(login.error.toString());
                       }

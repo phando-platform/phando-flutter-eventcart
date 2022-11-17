@@ -41,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   PageController pageController = PageController(initialPage: 0);
   int currentIndexPage = 0;
+  HomeModel? homeModel;
 
   @override
   Widget build(BuildContext context) {
@@ -186,15 +187,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(20.0),
-                                        color: kMainColor.withOpacity(0.5),
+                                       /* color: kMainColor.withOpacity(0.5),*/
                                       ),
                                       child: Text(
-                                        snapshot
-                                                .data
-                                                ?.value
-                                                ?.banners![itemIndex]
-                                                .offerTitle ??
-                                            '',
+                                        snapshot.data?.value?.banners![itemIndex].offerTitle ?? '',
                                         style: kTextStyle.copyWith(
                                             color: kWhiteColor,
                                             fontWeight: FontWeight.bold),
@@ -239,7 +235,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             const Spacer(),
                             GestureDetector(
                               onTap: () {
-                                const CategoryList().launch(context);
+
+                                 CategoryList(
+                                  subCatModel: snapshot.data,
+                                ).launch(context);
                               },
                               child: Text(
                                 'See All',
@@ -266,13 +265,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ).onTap(
                             () {
+
+                              print(snapshot.data?.value?.category?.data?[i].subcat?.length);
                               CategoryProduct(
-                                catName: snapshot
-                                        .data?.value?.category?.data?[i].name ??
-                                    "NA",
-                                catId: snapshot
-                                        .data?.value?.category?.data?[i].id ??
-                                    2,
+                                subCatModel: snapshot.data,
+                                clickIndex: i,
+                                catName: snapshot.data?.value?.category?.data?[i].name ?? "NA",
+                                catId: snapshot.data?.value?.category?.data?[i].id ?? 2,
+                                /*subCat: snapshot.data?.value?.category?.data?[i].subcat,*/
                                 page: 1,
                               ).launch(context);
                             },
@@ -682,102 +682,108 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: 20),
-      child: Card(
-        elevation: 0.0,
-        color: kWhiteColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Stack(
-              alignment: Alignment.topRight,
+    return Column(
+      children: [
+
+        Padding(
+          padding: EdgeInsets.only(right: 10,left: 10),
+          child: Card(
+            elevation: 0.0,
+            color: kWhiteColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(10.0),
-                    topLeft: Radius.circular(10.0),
-                    bottomLeft: Radius.circular(10.0),
-                    bottomRight: Radius.circular(10.0),
-                  ),
-                  child: Image(
-                    image: CachedNetworkImageProvider(productData.productImage),
-                    height: 160.0,
-                    width: 160,
-                    fit: BoxFit.fill,
+                Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(10.0),
+                        topLeft: Radius.circular(10.0),
+                        bottomLeft: Radius.circular(10.0),
+                        bottomRight: Radius.circular(10.0),
+                      ),
+                      child: Image(
+                        image: CachedNetworkImageProvider(productData.productImage),
+                        height: 160.0,
+                        width: 160,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: const CircleAvatar(
+                        backgroundColor: kWhiteColor,
+                        radius: 15.0,
+                        child: Center(
+                            child: Icon(
+                              Icons.favorite_border_outlined,
+                              color: kMainColor,
+                            )),
+                      ).onTap(onBookMarkPressed),
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                  child: Container(
+                    width: 150,
+                    child: Text(
+                      productData.productTitle,
+                      style: kTextStyle,
+                      textAlign: TextAlign.center,
+                      maxLines: 3,
+                    ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: const CircleAvatar(
-                    backgroundColor: kWhiteColor,
-                    radius: 15.0,
-                    child: Center(
-                        child: Icon(
-                      Icons.favorite_border_outlined,
-                      color: kMainColor,
-                    )),
-                  ).onTap(onBookMarkPressed),
-                )
+                  padding: const EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
+                  child: Row(
+                    children: [
+                      RatingBarWidget(
+                        activeColor: const Color(0xFFFACA51),
+                        onRatingChanged: null,
+                        rating: productData.productRating.toDouble(),
+                        size: 12.0,
+                      ),
+                      Text(
+                        '(${productData.productRating})',
+                        style: kTextStyle.copyWith(
+                            color: kGreyTextColor, fontSize: 10.0),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        currencyIcon + productData.productPrice,
+                        style: kTextStyle.copyWith(color: kMainColor, fontSize: 18.0),
+                      ),
+                      const SizedBox(
+                        width: 5.0,
+                      ),
+                      Text(
+                        currencyIcon + productData.productDiscount,
+                        style: kTextStyle.copyWith(
+                            color: kGreyTextColor,
+                            fontSize: 12.0,
+                            decoration: TextDecoration.lineThrough),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-              child: Container(
-                width: 150,
-                child: Text(
-                  productData.productTitle,
-                  style: kTextStyle,
-                  textAlign: TextAlign.center,
-                  maxLines: 3,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
-              child: Row(
-                children: [
-                  RatingBarWidget(
-                    activeColor: const Color(0xFFFACA51),
-                    onRatingChanged: null,
-                    rating: productData.productRating.toDouble(),
-                    size: 12.0,
-                  ),
-                  Text(
-                    '(${productData.productRating})',
-                    style: kTextStyle.copyWith(
-                        color: kGreyTextColor, fontSize: 10.0),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
-              child: Row(
-                children: [
-                  Text(
-                    currencyIcon + productData.productPrice,
-                    style: kTextStyle.copyWith(color: kMainColor, fontSize: 18.0),
-                  ),
-                  const SizedBox(
-                    width: 5.0,
-                  ),
-                  Text(
-                    currencyIcon + productData.productDiscount,
-                    style: kTextStyle.copyWith(
-                        color: kGreyTextColor,
-                        fontSize: 12.0,
-                        decoration: TextDecoration.lineThrough),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
+      ],
+
     );
   }
 }

@@ -24,6 +24,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   int productQuantity = 1;
+  int minQuantity = 0;
   double shipping = 0.0;
   final couponController = TextEditingController();
   final ApiManager _apiManager = ApiManager();
@@ -116,8 +117,8 @@ class _CartScreenState extends State<CartScreen> {
                     shrinkWrap: true,
                     itemCount: cartItemUi.length,
                     itemBuilder: (_, index) {
-                      productQuantity =
-                          ref.read(cartProvider).cartItems[index].quantity;
+                      productQuantity = ref.read(cartProvider).cartItems[index].quantity;
+                      minQuantity = ref.read(cartProvider).cartItems[index].minQuantity;
                       return Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Card(
@@ -241,10 +242,10 @@ class _CartScreenState extends State<CartScreen> {
                                                         .cartItemUis[index]
                                                         .productQuantity!
                                                         .toInt());
-                                            if (productQuantity == 10) {
+                                            /*if (productQuantity == 10) {
                                               toast(
                                                   'You can\'t buy more than 10 products');
-                                            }
+                                            }*/
                                           }),
                                         ],
                                       ),
@@ -518,12 +519,20 @@ class _CartScreenState extends State<CartScreen> {
                               buttonDecoration:
                                   kButtonDecoration.copyWith(color: kMainColor),
                               onPressed: () {
-                                if (username != 'Guest') {
-                                  const OrderReview().launch(context);
-                                } else {
-                                  toast('Please sign In to Checkout');
-                                  const SignIn().launch(context);
+                                if(productQuantity<minQuantity){
+                                  toast(
+                                      'Minimum Quantity should be atleast '+minQuantity.toString());
                                 }
+                                else{
+                                  if (username != 'Guest') {
+                                    const OrderReview().launch(context);
+                                  } else {
+                                    toast('Please sign In to Checkout');
+                                    const SignIn().launch(context);
+                                  }
+                                }
+                                print(productQuantity);
+                                print(minQuantity);
                               },
                             ),
                           ],

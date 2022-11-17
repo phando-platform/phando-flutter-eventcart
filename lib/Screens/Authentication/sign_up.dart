@@ -1,5 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:event_app/GlobalComponents/form_errors_list.dart';
+import 'package:event_app/Screens/Authentication/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -226,7 +227,8 @@ class _SignUpState extends State<SignUp> {
               ),
 
               Visibility(
-                visible: otpVisible,
+               // visible: otpVisible,
+                visible: false,
                   child: Column(
                 children: [
                   const SizedBox(
@@ -346,14 +348,14 @@ class _SignUpState extends State<SignUp> {
             prefs.setInt('country', countryId);
             prefs.setString('username', signUp.customer?.username ?? 'Guest');
             prefs.setBool('autoLogin', true);
-
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
+            const SignIn().launch(context, isNewTask: true);
+           /* Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
                 country: countryId,
                 mobile: mobileController.text,
                 status: 1
             )),
                 ModalRoute.withName("/AddBilling"));
-
+*/
 
             /* AddBilling(
             country: countryId,
@@ -397,7 +399,7 @@ class _SignUpState extends State<SignUp> {
             _showErrors = true;
             _errorsList = [];
           });
-          EasyLoading.showSuccess('Sign up Successful...');
+          EasyLoading.showSuccess('Please verify email to login');
           final SharedPreferences prefs = await _prefs;
           prefs.setString('token', signUp.accessToken?.toString() ?? 'Guest');
           prefs.setString('lastName', signUp.customer?.lastName ?? 'Guest');
@@ -406,13 +408,14 @@ class _SignUpState extends State<SignUp> {
           prefs.setInt('country', countryId);
           prefs.setString('username', signUp.customer?.username ?? 'Guest');
           prefs.setBool('autoLogin', true);
-
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
+          const SignIn().launch(context, isNewTask: true);
+          /*Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
               country: countryId,
               mobile: mobileController.text,
               status: 1
-          )),
-              ModalRoute.withName("/AddBilling"));
+          )
+          ),
+              ModalRoute.withName("/AddBilling"));*/
 
 
          /* AddBilling(
