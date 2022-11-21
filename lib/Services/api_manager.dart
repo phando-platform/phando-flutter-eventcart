@@ -57,7 +57,7 @@ class ApiManager {
     required String mobileNumber,
   }) async {
     final response = await http.post(
-      Uri.parse('https://eventcartstage.phando.com/api/v1/send-otp'),
+      Uri.parse(apiUrl + 'send-otp'),
       headers: <String, String>{
         'Accept': 'application/json',
       },
@@ -77,7 +77,7 @@ class ApiManager {
     required String otp,
   }) async {
     final response = await http.post(
-      Uri.parse('https://eventcartstage.phando.com/api/v1/mobile/otp/verify'),
+      Uri.parse(apiUrl + 'mobile/otp/verify'),
       headers: <String, String>{
         'Accept': 'application/json',
       },

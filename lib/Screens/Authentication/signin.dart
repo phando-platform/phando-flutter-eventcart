@@ -372,18 +372,30 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                             log(login.customer?.mobile ?? '');
                             log(login.customer?.username ?? '');
 
-                            prefs.setString('token',
-                                login.accessToken?.toString() ?? 'Guest');
-                            prefs.setString('firstName',
-                                login.customer?.firstName ?? 'Guest');
-                            prefs.setString('lastName',
-                                login.customer?.lastName ?? 'Guest');
                             prefs.setString(
-                                'email', login.customer?.email ?? 'Guest');
+                              'token',
+                              login.accessToken ?? 'Guest',
+                            );
                             prefs.setString(
-                                'phone', login.customer?.mobile ?? 'Guest');
-                            prefs.setString('username',
-                                login.customer?.username ?? 'Guest');
+                              'firstName',
+                              login.customer?.firstName ?? 'Guest',
+                            );
+                            prefs.setString(
+                              'lastName',
+                              login.customer?.lastName ?? 'Guest',
+                            );
+                            prefs.setString(
+                              'email',
+                              login.customer?.email ?? 'Guest',
+                            );
+                            prefs.setString(
+                              'phone',
+                              login.customer?.mobile ?? 'Guest',
+                            );
+                            prefs.setString(
+                              'username',
+                              login.customer?.username ?? 'Guest',
+                            );
                             prefs.setBool('autoLogin', isChecked);
                             String? detailFilled =
                                 prefs.getString('detailedFilled');
@@ -430,10 +442,6 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                         } else {
                           EasyLoading.dismiss();
                           EasyLoading.showError('Something went wrong');
-                          // toast(
-                          //   'Something went wrong',
-                          //   bgColor: Colors.red,
-                          // );
                         }
                       }
                     }

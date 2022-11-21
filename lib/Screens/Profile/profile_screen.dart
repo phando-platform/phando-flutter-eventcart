@@ -30,17 +30,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     SharedPreferences preferences = await _prefs;
 
     setState(() {
-      token = preferences.getString('token')??"";
+      token = preferences.getString('token') ?? "";
       country = preferences.getInt('country');
       mobile = preferences.getString('phone');
-      strUserImage = preferences.getString('userImage')??"https://cdn-icons-png.flaticon.com/512/149/149071.png";
+      strUserImage = preferences.getString('userImage') ??
+          "https://cdn-icons-png.flaticon.com/512/149/149071.png";
       print(country);
       print(mobile);
     });
     final wish = await _apiManager.wishList(token);
     final value = await _apiManager.getProfileInfo(token);
     setState(() {
-      wishLength = wish.value!.data!.length;
+      wishLength = wish.value == null ? 0 : wish.value!.data!.length;
     });
   }
 
@@ -75,10 +76,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: FutureBuilder<ProfileModel>(
         future: _apiManager.getProfileInfo(token),
         builder: (_, snapshot) {
-          if(snapshot.hasData){
-            if(snapshot.data?.value?.shipping == null){
+          if (snapshot.hasData) {
+            if (snapshot.data?.value?.shipping == null) {
               return Center(
-                child: SizedBox(height:60.0,child: ButtonGlobal(buttontext: 'Add Shipping Id', buttonDecoration: kButtonDecoration.copyWith(color: kMainColor), onPressed: () => AddBilling(country: country, mobile: mobile,status: 3).launch(context))),
+                child: SizedBox(
+                    height: 60.0,
+                    child: ButtonGlobal(
+                        buttontext: 'Add Shipping Id',
+                        buttonDecoration:
+                            kButtonDecoration.copyWith(color: kMainColor),
+                        onPressed: () => AddBilling(
+                                country: country, mobile: mobile, status: 3)
+                            .launch(context))),
               );
             }
             return SingleChildScrollView(
@@ -91,18 +100,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       children: [
                         ClipOval(
-
-                          child: Image.network(strUserImage??"strUserImage",
-                            fit: BoxFit.cover,
-                            width: 90.0,
-                            height: 90.0
-                          ),
+                          child: Image.network(strUserImage ?? "strUserImage",
+                              fit: BoxFit.cover, width: 90.0, height: 90.0),
                         ),
                         const SizedBox(
                           height: 10.0,
                         ),
                         Text(
-                          snapshot.data!.value!.customer!.firstName! + ' ' + snapshot.data!.value!.customer!.lastName!,
+                          snapshot.data!.value!.customer!.firstName! +
+                              ' ' +
+                              snapshot.data!.value!.customer!.lastName!,
                           style: kTextStyle.copyWith(
                               color: Colors.white, fontSize: 18.0),
                         ),
@@ -186,7 +193,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   ListTile(
                     onTap: () {
-                      PersonalSettings(firstName: snapshot.data!.value!.customer!.firstName!, lastName: snapshot.data!.value!.customer!.lastName!,mobile: snapshot.data!.value!.customer!.mobile!,email: snapshot.data!.value!.customer!.email!,).launch(context);
+                      PersonalSettings(
+                        firstName: snapshot.data!.value!.customer!.firstName!,
+                        lastName: snapshot.data!.value!.customer!.lastName!,
+                        mobile: snapshot.data!.value!.customer!.mobile!,
+                        email: snapshot.data!.value!.customer!.email!,
+                      ).launch(context);
                     },
                     leading: Container(
                       padding: const EdgeInsets.all(5.0),
@@ -209,7 +221,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   ListTile(
-                    onTap: (){
+                    onTap: () {
                       toast('Coming soon');
                     },
                     leading: Container(
@@ -259,7 +271,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   ListTile(
-                    onTap: (){
+                    onTap: () {
                       toast('Coming soon');
                     },
                     leading: Container(
@@ -283,7 +295,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   ListTile(
-                    onTap: (){
+                    onTap: () {
                       toast('Coming soon');
                     },
                     leading: Container(
@@ -331,10 +343,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             );
-          }
-          else{
-            return  Center(
-              child: SizedBox(height:60.0,child: ButtonGlobal(buttontext: 'Add Shipping Id', buttonDecoration: kButtonDecoration.copyWith(color: kMainColor), onPressed: () => AddBilling(country: country, mobile: mobile,status: 3).launch(context))),
+          } else {
+            return Center(
+              child: SizedBox(
+                  height: 60.0,
+                  child: ButtonGlobal(
+                      buttontext: 'Add Shipping Id',
+                      buttonDecoration:
+                          kButtonDecoration.copyWith(color: kMainColor),
+                      onPressed: () => AddBilling(
+                              country: country, mobile: mobile, status: 3)
+                          .launch(context))),
             );
 
             /*return const Center(

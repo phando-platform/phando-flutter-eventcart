@@ -1,9 +1,11 @@
+import 'dart:developer';
+
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:icon_badge/icon_badge.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide log;
 
 import '../../Screens/Authentication/signin.dart';
 import '../../Screens/Checkout/cart_screen.dart';
@@ -32,7 +34,12 @@ class _HomeState extends State<Home> {
     final SharedPreferences prefs = await _prefs;
     setState(() {
       username = prefs.getString('username') ?? 'Guest';
-      token = prefs.getString('token');
+      if (prefs.containsKey('token')) {
+        token = prefs.getString('token');
+        log(token.toString());
+      } else {
+        token = 'Guest';
+      }
     });
   }
 
@@ -77,15 +84,15 @@ class _HomeState extends State<Home> {
         );
       }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-
       body: IndexedStack(
         index: _selectedIndex,
         children: [
           const HomeScreen(),
           const AllProducts(page: 1),
           const WishList(),
-          username == 'Guest' ? const SignIn() : const ProfileScreen()
+          (token == 'Guest' || token == 'Not Found')
+              ? const SignIn()
+              : const ProfileScreen()
         ],
       ),
       bottomNavigationBar: AnimatedBottomNavigationBar(

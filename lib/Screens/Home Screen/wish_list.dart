@@ -22,7 +22,6 @@ class WishList extends StatefulWidget {
 }
 
 class _WishListState extends State<WishList> {
-
   final ApiManager _apiManager = ApiManager();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   String? token;
@@ -31,10 +30,9 @@ class _WishListState extends State<WishList> {
     final SharedPreferences prefs = await _prefs;
     setState(() {
       username = prefs.getString('username') ?? 'Guest';
-      token = prefs.getString('token');
+      token = prefs.getString('token') ?? '';
     });
   }
-
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
@@ -57,19 +55,16 @@ class _WishListState extends State<WishList> {
           style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
-
       body: RefreshIndicator(
         onRefresh: () {
           return Future(() {
             EasyLoading.showSuccess("Please wait..");
-            setState(() {
-            });
+            setState(() {});
           });
         },
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Column(
-
             children: [
               const SizedBox(
                 height: 4.0,
@@ -87,12 +82,12 @@ class _WishListState extends State<WishList> {
                     future: _apiManager.wishList(token ?? ''),
                     builder: (BuildContext context, snapshot) {
                       if (snapshot.hasData && snapshot.data != null) {
-                        if (snapshot.data!.value!.data!.isEmpty) {
+                        if (snapshot.data?.value?.data?.isEmpty ?? true) {
                           return Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                             SvgPicture.asset(
+                              SvgPicture.asset(
                                 'images/emptycart.svg',
                                 height: context.height() / 2,
                                 width: context.width(),
@@ -114,7 +109,8 @@ class _WishListState extends State<WishList> {
                                   buttontext: 'Shop Now',
                                   buttonDecoration: kButtonDecoration.copyWith(
                                       color: kMainColor),
-                                  onPressed: () => const Home().launch(context)),
+                                  onPressed: () =>
+                                      const Home().launch(context)),
                             ],
                           );
                         }
@@ -168,7 +164,8 @@ class _WishListState extends State<WishList> {
                                               'null');
                                   if (wishlist.success == true) {
                                     setState(() {});
-                                    EasyLoading.showSuccess(wishlist.message.toString());
+                                    EasyLoading.showSuccess(
+                                        wishlist.message.toString());
                                   } else {
                                     setState(() {});
                                     EasyLoading.showError(
@@ -193,7 +190,7 @@ class _WishListState extends State<WishList> {
                         return const CircularProgressIndicator();
                       }
                     }),
-              ).visible(username != 'Guest'),
+              ).visible(token != 'Guest'),
               Center(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10.0, right: 10.0),
@@ -237,7 +234,7 @@ class _WishListState extends State<WishList> {
                     textScaleFactor: 0.5,
                   ),
                 ),
-              ).visible(username == 'Guest'),
+              ).visible(token == 'Guest'),
             ],
           ),
         ),
