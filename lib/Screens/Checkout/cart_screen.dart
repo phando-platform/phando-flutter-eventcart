@@ -238,6 +238,11 @@ class _CartScreenState extends State<CartScreen> {
                                                           .cartItemUis[index]
                                                           .productQuantity!
                                                           .toInt());
+                                            } else {
+                                              toast(
+                                                'Minimum purchase quantity for product is $minQuantity',
+                                                bgColor: Colors.red,
+                                              );
                                             }
                                           }),
                                           const SizedBox(
