@@ -33,24 +33,28 @@ class CartItemNotifier extends ChangeNotifier {
 
   // Let's allow removing todos
   void removeUiItem(int itemId) {
-    cartItemUis.remove(cartItemUis.firstWhere((element) => element.id == itemId));
+    cartItemUis
+        .remove(cartItemUis.firstWhere((element) => element.id == itemId));
     notifyListeners();
   }
 
-  void updateQuantity(int itemId){
-    for(final item in cartItemUis){
-      if(item.id == itemId){
-        item.productQuantity = item.productQuantity! < 10
-            ? item.productQuantity! + 1
-            : item.productQuantity = 10;
+  void updateQuantity(int itemId) {
+    for (final item in cartItemUis) {
+      if (item.id == itemId) {
+        item.productQuantity =
+                // item.productQuantity! < 10
+                //     ?
+                item.productQuantity! + 1
+            // : item.productQuantity = 10
+            ;
         notifyListeners();
       }
     }
   }
 
-  void decreaseQuantity(int itemId){
-    for(final item in cartItemUis){
-      if(item.id == itemId){
+  void decreaseQuantity(int itemId) {
+    for (final item in cartItemUis) {
+      if (item.id == itemId) {
         item.productQuantity =
             item.productQuantity! > 1 ? item.productQuantity! - 1 : 1;
         notifyListeners();
