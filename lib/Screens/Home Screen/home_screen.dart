@@ -187,10 +187,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                       decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(20.0),
-                                       /* color: kMainColor.withOpacity(0.5),*/
+                                        /* color: kMainColor.withOpacity(0.5),*/
                                       ),
                                       child: Text(
-                                        snapshot.data?.value?.banners![itemIndex].offerTitle ?? '',
+                                        snapshot
+                                                .data
+                                                ?.value
+                                                ?.banners![itemIndex]
+                                                .offerTitle ??
+                                            '',
                                         style: kTextStyle.copyWith(
                                             color: kWhiteColor,
                                             fontWeight: FontWeight.bold),
@@ -199,6 +204,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                               ),
+                            ).onTap(
+                              () {
+                                CategoryProduct(
+                                  catName: snapshot.data?.value
+                                          ?.banners![itemIndex].subTitle ??
+                                      "NA",
+                                  subCatModel: HomeModel(),
+                                  clickIndex: 0,
+                                  catId: snapshot.data?.value
+                                          ?.banners![itemIndex].categoryId ??
+                                      2,
+                                  page: 1,
+                                ).launch(context);
+                              },
+                              highlightColor: context.cardColor,
                             );
                           },
                           options: CarouselOptions(
@@ -235,8 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             const Spacer(),
                             GestureDetector(
                               onTap: () {
-
-                                 CategoryList(
+                                CategoryList(
                                   subCatModel: snapshot.data,
                                 ).launch(context);
                               },
@@ -251,12 +270,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       HorizontalList(
                         spacing: 0,
-                       // itemCount: snapshot.data?.value?.category?.data?.length ?? 10,
+                        // itemCount: snapshot.data?.value?.category?.data?.length ?? 10,
                         itemCount: 2,
                         itemBuilder: (_, i) {
                           return CategoryCard(
                             categoryData: CategoryData(
-                              catTitle: snapshot.data?.value?.category?.data?[i].name ??
+                              catTitle: snapshot
+                                      .data?.value?.category?.data?[i].name ??
                                   'Null',
                               catIcon: snapshot
                                       .data?.value?.category?.data?[i].banner
@@ -265,13 +285,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ).onTap(
                             () {
-
-                              print(snapshot.data?.value?.category?.data?[i].subcat?.length);
+                              print(snapshot.data?.value?.category?.data?[i]
+                                  .subcat?.length);
                               CategoryProduct(
                                 subCatModel: snapshot.data,
                                 clickIndex: i,
-                                catName: snapshot.data?.value?.category?.data?[i].name ?? "NA",
-                                catId: snapshot.data?.value?.category?.data?[i].id ?? 2,
+                                catName: snapshot
+                                        .data?.value?.category?.data?[i].name ??
+                                    "NA",
+                                catId: snapshot
+                                        .data?.value?.category?.data?[i].id ??
+                                    2,
                                 /*subCat: snapshot.data?.value?.category?.data?[i].subcat,*/
                                 page: 1,
                               ).launch(context);
@@ -284,7 +308,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 20.0,
                       ),
                       //Flash Deals Section
-                     /* Padding(
+                      /* Padding(
                         padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                         child: Row(
                           children: [
@@ -410,8 +434,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       HorizontalList(
                         spacing: 0,
-
-                        itemCount:2,
+                        itemCount: 2,
                         itemBuilder: (_, i) {
                           return ProductCard(
                             productData: ProductData(
@@ -684,9 +707,8 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         Padding(
-          padding: EdgeInsets.only(right: 10,left: 10),
+          padding: EdgeInsets.only(right: 10, left: 10),
           child: Card(
             elevation: 0.0,
             color: kWhiteColor,
@@ -707,7 +729,8 @@ class ProductCard extends StatelessWidget {
                         bottomRight: Radius.circular(10.0),
                       ),
                       child: Image(
-                        image: CachedNetworkImageProvider(productData.productImage),
+                        image: CachedNetworkImageProvider(
+                            productData.productImage),
                         height: 160.0,
                         width: 160,
                         fit: BoxFit.fill,
@@ -720,9 +743,9 @@ class ProductCard extends StatelessWidget {
                         radius: 15.0,
                         child: Center(
                             child: Icon(
-                              Icons.favorite_border_outlined,
-                              color: kMainColor,
-                            )),
+                          Icons.favorite_border_outlined,
+                          color: kMainColor,
+                        )),
                       ).onTap(onBookMarkPressed),
                     )
                   ],
@@ -740,7 +763,8 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
+                  padding:
+                      const EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
                   child: Row(
                     children: [
                       RatingBarWidget(
@@ -763,7 +787,8 @@ class ProductCard extends StatelessWidget {
                     children: [
                       Text(
                         currencyIcon + productData.productPrice,
-                        style: kTextStyle.copyWith(color: kMainColor, fontSize: 18.0),
+                        style: kTextStyle.copyWith(
+                            color: kMainColor, fontSize: 18.0),
                       ),
                       const SizedBox(
                         width: 5.0,
@@ -783,7 +808,6 @@ class ProductCard extends StatelessWidget {
           ),
         ),
       ],
-
     );
   }
 }
@@ -794,10 +818,8 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Padding(
-       padding: EdgeInsets.only(right: 20),
+      padding: EdgeInsets.only(right: 20),
       child: Card(
         elevation: 0.0,
         color: kWhiteColor,
@@ -824,7 +846,6 @@ class CategoryCard extends StatelessWidget {
                     fit: BoxFit.fill,
                   ),
                 ),
-
               ],
             ),
             Padding(
@@ -839,12 +860,10 @@ class CategoryCard extends StatelessWidget {
                 ),
               ),
             ),
-
           ],
         ),
       ),
     );
-
 
     /*return Padding(
       padding: const EdgeInsets.all(5.0),
