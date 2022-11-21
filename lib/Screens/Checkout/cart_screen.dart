@@ -36,7 +36,7 @@ class _CartScreenState extends State<CartScreen> {
   Future<void> getToken() async {
     SharedPreferences preferences = await _prefs;
     setState(() {
-      token = preferences.getString('token')!;
+      token = preferences.getString('token') ?? 'Guest';
       username = preferences.getString('username')!;
     });
   }
@@ -420,7 +420,8 @@ class _CartScreenState extends State<CartScreen> {
                                           !coupon.coupon!.details!.productId!
                                               .contains(cartItems[0].id)) {
                                         EasyLoading.showError(
-                                            'Your Cart is not Eligible For the Coupon');
+                                          'Your Cart is not Eligible For the Coupon',
+                                        );
                                       } else if (coupon.coupon?.type ==
                                               'cart' &&
                                           total >
@@ -558,17 +559,13 @@ class _CartScreenState extends State<CartScreen> {
                               buttonDecoration:
                                   kButtonDecoration.copyWith(color: kMainColor),
                               onPressed: () {
-                                if (productQuantity < minQuantity) {
-                                  toast('Minimum Quantity should be atleast ' +
-                                      minQuantity.toString());
+                                if (token != 'Guest') {
+                                  const OrderReview().launch(context);
                                 } else {
-                                  if (username != 'Guest') {
-                                    const OrderReview().launch(context);
-                                  } else {
-                                    toast('Please sign In to Checkout');
-                                    const SignIn().launch(context);
-                                  }
+                                  toast('Please sign In to Checkout');
+                                  const SignIn().launch(context);
                                 }
+
                                 print(productQuantity);
                                 print(minQuantity);
                               },

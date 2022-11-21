@@ -86,8 +86,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         buttonDecoration:
                             kButtonDecoration.copyWith(color: kMainColor),
                         onPressed: () => AddBilling(
-                                country: country, mobile: mobile, status: 3)
-                            .launch(context))),
+                              country: country,
+                              mobile: mobile,
+                              status: 3,
+                            ).launch(context))),
               );
             }
             return SingleChildScrollView(
@@ -100,18 +102,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       children: [
                         ClipOval(
-                          child: Image.network(strUserImage ?? "strUserImage",
-                              fit: BoxFit.cover, width: 90.0, height: 90.0),
+                          child: Image.network(
+                            strUserImage ?? "strUserImage",
+                            fit: BoxFit.cover,
+                            width: 90.0,
+                            height: 90.0,
+                          ),
                         ),
                         const SizedBox(
                           height: 10.0,
                         ),
                         Text(
-                          snapshot.data!.value!.customer!.firstName! +
-                              ' ' +
-                              snapshot.data!.value!.customer!.lastName!,
+                          snapshot.data?.value?.customer?.firstName ??
+                              ' ' ' ' +
+                                  snapshot.data!.value!.customer!.lastName!,
                           style: kTextStyle.copyWith(
-                              color: Colors.white, fontSize: 18.0),
+                            color: Colors.white,
+                            fontSize: 18.0,
+                          ),
                         ),
                         const SizedBox(
                           height: 5.0,
@@ -194,10 +202,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ListTile(
                     onTap: () {
                       PersonalSettings(
-                        firstName: snapshot.data!.value!.customer!.firstName!,
-                        lastName: snapshot.data!.value!.customer!.lastName!,
-                        mobile: snapshot.data!.value!.customer!.mobile!,
-                        email: snapshot.data!.value!.customer!.email!,
+                        firstName:
+                            snapshot.data?.value?.customer?.firstName ?? '',
+                        lastName:
+                            snapshot.data?.value?.customer?.lastName ?? '',
+                        mobile: snapshot.data?.value?.customer?.mobile ?? '',
+                        email: snapshot.data?.value?.customer?.email ?? '',
                       ).launch(context);
                     },
                     leading: Container(

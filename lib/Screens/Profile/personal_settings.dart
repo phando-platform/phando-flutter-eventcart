@@ -40,15 +40,16 @@ class _PersonalSettingsState extends State<PersonalSettings> {
   String token = '';
   String strAttachmentImageName = 'Attachment';
   File? attachmentFile;
-  String attachmentBytedata="";
-  String strUserImage="https://cdn-icons-png.flaticon.com/512/149/149071.png";
+  String attachmentBytedata = "";
+  String strUserImage = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
   Future<void> getToken() async {
     SharedPreferences preferences = await _prefs;
 
     setState(() {
       token = preferences.getString('token')!;
-      strUserImage = preferences.getString('userImage')??"https://cdn-icons-png.flaticon.com/512/149/149071.png";
+      strUserImage = preferences.getString('userImage') ??
+          "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     });
   }
 
@@ -98,30 +99,22 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                       color: kBgColor,
                       thickness: 1.0,
                     ),
-
                     ClipOval(
-
-                      child: Image.network(strUserImage??"strUserImage",
-                          fit: BoxFit.cover,
-                          width: 90.0,
-                          height: 90.0
-                      ),
+                      child: Image.network(strUserImage ?? "strUserImage",
+                          fit: BoxFit.cover, width: 90.0, height: 90.0),
                     ),
                     const SizedBox(
                       height: 10.0,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 40,right: 40),
+                      padding: const EdgeInsets.only(left: 40, right: 40),
                       child: ButtonGlobal(
                           buttontext: 'Select Image',
-                          buttonDecoration: kButtonDecoration.copyWith(
-                              color: kGreyTextColor),
+                          buttonDecoration:
+                              kButtonDecoration.copyWith(color: kGreyTextColor),
                           onPressed: () async {
                             ImageFromGallery();
-
-
-                          }
-                          ),
+                          }),
                     ),
                     const SizedBox(
                       height: 20.0,
@@ -209,16 +202,17 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                     ButtonGlobal(
                         buttontext: 'Update',
                         buttonDecoration:
-                        kButtonDecoration.copyWith(color: kMainColor),
+                            kButtonDecoration.copyWith(color: kMainColor),
                         onPressed: () async {
                           try {
                             EasyLoading.show(status: 'Updating Profile');
                             final profile = await _apiManager.updateProfile(
-                                token,
-                                firstNameController.text,
-                                lastNameController.text,
-                                mobileController.text,
-                                emailController.text);
+                              token,
+                              firstNameController.text,
+                              lastNameController.text,
+                              mobileController.text,
+                              emailController.text,
+                            );
                             if (profile.success == true) {
                               EasyLoading.showSuccess(
                                   profile.message.toString());
@@ -232,8 +226,6 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                         }),
                   ],
                 ),
-
-
               ),
             ),
           );
@@ -497,6 +489,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
       ),
     );
   }
+
   ImageFromGallery() async {
     PickedFile? pickedFile = await ImagePicker()
         .getImage(source: ImageSource.gallery, maxHeight: 200, maxWidth: 200);
@@ -505,8 +498,8 @@ class _PersonalSettingsState extends State<PersonalSettings> {
         attachmentFile = File(pickedFile.path);
         print(attachmentFile.toString());
         strAttachmentImageName = pickedFile.path.split('/').last;
-        final bytes =File(pickedFile.path).readAsBytesSync();
-        attachmentBytedata=base64Encode(bytes);
+        final bytes = File(pickedFile.path).readAsBytesSync();
+        attachmentBytedata = base64Encode(bytes);
         print(strAttachmentImageName);
         print(attachmentBytedata);
         updateUserImage(pickedFile);
@@ -514,38 +507,34 @@ class _PersonalSettingsState extends State<PersonalSettings> {
     }
   }
 
-
-  Future<void>  updateUserImage(PickedFile pickedFile) async {
-
+  Future<void> updateUserImage(PickedFile pickedFile) async {
     FormData formData = new FormData.fromMap({
-
       'image': await MultipartFile.fromFile(pickedFile.path,
           filename: strAttachmentImageName),
     });
     try {
       Dio dio = Dio();
-      Response response = await dio.post(
-          ApiManager.apiUrl+"profile/image",
+      Response response = await dio.post(ApiManager.apiUrl + "profile/image",
           data: formData,
-          options: Options(
-              headers: {
-                'Authorization':'Bearer '+' '+token,
-              })
-      );
+          options: Options(headers: {
+            'Authorization': 'Bearer ' + ' ' + token,
+          }));
 
       if (response.data['message'] == 'Image has been updated') {
         Fluttertoast.showToast(msg: 'User Image Updated');
-        Navigator.pop(context); //pop dialog
-        strUserImage=response.data['value'];
+        // Navigator.pop(context); //pop dialog
+        strUserImage = response.data['value'];
         final SharedPreferences prefs = await _prefs;
-        prefs.setString('userImage', strUserImage ?? 'Guest');
-        setState(() {
-
-        });
-
+        prefs.setString(
+          'userImage',
+          strUserImage ?? 'Guest',
+        );
+        setState(() {});
       } else {
         //Navigator.pop(context);
-        Fluttertoast.showToast(msg: "Something went wrong! Try after sometime.");
+        Fluttertoast.showToast(
+          msg: "Something went wrong! Try after sometime.",
+        );
       }
     } on DioError catch (e) {
       // Navigator.pop(context);

@@ -52,7 +52,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   int selectedColorIndex = 0;
   int productQuantity = 1;
   int selectedSizeIndex = 0;
-  late String? username;
+  late String? token;
 
   PageController pageController = PageController(initialPage: 0);
   int currentIndexPage = 0;
@@ -60,7 +60,8 @@ class _ProductDetailsState extends State<ProductDetails> {
   Future<void> getUser() async {
     SharedPreferences preferences = await _prefs;
     setState(() {
-      username = preferences.getString('username')!;
+      token = preferences.getString('token') ?? 'Guest';
+      log('Token of the user : \n' + token.toString());
     });
   }
 
@@ -143,7 +144,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                if (username != 'Guest') {
+                                if (token != 'Guest') {
                                   if (ref.read(cartProvider.notifier).checkCart(
                                           snapshot.data?.value?.id ?? 10,
                                           snapshot.data!.value!.sizes!.isEmpty
@@ -274,7 +275,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                if (username != 'Guest') {
+                                if (token != 'Guest') {
                                   if (ref.read(cartProvider.notifier).checkCart(
                                           snapshot.data?.value?.id ?? 10,
                                           snapshot.data!.value!.sizes!.isEmpty

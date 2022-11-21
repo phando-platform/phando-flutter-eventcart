@@ -645,6 +645,7 @@ class ApiManager {
       },
     );
     final data = jsonDecode(response.body);
+    log(response.body);
     if (response.statusCode == 200) {
       return ProfileUpdateModel.fromJson(data);
     } else {
