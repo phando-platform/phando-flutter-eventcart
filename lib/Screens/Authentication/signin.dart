@@ -18,13 +18,15 @@ class SignIn extends StatefulWidget {
   _SignInState createState() => _SignInState();
 }
 
-class _SignInState extends State<SignIn> {
+class _SignInState extends State<SignIn> with TickerProviderStateMixin {
   bool isChecked = true;
   final ApiManager _apiManager = ApiManager();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   int countryId = 104;
+  late TabController tabController;
+
   Future<void> setToken() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
@@ -32,6 +34,12 @@ class _SignInState extends State<SignIn> {
       prefs.setString('token', 'Not Found');
     });
     const Home().launch(context);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this, initialIndex: 0);
   }
 
   @override
@@ -80,48 +88,137 @@ class _SignInState extends State<SignIn> {
                 height: 50.0,
               ),
               SizedBox(
-                height: 60.0,
-                child: AppTextField(
-                  textFieldType: TextFieldType.EMAIL,
-                  controller: emailController,
-                  enabled: true,
-                  decoration: InputDecoration(
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: kMainColor),
-                    ),
-                    labelText: 'Username',
-                    hintText: 'Enter your username',
-                    labelStyle: kTextStyle,
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFE8E7E5),
+                height: MediaQuery.of(context).size.height * 0.3,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: TabBar(
+                        indicatorColor: kMainColor,
+                        controller: tabController,
+                        onTap: (value) {},
+                        tabs: List.generate(
+                          2,
+                          (index) => Container(
+                            alignment: Alignment.center,
+                            height: 40,
+                            child: Text(
+                              index == 0 ? 'Email' : 'Mobile',
+                              style: const TextStyle(
+                                color: kMainColor,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: tabController,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 60.0,
+                                child: AppTextField(
+                                  textFieldType: TextFieldType.EMAIL,
+                                  controller: emailController,
+                                  enabled: true,
+                                  decoration: InputDecoration(
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(color: kMainColor),
+                                    ),
+                                    labelText: 'Username',
+                                    hintText: 'Enter your username',
+                                    labelStyle: kTextStyle,
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xFFE8E7E5),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              AppTextField(
+                                textFieldType: TextFieldType.PASSWORD,
+                                controller: passwordController,
+                                decoration: InputDecoration(
+                                  labelText: 'Password',
+                                  labelStyle: kTextStyle,
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: kMainColor),
+                                  ),
+                                  hintText: 'Enter password',
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFE8E7E5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 60.0,
+                                child: AppTextField(
+                                  textFieldType: TextFieldType.EMAIL,
+                                  controller: emailController,
+                                  enabled: true,
+                                  decoration: InputDecoration(
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(color: kMainColor),
+                                    ),
+                                    labelText: 'Username',
+                                    hintText: 'Enter your username',
+                                    labelStyle: kTextStyle,
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xFFE8E7E5),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              AppTextField(
+                                textFieldType: TextFieldType.PASSWORD,
+                                controller: passwordController,
+                                decoration: InputDecoration(
+                                  labelText: 'Password',
+                                  labelStyle: kTextStyle,
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: kMainColor),
+                                  ),
+                                  hintText: 'Enter password',
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFE8E7E5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              AppTextField(
-                textFieldType: TextFieldType.PASSWORD,
-                controller: passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  labelStyle: kTextStyle,
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: kMainColor),
-                  ),
-                  hintText: 'Enter password',
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFE8E7E5),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20.0,
               ),
               Row(
                 children: [
@@ -160,14 +257,11 @@ class _SignInState extends State<SignIn> {
                 onPressed: () async {
                   if (emailController.text.isEmpty) {
                     toast("Please input your username to login");
-                  }
-                  else if (passwordController.text.isEmpty) {
+                  } else if (passwordController.text.isEmpty) {
                     toast("Please input your password to login");
-                  }
-                  else if (passwordController.text.length < 6) {
+                  } else if (passwordController.text.length < 6) {
                     toast("Password must be more than 6 characters");
-                  }
-                  else if (emailController.text.isNotEmpty &&
+                  } else if (emailController.text.isNotEmpty &&
                       passwordController.text.isNotEmpty &&
                       passwordController.text.length > 5) {
                     try {
@@ -184,28 +278,38 @@ class _SignInState extends State<SignIn> {
                         print(login.customer?.mobile);
                         print(login.customer?.username);
 
-                        prefs.setString('token', login.accessToken?.toString() ?? 'Guest');
-                        prefs.setString('firstName', login.customer?.firstName ?? 'Guest');
-                        prefs.setString('lastName', login.customer?.lastName ?? 'Guest');
-                        prefs.setString('email', login.customer?.email ?? 'Guest');
-                        prefs.setString('phone', login.customer?.mobile ?? 'Guest');
-                        prefs.setString('username', login.customer?.username ?? 'Guest');
+                        prefs.setString(
+                            'token', login.accessToken?.toString() ?? 'Guest');
+                        prefs.setString(
+                            'firstName', login.customer?.firstName ?? 'Guest');
+                        prefs.setString(
+                            'lastName', login.customer?.lastName ?? 'Guest');
+                        prefs.setString(
+                            'email', login.customer?.email ?? 'Guest');
+                        prefs.setString(
+                            'phone', login.customer?.mobile ?? 'Guest');
+                        prefs.setString(
+                            'username', login.customer?.username ?? 'Guest');
                         prefs.setBool('autoLogin', isChecked);
-                        String? detailFilled= prefs.getString('detailedFilled');
-                        countryId=prefs.getInt('country')??0;
+                        String? detailFilled =
+                            prefs.getString('detailedFilled');
+                        countryId = prefs.getInt('country') ?? 0;
 
-                       if(detailFilled==1){
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
-                            ModalRoute.withName("/Home"));
-                       }
-                       else{
-                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
-                             country: countryId,
-                             mobile: login.customer?.mobile,
-                             status: 1
-                         )),
-                             ModalRoute.withName("/AddBilling"));
-                       }
+                        if (detailFilled == 1) {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => Home()),
+                              ModalRoute.withName("/Home"));
+                        } else {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddBilling(
+                                      country: countryId,
+                                      mobile: login.customer?.mobile,
+                                      status: 1)),
+                              ModalRoute.withName("/AddBilling"));
+                        }
                       } else {
                         EasyLoading.showError(login.error.toString());
                       }
