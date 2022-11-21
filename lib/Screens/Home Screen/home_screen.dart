@@ -768,13 +768,14 @@ class ProductCard extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-                  child: Container(
+                  child: SizedBox(
                     width: 150,
                     child: Text(
                       productData.productTitle,
                       style: kTextStyle,
                       textAlign: TextAlign.center,
-                      maxLines: 3,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),

@@ -1,7 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide log;
 
 import '../../Models/order_list_model.dart';
 import '../../Screens/Checkout/delivery_status.dart';
@@ -62,7 +64,6 @@ class _OrderListState extends State<OrderList> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
             const SizedBox(
               height: 20.0,
             ),
@@ -76,7 +77,8 @@ class _OrderListState extends State<OrderList> {
                           ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: snapshot.data!.value!.data!.length,
+                              itemCount:
+                                  snapshot.data?.value?.data?.length ?? 0,
                               itemBuilder: (BuildContext context, index) {
                                 DateFormat dateFormat =
                                     DateFormat("yyyy-MM-dd");
@@ -91,7 +93,7 @@ class _OrderListState extends State<OrderList> {
                                         const NeverScrollableScrollPhysics(),
                                     itemCount: snapshot.data?.value
                                             ?.data?[index].details?.length ??
-                                        10,
+                                        1,
                                     itemBuilder: (_, i) {
                                       return Card(
                                         shape: RoundedRectangleBorder(
@@ -100,7 +102,7 @@ class _OrderListState extends State<OrderList> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(10.0),
                                           child: ListTile(
-                                           /* leading: Image.network(snapshot
+                                            /* leading: Image.network(snapshot
                                                     .data
                                                     ?.value
                                                     ?.data?[index]
@@ -113,7 +115,7 @@ class _OrderListState extends State<OrderList> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                               /* Text(
+                                                /* Text(
                                                   snapshot
                                                           .data
                                                           ?.value

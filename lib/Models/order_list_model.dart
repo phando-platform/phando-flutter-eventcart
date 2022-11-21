@@ -8,7 +8,7 @@ class OrderListModel {
   OrderListModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    value = json['value'] != null ? new Value.fromJson(json['value']) : null;
+    value = json['value'] != null ? Value.fromJson(json['value']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -30,27 +30,27 @@ class Value {
   int? lastPage;
   String? lastPageUrl;
   List<Links>? links;
-  Null? nextPageUrl;
+  int? nextPageUrl;
   String? path;
   int? perPage;
-  Null? prevPageUrl;
+  int? prevPageUrl;
   int? to;
   int? total;
 
   Value(
       {this.currentPage,
-        this.data,
-        this.firstPageUrl,
-        this.from,
-        this.lastPage,
-        this.lastPageUrl,
-        this.links,
-        this.nextPageUrl,
-        this.path,
-        this.perPage,
-        this.prevPageUrl,
-        this.to,
-        this.total});
+      this.data,
+      this.firstPageUrl,
+      this.from,
+      this.lastPage,
+      this.lastPageUrl,
+      this.links,
+      this.nextPageUrl,
+      this.path,
+      this.perPage,
+      this.prevPageUrl,
+      this.to,
+      this.total});
 
   Value.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
@@ -104,14 +104,14 @@ class Value {
 class Data {
   int? id;
   String? orderNo;
-  Null? discount;
-  Null? couponDiscount;
-  Null? tax;
+  int? discount;
+  int? couponDiscount;
+  int? tax;
   int? shippingCost;
   int? totalPrice;
-  Null? couponId;
+  int? couponId;
   int? currencyId;
-  double? exchangeRate;
+  int? exchangeRate;
   String? shippingName;
   String? shippingAddress1;
   String? shippingAddress2;
@@ -133,41 +133,44 @@ class Data {
   String? userEmail;
   String? createdAt;
   String? updatedAt;
+  int? grandTotal;
   List<Details>? details;
 
-  Data(
-      {this.id,
-        this.orderNo,
-        this.discount,
-        this.couponDiscount,
-        this.tax,
-        this.shippingCost,
-        this.totalPrice,
-        this.couponId,
-        this.currencyId,
-        this.exchangeRate,
-        this.shippingName,
-        this.shippingAddress1,
-        this.shippingAddress2,
-        this.shippingMobile,
-        this.shippingEmail,
-        this.shippingPost,
-        this.shippingTown,
-        this.shippingCountryId,
-        this.shippingNote,
-        this.paymentBy,
-        this.userId,
-        this.userFirstName,
-        this.userLastName,
-        this.userAddress1,
-        this.userPostCode,
-        this.userCity,
-        this.userCountryId,
-        this.userMobile,
-        this.userEmail,
-        this.createdAt,
-        this.updatedAt,
-        this.details});
+  Data({
+    this.id,
+    this.orderNo,
+    this.discount,
+    this.couponDiscount,
+    this.tax,
+    this.shippingCost,
+    this.totalPrice,
+    this.couponId,
+    this.currencyId,
+    this.exchangeRate,
+    this.shippingName,
+    this.shippingAddress1,
+    this.shippingAddress2,
+    this.shippingMobile,
+    this.shippingEmail,
+    this.shippingPost,
+    this.shippingTown,
+    this.shippingCountryId,
+    this.shippingNote,
+    this.paymentBy,
+    this.userId,
+    this.userFirstName,
+    this.userLastName,
+    this.userAddress1,
+    this.userPostCode,
+    this.userCity,
+    this.userCountryId,
+    this.userMobile,
+    this.userEmail,
+    this.createdAt,
+    this.updatedAt,
+    this.details,
+    this.grandTotal,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -201,6 +204,7 @@ class Data {
     userEmail = json['user_email'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    grandTotal = json['grand_total'];
     if (json['details'] != null) {
       details = <Details>[];
       json['details'].forEach((v) {
@@ -258,8 +262,8 @@ class Details {
   int? productId;
   int? salePrice;
   int? qty;
-  Null? color;
-  Null? size;
+  String? color;
+  int? size;
   int? discount;
   int? tax;
   int? shippingCost;
@@ -268,32 +272,32 @@ class Details {
   int? grandTotal;
   int? currencyId;
   double? exchangeRate;
-  Null? estimatedShippingDays;
+  int? estimatedShippingDays;
   String? createdAt;
   String? updatedAt;
 
   Details(
       {this.id,
-        this.sellerId,
-        this.userId,
-        this.orderId,
-        this.orderStat,
-        this.productId,
-        this.salePrice,
-        this.qty,
-        this.color,
-        this.size,
-        this.discount,
-        this.tax,
-        this.shippingCost,
-        this.totalShippingCost,
-        this.totalPrice,
-        this.grandTotal,
-        this.currencyId,
-        this.exchangeRate,
-        this.estimatedShippingDays,
-        this.createdAt,
-        this.updatedAt});
+      this.sellerId,
+      this.userId,
+      this.orderId,
+      this.orderStat,
+      this.productId,
+      this.salePrice,
+      this.qty,
+      this.color,
+      this.size,
+      this.discount,
+      this.tax,
+      this.shippingCost,
+      this.totalShippingCost,
+      this.totalPrice,
+      this.grandTotal,
+      this.currencyId,
+      this.exchangeRate,
+      this.estimatedShippingDays,
+      this.createdAt,
+      this.updatedAt});
 
   Details.fromJson(Map<String, dynamic> json) {
     id = json['id'];
