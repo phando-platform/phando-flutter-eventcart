@@ -117,8 +117,21 @@ class _CartScreenState extends State<CartScreen> {
                     shrinkWrap: true,
                     itemCount: cartItemUi.length,
                     itemBuilder: (_, index) {
-                      productQuantity = ref.read(cartProvider).cartItems[index].quantity;
-                      minQuantity = ref.read(cartProvider).cartItems[index].minQuantity;
+                      // productQuantity = ref.read(cartProvider).cartItems[index].quantity;
+                      minQuantity =
+                          ref.read(cartProvider).cartItems[index].minQuantity;
+                      ref.read(cartItemUiProvider.notifier).updateQuantity(
+                            cartItemUi[index].id ?? 0,
+                            minimumQuantity: minQuantity,
+                          );
+                      ref.read(cartProvider.notifier).updatePrice(
+                            cartItemUi[index].id ?? 0,
+                            ref
+                                .read(cartItemUiProvider.notifier)
+                                .cartItemUis[index]
+                                .productQuantity!
+                                .toInt(),
+                          );
                       return Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Card(
@@ -202,9 +215,30 @@ class _CartScreenState extends State<CartScreen> {
                                             Icons.remove,
                                             color: kTitleColor,
                                           ).onTap(() {
-                                            ref.read(cartItemUiProvider.notifier).decreaseQuantity(cartItemUi[index].id ?? 0);
-                                            ref.read(cartProvider.notifier).updatePrice(cartItemUi[index].id ?? 0,
-                                                ref.read(cartItemUiProvider.notifier).cartItemUis[index].productQuantity!.toInt());
+                                            if (minQuantity <
+                                                ref
+                                                    .read(cartItemUiProvider
+                                                        .notifier)
+                                                    .cartItemUis[index]
+                                                    .productQuantity!) {
+                                              ref
+                                                  .read(cartItemUiProvider
+                                                      .notifier)
+                                                  .decreaseQuantity(
+                                                      cartItemUi[index].id ??
+                                                          0);
+                                              ref
+                                                  .read(cartProvider.notifier)
+                                                  .updatePrice(
+                                                      cartItemUi[index].id ?? 0,
+                                                      ref
+                                                          .read(
+                                                              cartItemUiProvider
+                                                                  .notifier)
+                                                          .cartItemUis[index]
+                                                          .productQuantity!
+                                                          .toInt());
+                                            }
                                           }),
                                           const SizedBox(
                                             width: 10.0,
@@ -519,11 +553,10 @@ class _CartScreenState extends State<CartScreen> {
                               buttonDecoration:
                                   kButtonDecoration.copyWith(color: kMainColor),
                               onPressed: () {
-                                if(productQuantity<minQuantity){
-                                  toast(
-                                      'Minimum Quantity should be atleast '+minQuantity.toString());
-                                }
-                                else{
+                                if (productQuantity < minQuantity) {
+                                  toast('Minimum Quantity should be atleast ' +
+                                      minQuantity.toString());
+                                } else {
                                   if (username != 'Guest') {
                                     const OrderReview().launch(context);
                                   } else {

@@ -29,14 +29,14 @@ class _SignUpState extends State<SignUp> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController otpController = TextEditingController();
 
   // default country id = India
   int countryId = 104;
-  String countryCode="IN";
-  bool otpVisible=false;
-  String  strOTP='';
-
+  String countryCode = "IN";
+  bool otpVisible = false;
+  String strOTP = '';
 
   @override
   void dispose() {
@@ -47,22 +47,20 @@ class _SignUpState extends State<SignUp> {
 
   @override
   void initState() {
-    mobileController.addListener((){
+    mobileController.addListener(() {
       print("value: ${mobileController.text}");
-      String number=mobileController.text;
-      if(number.length==10){
-        otpVisible=true;
-      }
-      else{
-        otpVisible=false;
+      String number = mobileController.text;
+      if (number.length == 10) {
+        otpVisible = true;
+      } else {
+        otpVisible = false;
       }
 
-      setState(() {
-
-      });
+      setState(() {});
     });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,11 +185,12 @@ class _SignUpState extends State<SignUp> {
                 height: 20.0,
               ),
               SizedBox(
-                height: 60.0,
+                height: 70.0,
                 child: AppTextField(
                   textFieldType: TextFieldType.PHONE,
                   controller: mobileController,
                   enabled: true,
+                  maxLength: countryCode == "IN" ? 10 : null,
                   decoration: InputDecoration(
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: kMainColor),
@@ -212,8 +211,8 @@ class _SignUpState extends State<SignUp> {
                         print(country.code);
                         setState(() {
                           String name = country.name?.toUpperCase() ?? 'INDIA';
-                            countryCode = country.code?.toUpperCase() ?? 'IN';
-                            countryId = countries.indexOf(name, 0) + 1;
+                          countryCode = country.code?.toUpperCase() ?? 'IN';
+                          countryId = countries.indexOf(name, 0) + 1;
                         });
                       },
                       initialSelection: 'IN',
@@ -225,41 +224,39 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
               ),
-
               Visibility(
-               // visible: otpVisible,
+                // visible: otpVisible,
                 visible: false,
-                  child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  SizedBox(
-                    height: 60.0,
-                    child: AppTextField(
-                      textFieldType: TextFieldType.NUMBER,
-                      controller: otpController,
-                      enabled: true,
-                      decoration: InputDecoration(
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: kMainColor),
-                        ),
-                        labelText: 'OTP',
-                        hintText: 'Enter your OTP',
-                        labelStyle: kTextStyle,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFFE8E7E5),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    SizedBox(
+                      height: 60.0,
+                      child: AppTextField(
+                        textFieldType: TextFieldType.NUMBER,
+                        controller: otpController,
+                        enabled: true,
+                        decoration: InputDecoration(
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: kMainColor),
+                          ),
+                          labelText: 'OTP',
+                          hintText: 'Enter your OTP',
+                          labelStyle: kTextStyle,
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFFE8E7E5),
+                            ),
                           ),
                         ),
-
                       ),
                     ),
-                  ),
-                ],
-              )),
-
+                  ],
+                ),
+              ),
               const SizedBox(
                 height: 20.0,
               ),
@@ -273,6 +270,26 @@ class _SignUpState extends State<SignUp> {
                     borderSide: BorderSide(color: kMainColor),
                   ),
                   hintText: 'Enter password',
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFE8E7E5),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              AppTextField(
+                textFieldType: TextFieldType.PASSWORD,
+                controller: confirmPasswordController,
+                decoration: InputDecoration(
+                  labelText: 'Confirm Password',
+                  labelStyle: kTextStyle,
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: kMainColor),
+                  ),
+                  hintText: 'Confirm password',
                   enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Color(0xFFE8E7E5),
@@ -314,13 +331,13 @@ class _SignUpState extends State<SignUp> {
     } else if (!isMobileValid(mobileController.text)) {
       toast("Please add a valid Mobile no.");
     } else if (!isPasswordValid(passwordController.text)) {
-      toast("Password must have at least 8 characters");
-    }
-    else if (mobileController.text.length==10) {
-      if(countryCode!="IN"){
+      toast("Password must have at least 8 characters.");
+    } else if (confirmPasswordController.text == passwordController.text) {
+      toast("Password and confirm password do not match.");
+    } else if (mobileController.text.length == 10) {
+      if (countryCode != "IN") {
         toast("Please Select Valid Country");
-      }
-      else {
+      } else {
         try {
           print("country");
           print(countries[countryId - 1]);
@@ -349,7 +366,7 @@ class _SignUpState extends State<SignUp> {
             prefs.setString('username', signUp.customer?.username ?? 'Guest');
             prefs.setBool('autoLogin', true);
             const SignIn().launch(context, isNewTask: true);
-           /* Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
+            /* Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddBilling(
                 country: countryId,
                 mobile: mobileController.text,
                 status: 1
@@ -379,8 +396,7 @@ class _SignUpState extends State<SignUp> {
           EasyLoading.showError(e.toString());
         }
       }
-    }
-    else {
+    } else {
       try {
         print("country");
         print(countries[countryId - 1]);
@@ -417,8 +433,7 @@ class _SignUpState extends State<SignUp> {
           ),
               ModalRoute.withName("/AddBilling"));*/
 
-
-         /* AddBilling(
+          /* AddBilling(
             country: countryId,
             mobile: mobileController.text,
           ).launch(context);*/

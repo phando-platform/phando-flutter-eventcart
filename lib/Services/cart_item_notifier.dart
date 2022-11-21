@@ -38,7 +38,18 @@ class CartItemNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateQuantity(int itemId) {
+  void updateQuantity(int itemId, {int? minimumQuantity}) {
+    if (minimumQuantity != null) {
+      for (final item in cartItemUis) {
+        if (item.id == itemId) {
+          if (!(item.productQuantity! >= minimumQuantity)) {
+            item.productQuantity = minimumQuantity;
+            notifyListeners();
+          }
+        }
+      }
+      return;
+    }
     for (final item in cartItemUis) {
       if (item.id == itemId) {
         item.productQuantity =
