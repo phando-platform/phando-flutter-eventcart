@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../../Helpers/helper.functions.dart';
 import '../../Models/order_create_model.dart';
@@ -151,15 +152,43 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   EasyLoading.show(
                                       status: 'Adding To The Cart');
                                   Cart cartItem = Cart(
-                                      id: snapshot.data?.value?.id ?? 'Null',
-                                      price: snapshot.data?.value?.salePrice ??
-                                          0.0,
-                                      quantity: productQuantity,
-                                      size: snapshot.data!.value!.sizes!.isEmpty
-                                          ? 'Null'
-                                          : snapshot.data?.value
-                                              ?.sizes?[selectedSizeIndex].name,
-                                      color:
+                                    id: snapshot.data?.value?.id ?? 'Null',
+                                    price:
+                                        snapshot.data?.value?.salePrice ?? 0.0,
+                                    quantity: productQuantity,
+                                    size: snapshot.data!.value!.sizes!.isEmpty
+                                        ? 'Null'
+                                        : snapshot.data?.value
+                                            ?.sizes?[selectedSizeIndex].name,
+                                    color: snapshot.data!.value!.colors!.isEmpty
+                                        ? 'Null'
+                                        : snapshot.data?.value
+                                            ?.colors?[selectedColorIndex].hex,
+                                    shippingCost:
+                                        snapshot.data?.value?.shippingCost ??
+                                            'Null',
+                                    estimatedShippingDays: snapshot.data?.value
+                                            ?.details?.estimatedShippingDays
+                                            .toString() ??
+                                        'Null',
+                                    productPriceTotal:
+                                        snapshot.data?.value?.salePrice *
+                                                productQuantity ??
+                                            'Null',
+                                    minQuantity:
+                                        snapshot.data?.value?.minimumQty ??
+                                            'Null',
+                                  );
+                                  CartItemUi cartUi = CartItemUi(
+                                      id: snapshot.data?.value?.id ?? 0,
+                                      productName: snapshot.data?.value?.name,
+                                      productImage: snapshot
+                                          .data?.value?.images?[0].image,
+                                      productQuantity: productQuantity,
+                                      productPrice:
+                                          snapshot.data?.value?.salePrice ??
+                                              0.00,
+                                      productColor:
                                           snapshot.data!.value!.colors!.isEmpty
                                               ? 'Null'
                                               : snapshot
@@ -167,45 +196,23 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                   ?.value
                                                   ?.colors?[selectedColorIndex]
                                                   .hex,
-                                      shippingCost:
-                                          snapshot.data?.value?.shippingCost ??
-                                              'Null',
-                                      estimatedShippingDays: snapshot
-                                              .data
-                                              ?.value
-                                              ?.details
-                                              ?.estimatedShippingDays
-                                              .toString() ??
-                                          'Null',
-                                      productPriceTotal:
-                                          snapshot.data?.value?.salePrice *
-                                                  productQuantity ??
-                                              'Null',
-                                    minQuantity:
-                                    snapshot.data?.value?.minimumQty ??
-                                        'Null',);
-                                  CartItemUi cartUi = CartItemUi(
-                                      id: snapshot.data?.value?.id ?? 0,
-                                      productName: snapshot.data?.value?.name,
-                                      productImage: snapshot.data?.value?.images?[0].image,
-                                      productQuantity: productQuantity,
-                                      productPrice: snapshot.data?.value?.salePrice ?? 0.00,
-                                      productColor: snapshot.data!.value!.colors!.isEmpty ? 'Null'
-                                              : snapshot
-                                                  .data
-                                                  ?.value
-                                                  ?.colors?[selectedColorIndex]
-                                                  .hex,
-                                      productSize: snapshot.data!.value!.sizes!.isEmpty
+                                      productSize:
+                                          snapshot.data!.value!.sizes!.isEmpty
                                               ? 'Null'
                                               : snapshot
                                                   .data
                                                   ?.value
                                                   ?.sizes?[selectedSizeIndex]
                                                   .name,
-                                      minimumQtd: snapshot.data!.value!.minimumQty.toString());
-                                  ref.read(cartProvider.notifier).addItem(cartItem);
-                                  ref.read(cartItemUiProvider.notifier).addUiItem(cartUi);
+                                      minimumQtd: snapshot
+                                          .data!.value!.minimumQty
+                                          .toString());
+                                  ref
+                                      .read(cartProvider.notifier)
+                                      .addItem(cartItem);
+                                  ref
+                                      .read(cartItemUiProvider.notifier)
+                                      .addUiItem(cartUi);
                                   EasyLoading.showSuccess('Added To Cart');
                                   setState(() {});
                                 } else {
@@ -305,14 +312,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                   ?.value
                                                   ?.colors?[selectedColorIndex]
                                                   .hex,
-                                      productSize: snapshot.data!.value!.sizes!.isEmpty
+                                      productSize:
+                                          snapshot.data!.value!.sizes!.isEmpty
                                               ? 'Null'
                                               : snapshot
                                                   .data
                                                   ?.value
                                                   ?.sizes?[selectedSizeIndex]
                                                   .name,
-                                      minimumQtd: snapshot.data!.value!.minimumQty.toString());
+                                      minimumQtd: snapshot
+                                          .data!.value!.minimumQty
+                                          .toString());
                                   ref
                                       .read(cartProvider.notifier)
                                       .addItem(cartItem);
@@ -370,18 +380,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                         itemCount: snapshot.data?.value?.images?.length ?? 10,
                         itemBuilder: (BuildContext context, int index,
                             int pageViewIndex) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.network(
+                          return SizedBox(
+                            height: 380,
+                            child: PhotoView(
+                              backgroundDecoration: const BoxDecoration(
+                                color: Color(0xFFFFFFFF),
+                              ),
+                              imageProvider: NetworkImage(
                                 snapshot.data?.value?.images![index].image
                                         .toString() ??
                                     '',
-                                height: 380,
-                                fit: BoxFit.cover,
                               ),
-                            ],
+                            ),
                           );
                         },
                         options: CarouselOptions(
@@ -396,7 +406,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           autoPlayAnimationDuration:
                               const Duration(milliseconds: 800),
                           autoPlayCurve: Curves.fastOutSlowIn,
-                          enlargeCenterPage: true,
+                          // enlargeCenterPage: true,
                           scrollDirection: Axis.horizontal,
                         ),
                       ),
@@ -434,7 +444,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 icon: Icon(Icons.share),
                                 color: kGreyTextColor,
                                 onPressed: () => shareProductLink(
-                                    "Event Cart", "https://eventcart.co.in/p/"+(snapshot.data?.value?.slug??'')),
+                                    "Event Cart",
+                                    "https://eventcart.co.in/p/" +
+                                        (snapshot.data?.value?.slug ?? '')),
                               ),
                               const SizedBox(
                                 width: 5.0,
@@ -690,7 +702,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   children: [
                                     TextSpan(
                                       text: snapshot.data?.value?.description
-                                              .toString() ?? '',
+                                              .toString() ??
+                                          '',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
