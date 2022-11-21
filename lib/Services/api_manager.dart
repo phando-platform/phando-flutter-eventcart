@@ -32,7 +32,9 @@ class ApiManager {
   static const apiUrl = "https://eventcart.co.in/api/v1/";
 
   Future<LoginModel> signInWithEmail(
-      String username, String passwordUser) async {
+    String username,
+    String passwordUser,
+  ) async {
     final response = await http.post(
       Uri.parse(apiUrl + 'login'),
       headers: <String, String>{
@@ -44,6 +46,48 @@ class ApiManager {
       },
     );
     final data = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return LoginModel.fromJson(data);
+    } else {
+      return LoginModel.fromJson(data);
+    }
+  }
+
+  Future<bool> sendOtp({
+    required String mobileNumber,
+  }) async {
+    final response = await http.post(
+      Uri.parse('https://eventcartstage.phando.com/api/v1/send-otp'),
+      headers: <String, String>{
+        'Accept': 'application/json',
+      },
+      body: <String, String>{'mobile': mobileNumber},
+    );
+    final data = Map<String, dynamic>.from(jsonDecode(response.body));
+    log(response.body);
+    if (response.statusCode == 200) {
+      return data['status'] == 'success';
+    } else {
+      return false;
+    }
+  }
+
+  Future<LoginModel> verifyMobileOtp({
+    required String mobileNumber,
+    required String otp,
+  }) async {
+    final response = await http.post(
+      Uri.parse('https://eventcartstage.phando.com/api/v1/mobile/otp/verify'),
+      headers: <String, String>{
+        'Accept': 'application/json',
+      },
+      body: <String, String>{
+        'mobile': mobileNumber,
+        'otp': otp,
+      },
+    );
+    final data = jsonDecode(response.body);
+    log(response.body);
     if (response.statusCode == 200) {
       return LoginModel.fromJson(data);
     } else {

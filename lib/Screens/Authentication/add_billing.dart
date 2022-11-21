@@ -13,11 +13,15 @@ import '../Home Screen/home.dart';
 
 // ignore: must_be_immutable
 class AddBilling extends StatefulWidget {
-  AddBilling({Key? key, required this.country, required this.mobile,required this.status})
+  AddBilling(
+      {Key? key,
+      required this.country,
+      required this.mobile,
+      required this.status})
       : super(key: key);
 
   // ignore: prefer_typing_uninitialized_variables
-  var mobile, country,status;
+  var mobile, country, status;
 
   @override
   _AddBillingState createState() => _AddBillingState();
@@ -63,8 +67,8 @@ class _AddBillingState extends State<AddBilling> {
                 ),
                 Text(
                   'Please add your delivery Location',
-                  style:
-                  kTextStyle.copyWith(color: kGreyTextColor, fontSize: 14.0),
+                  style: kTextStyle.copyWith(
+                      color: kGreyTextColor, fontSize: 14.0),
                 ),
                 const SizedBox(
                   height: 50.0,
@@ -176,9 +180,9 @@ class _AddBillingState extends State<AddBilling> {
                 ),
                 ButtonGlobal(
                   buttontext: 'Add Shipping',
-                  buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
+                  buttonDecoration:
+                      kButtonDecoration.copyWith(color: kMainColor),
                   onPressed: () async {
-
                     if (addressOneController.text.isEmpty) {
                       toast("Please input your Address to Signup");
                     } else if (cityController.text.isEmpty) {
@@ -208,7 +212,8 @@ class _AddBillingState extends State<AddBilling> {
                                 : addressTwoController.text.toString(),
                             cityController.text.toString(),
                             postalController.text.toString(),
-                            "104", /*India*/
+                            "104",
+                            /*India*/
                             //  widget.country.toString(),
                             widget.mobile.toString(),
                           );
@@ -228,24 +233,29 @@ class _AddBillingState extends State<AddBilling> {
                           if (billing.success == true &&
                               shipping.success == true) {
                             final SharedPreferences prefs = await _prefs;
-                            prefs.setString('postal_Code', postalController.text.toString() ?? '000000');
-                            prefs.setString('user_city', cityController.text.toString() ?? 'xyz');
-                            prefs.setString('add_one', addressOneController.text.toString() ?? 'xyz');
-                            prefs.setString('add_two', addressTwoController.text.toString() ?? 'xyz');
+                            prefs.setString('postal_Code',
+                                postalController.text.toString() ?? '000000');
+                            prefs.setString('user_city',
+                                cityController.text.toString() ?? 'xyz');
+                            prefs.setString('add_one',
+                                addressOneController.text.toString() ?? 'xyz');
+                            prefs.setString('add_two',
+                                addressTwoController.text.toString() ?? 'xyz');
                             prefs.setString('detailedFilled', "1");
                             EasyLoading.showSuccess(
-                                'Shipping Address Successfully Saved');
+                              'Shipping Address Successfully Saved',
+                            );
 
-                           if(widget.status==1){
-                             ref.read(cartProvider).cartItems.clear();
-                             ref.read(cartItemUiProvider).cartItemUis.clear();
-                           }
+                            if (widget.status == 1) {
+                              ref.read(cartProvider).cartItems.clear();
+                              ref.read(cartItemUiProvider).cartItemUis.clear();
+                            }
 
-
-
-
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
-                                ModalRoute.withName("/Home"));
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => Home()),
+                              ModalRoute.withName("/Home"),
+                            );
                           } else {
                             EasyLoading.showError(billing.message.toString());
                             print(shipping.toString());
@@ -264,8 +274,6 @@ class _AddBillingState extends State<AddBilling> {
           ),
         ),
       );
-
-      });
-
-    }
+    });
+  }
 }
