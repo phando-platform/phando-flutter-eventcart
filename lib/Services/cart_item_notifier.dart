@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nb_utils/nb_utils.dart' hide log;
 
 class CartItemUi {
   int? id;
@@ -21,14 +25,69 @@ class CartItemUi {
     required this.productSize,
     required this.minimumQtd,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'productName': productName,
+      'productImage': productImage,
+      'productQuantity': productQuantity,
+      'productPrice': productPrice,
+      'productColor': productColor,
+      'productSize': productSize,
+      'minimumQtd': minimumQtd,
+    };
+  }
+
+  factory CartItemUi.fromMap(Map<String, dynamic> map) {
+    return CartItemUi(
+      id: map['id']?.toInt(),
+      productName: map['productName'],
+      productImage: map['productImage'],
+      productQuantity: map['productQuantity']?.toInt(),
+      productPrice: map['productPrice'] ?? null,
+      productColor: map['productColor'],
+      productSize: map['productSize'],
+      minimumQtd: map['minimumQtd'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory CartItemUi.fromJson(String source) =>
+      CartItemUi.fromMap(json.decode(source));
 }
 
 class CartItemNotifier extends ChangeNotifier {
-  final cartItemUis = <CartItemUi>[];
+  List<CartItemUi> cartItemUis = <CartItemUi>[];
+  late SharedPreferences pref;
+
+  void getSavedUiItem() async {
+    pref = await SharedPreferences.getInstance();
+    if (pref.containsKey('cart_ui_items')) {
+      final savedCartUi = pref.getStringList('cart_ui_items') ?? [];
+      cartItemUis = savedCartUi
+          .map(
+            (e) => CartItemUi.fromJson(
+              jsonDecode(e),
+            ),
+          )
+          .toList();
+    }
+  }
+
   // Let's allow the UI to add todos.
-  void addUiItem(CartItemUi item) {
+  void addUiItem(CartItemUi item) async {
     cartItemUis.add(item);
-    notifyListeners();
+    pref = await SharedPreferences.getInstance();
+    final result = await pref.setStringList(
+      'cart_ui_items',
+      cartItemUis.map((e) => jsonEncode(e)).toList(),
+    );
+    log(result.toString());
+    if (result) {
+      notifyListeners();
+    }
   }
 
   // Let's allow removing todos

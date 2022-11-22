@@ -163,7 +163,7 @@ class Carts {
   String? get productPriceTotal => _productPriceTotal;
 
   String? get estimatedShippingDays => _estimatedShippingDays;
-  String? get  minQuantity => _minQuantity;
+  String? get minQuantity => _minQuantity;
 
   set productPriceTotal(dynamic p) {
     _productPriceTotal = p;
@@ -256,8 +256,8 @@ class Cart {
     _quantity = p;
   }
 
-  Map<String, String> toJson() {
-    final map = <String, String>{};
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
     map['id'] = _id;
     map['price'] = _price;
     map['quantity'] = _quantity;

@@ -1,3 +1,5 @@
+import 'package:event_app/Services/cart_item_notifier.dart';
+import 'package:event_app/Services/cart_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -29,7 +31,11 @@ class MyApp extends StatelessWidget {
         }),
       ),
       title: 'Event App',
-      home: const SplashScreen(),
+      home: Consumer(builder: (BuildContext context, ref, watch) {
+        ref.read(cartProvider).getSavedCart();
+        ref.read(cartItemUiProvider).getSavedUiItem();
+        return const SplashScreen();
+      }),
       builder: EasyLoading.init(),
     );
   }
