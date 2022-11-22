@@ -226,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   catName: snapshot.data?.value
                                           ?.banners![itemIndex].subTitle ??
                                       "NA",
-                                  subCatModel: snapshot.data,
+                                  subCatModel: null,
                                   clickIndex: itemIndex,
                                   catId: snapshot.data?.value
                                           ?.banners![itemIndex].categoryId ??
