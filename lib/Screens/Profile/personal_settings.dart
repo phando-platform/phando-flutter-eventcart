@@ -257,7 +257,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
               child: Row(
                 children: [
                   Text(
-                    'Name',
+                    'Personal Details',
                     style: kTextStyle,
                   ),
                   const Spacer(),
@@ -273,56 +273,57 @@ class _PersonalSettingsState extends State<PersonalSettings> {
               ),
             ),
           ),
-          GestureDetector(
-            onTap: () => showUpdate(),
-            child: Container(
-              padding: const EdgeInsets.all(20.0),
-              width: context.width(),
-              height: 60.0,
-              child: Row(
-                children: [
-                  Text(
-                    'Change Mobile',
-                    style: kTextStyle,
-                  ),
-                  const Spacer(),
-                  Text(
-                    widget.mobile,
-                    style: kTextStyle.copyWith(color: kGreyTextColor),
-                  ),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    color: kGreyTextColor,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () => showUpdate(),
-            child: Container(
-              padding: const EdgeInsets.all(20.0),
-              width: context.width(),
-              height: 60.0,
-              child: Row(
-                children: [
-                  Text(
-                    'Email',
-                    style: kTextStyle,
-                  ),
-                  const Spacer(),
-                  Text(
-                    widget.email,
-                    style: kTextStyle.copyWith(color: kGreyTextColor),
-                  ),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    color: kGreyTextColor,
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () => showUpdate(),
+          //   child: Container(
+          //     padding: const EdgeInsets.all(20.0),
+          //     width: context.width(),
+          //     height: 60.0,
+          //     child: Row(
+          //       children: [
+          //         Text(
+          //           'Change Mobile',
+          //           style: kTextStyle,
+          //         ),
+          //         const Spacer(),
+          //         Text(
+          //           widget.mobile,
+          //           style: kTextStyle.copyWith(color: kGreyTextColor),
+          //         ),
+          //         const Icon(
+          //           Icons.arrow_forward_ios,
+          //           color: kGreyTextColor,
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // GestureDetector(
+          //   onTap: () => showUpdate(),
+          //   child: Container(
+          //     padding: const EdgeInsets.all(20.0),
+          //     width: context.width(),
+          //     height: 60.0,
+          //     child: Row(
+          //       children: [
+          //         Text(
+          //           'Email',
+          //           style: kTextStyle,
+          //         ),
+          //         const Spacer(),
+          //         Text(
+          //           widget.email,
+          //           style: kTextStyle.copyWith(color: kGreyTextColor),
+          //         ),
+          //         const Icon(
+          //           Icons.arrow_forward_ios,
+          //           color: kGreyTextColor,
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+
           GestureDetector(
             onTap: () => showModalBottomSheet<void>(
                 context: context,
