@@ -33,8 +33,25 @@ class _AddBillingState extends State<AddBilling> {
   TextEditingController addressTwoController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController postalController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController stateController = TextEditingController();
   final ApiManager _apiManager = ApiManager();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  Future<void> getPrefilledData() async {
+    final SharedPreferences _prefs = await SharedPreferences.getInstance();
+    final email = _prefs.getString('email') ?? '';
+    final firstName = _prefs.getString('firstName') ?? '';
+    final lastName = _prefs.getString('lastName') ?? '';
+    emailController.text = email;
+    fullNameOneController.text = firstName + ' ' + lastName;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPrefilledData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +173,26 @@ class _AddBillingState extends State<AddBilling> {
                   height: 20.0,
                 ),
                 AppTextField(
+                  textFieldType: TextFieldType.NAME,
+                  controller: stateController,
+                  decoration: InputDecoration(
+                    labelText: 'State',
+                    labelStyle: kTextStyle,
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: kMainColor),
+                    ),
+                    hintText: 'Enter Your State',
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFE8E7E5),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                AppTextField(
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(6),
                   ],
@@ -178,6 +215,26 @@ class _AddBillingState extends State<AddBilling> {
                 const SizedBox(
                   height: 20.0,
                 ),
+                AppTextField(
+                  textFieldType: TextFieldType.NAME,
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    labelStyle: kTextStyle,
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: kMainColor),
+                    ),
+                    hintText: 'Enter Your Email',
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFE8E7E5),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
                 ButtonGlobal(
                   buttontext: 'Add Shipping',
                   buttonDecoration:
@@ -189,10 +246,18 @@ class _AddBillingState extends State<AddBilling> {
                       toast("Please input your city to signup");
                     } else if (fullNameOneController.text.isEmpty) {
                       toast("Please input your Full name to signup");
+                    } else if (fullNameOneController.text.contains('Guest')) {
+                      toast("Please input valid Full name to signup");
                     } else if (postalController.text.isEmpty) {
                       toast("Please input your post code to signup");
                     } else if (postalController.text.length < 5) {
                       toast("Postal code less than 5");
+                    } else if (stateController.text.isEmpty) {
+                      toast("Please input your state to signup");
+                    } else if (emailController.text.isEmpty) {
+                      toast("Please input your email to signup");
+                    } else if (emailController.text.contains('Guest')) {
+                      toast("Please input valid email to signup");
                     } else if (addressOneController.text.isNotEmpty &&
                         cityController.text.isNotEmpty &&
                         postalController.text.isNotEmpty) {
@@ -221,27 +286,79 @@ class _AddBillingState extends State<AddBilling> {
                           print("shipping response");
                           print(shipping.success);
                           final billing = await _apiManager.setBillingInfo(
-                              token.toString(),
-                              addressOneController.text.toString(),
-                              widget.mobile.toString(),
-                              cityController.text.toString(),
-                              postalController.text.toString(),
-                              "104");
+                            token.toString(),
+                            addressOneController.text.toString(),
+                            widget.mobile.toString(),
+                            cityController.text.toString(),
+                            postalController.text.toString(),
+                            "104",
+                          );
                           /* widget.country.toString());*/
                           print("billing response");
                           print(billing.success);
                           if (billing.success == true &&
                               shipping.success == true) {
-                            final SharedPreferences prefs = await _prefs;
-                            prefs.setString('postal_Code',
-                                postalController.text.toString() ?? '000000');
-                            prefs.setString('user_city',
-                                cityController.text.toString() ?? 'xyz');
-                            prefs.setString('add_one',
-                                addressOneController.text.toString() ?? 'xyz');
-                            prefs.setString('add_two',
-                                addressTwoController.text.toString() ?? 'xyz');
-                            prefs.setString('detailedFilled', "1");
+                            await _prefs
+                              ..setString(
+                                'billing_postal_Code',
+                                postalController.text,
+                              )
+                              ..setString(
+                                'billing_user_city',
+                                cityController.text,
+                              )
+                              ..setString(
+                                'billing_user_state',
+                                stateController.text,
+                              )
+                              ..setString(
+                                'billing_add_one',
+                                addressOneController.text,
+                              )
+                              ..setString(
+                                'billing_add_two',
+                                addressTwoController.text,
+                              )
+                              ..setString(
+                                'billing_full_name',
+                                fullNameOneController.text,
+                              )
+                              ..setString(
+                                'billing_email',
+                                emailController.text,
+                              )
+                              ..setString(
+                                'shipping_postal_Code',
+                                postalController.text,
+                              )
+                              ..setString(
+                                'shipping_user_city',
+                                cityController.text,
+                              )
+                              ..setString(
+                                'shipping_user_state',
+                                stateController.text,
+                              )
+                              ..setString(
+                                'shipping_add_one',
+                                addressOneController.text,
+                              )
+                              ..setString(
+                                'shipping_add_two',
+                                addressTwoController.text,
+                              )
+                              ..setString(
+                                'shipping_full_name',
+                                fullNameOneController.text,
+                              )
+                              ..setString(
+                                'shipping_email',
+                                emailController.text,
+                              )
+                              ..setString(
+                                'detailedFilled',
+                                "1",
+                              );
                             EasyLoading.showSuccess(
                               'Shipping Address Successfully Saved',
                             );

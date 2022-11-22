@@ -496,47 +496,55 @@ class ApiManager {
       String shippingId,
       String billingId) async {
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
-    print("User name: ");
 
-    String? strFirstName = _prefs.getString('firstName') ?? "Not Specified";
-    String? strLastName = _prefs.getString('lastName') ?? "Not Specified";
-    String? strAddOne = _prefs.getString('add_one') ?? "Not Specified";
-    String? strPhone = _prefs.getString('phone') ?? "Not Specified";
-    String? strEmail = _prefs.getString('email') ?? "Not Specified";
-    String? strPostCode = _prefs.getString('postal_Code') ?? "Not Specified";
+    String? billingFirstName = _prefs.getString('firstName') ?? "Not Specified";
+    String? billingLastName = _prefs.getString('lastName') ?? "Not Specified";
+    String? billingAddOne =
+        _prefs.getString('billing_add_one') ?? "Not Specified";
+    String? billingPhone = _prefs.getString('billing_phone') ?? "Not Specified";
+    String? billingEmail = _prefs.getString('billing_email') ?? "Not Specified";
+    String? billingPostCode =
+        _prefs.getString('billing_postal_Code') ?? "Not Specified";
+    String? billingUserCity =
+        _prefs.getString('billing_user_city') ?? "Not Specified";
+    String? billingUserState =
+        _prefs.getString('billing_user_state') ?? "Not Specified";
+    String? shippingFirstName =
+        _prefs.getString('shipping_full_name') ?? "Not Specified";
+    String? shippingLastName =
+        _prefs.getString('shipping_full_name') ?? "Not Specified";
+    String? shippingAddOne =
+        _prefs.getString('shipping_add_one') ?? "Not Specified";
+    String? shippingPhone =
+        _prefs.getString('shipping_phone') ?? "Not Specified";
+    String? shippingEmail =
+        _prefs.getString('shipping_email') ?? "Not Specified";
+    String? shippingPostCode =
+        _prefs.getString('shipping_postal_Code') ?? "Not Specified";
+    String? shippingUserCity =
+        _prefs.getString('shipping_user_city') ?? "Not Specified";
+    String? shippingUserState =
+        _prefs.getString('shipping_user_state') ?? "Not Specified";
 
     // print(token);
 
-    print(strFirstName);
-    print(strLastName);
-    print(strAddOne);
-    print(strPhone);
-    print(strEmail);
-    print(strPostCode);
-    print(strAddOne);
-    print('104');
-
-    print(strAddOne);
-    print(strPhone);
-    print(strEmail);
-    print("200");
-    print(strAddOne);
-    print('104');
-    print(strAddOne);
-
-    print(payment);
-    print(model.currency?.id ?? 0);
-    print('1.35');
-    print(subTotal);
-    print(totalShipping);
-    print(total);
-
-    print(json.encode(model.cart?[0].id));
-    print(json.encode(model.cart?[0].price));
-    print(json.encode(model.cart?[0].quantity));
-    print(json.encode(model.cart?[0].shippingCost));
-    print(json.encode(model.cart?[0].productPriceTotal));
-    print(json.encode(model.cart?[0].estimatedShippingDays));
+    log('first name:' + billingFirstName);
+    log('last name:' + billingLastName);
+    log('str add one:' + billingAddOne);
+    log('phone:' + billingPhone);
+    log('email:' + billingEmail);
+    log('postal code:' + billingPostCode);
+    log('payment:' + payment);
+    log('currency: ${model.currency?.id.toString()}');
+    log('sub total:' + subTotal);
+    log('total shipping:' + totalShipping);
+    log('total:' + total);
+    log('cart id:' + json.encode(model.cart?[0].id));
+    log('cart price:' + json.encode(model.cart?[0].price));
+    log('cart qty:' + json.encode(model.cart?[0].quantity));
+    log('shipping cost:' + json.encode(model.cart?[0].shippingCost));
+    log('productTotalPrice:' + json.encode(model.cart?[0].productPriceTotal));
+    log('shipping Days:' + json.encode(model.cart?[0].estimatedShippingDays));
 
     final response = await http.post(
       Uri.parse(apiUrl + 'order'),
@@ -545,24 +553,22 @@ class ApiManager {
         'Authorization': 'Bearer $token',
       },
       body: <dynamic, dynamic>{
-        'first_name': strFirstName,
-        'last_name': strLastName,
-        'user_address_1': strAddOne, //null
-        'user_mobile': strPhone,
-        'user_email': strEmail,
-        'user_post_code': strPostCode, //null
-        'user_city': strAddOne, //null
+        'first_name': billingFirstName,
+        'last_name': billingLastName,
+        'user_address_1': billingAddOne,
+        'user_mobile': billingPhone,
+        'user_email': billingEmail,
+        'user_post_code': billingPostCode,
+        'user_city': billingUserCity,
         'user_country_id': "104",
-        'shipping_name': strAddOne,
-        'shipping_mobile': strPhone,
-        'shipping_email': strEmail,
-        'shipping_post': "200",
-        'shipping_town': strAddOne,
+        'shipping_name': shippingFirstName,
+        'shipping_mobile': shippingPhone,
+        'shipping_email': shippingEmail,
+        'shipping_post': shippingPostCode,
+        'shipping_town': shippingUserCity,
+        'shipping_state': shippingUserState,
+        'address_line_one': shippingAddOne,
         'shipping_country_id': "104",
-        'address_line_one': strAddOne,
-        'shipping_town': strAddOne,
-        'shipping_country_id': '104',
-        'address_line_one': strAddOne,
         'payment_by': payment,
         'subTotal': subTotal,
         'totalShipping': totalShipping,
@@ -578,9 +584,9 @@ class ApiManager {
       },
     );
 
-    print("api manager: create order");
-    print(response.statusCode);
-    print(response.body);
+    log("api manager: create order");
+    log(response.statusCode.toString());
+    log(response.body);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return OrderCreateResponse.fromJson(data);
@@ -599,12 +605,17 @@ class ApiManager {
       },
     );
     if (response.statusCode == 200) {
-      final data = Map<String, dynamic>.from(jsonDecode(response.body));
-      log(response.body);
-      return OrderListModel.fromJson(data);
+      // final data = jsonDecode(response.body);
+      try {
+        return OrderListModel.fromJson(response.body);
+      } catch (error, stackTrace) {
+        log(error.toString());
+        log(stackTrace.toString());
+        rethrow;
+      }
     } else {
       final data = Map<String, dynamic>.from(jsonDecode(response.body));
-      return OrderListModel.fromJson(data);
+      return OrderListModel.fromJson(response.body);
     }
   }
 

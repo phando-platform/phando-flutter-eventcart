@@ -8,8 +8,13 @@ import '../../constant.dart';
 
 // ignore: must_be_immutable
 class UpdateShipping extends StatefulWidget {
-  UpdateShipping({Key? key, required this.shipping}) : super(key: key);
-  ShippingUpdate shipping;
+  const UpdateShipping({
+    Key? key,
+    required this.shipping,
+    required this.isShipping,
+  }) : super(key: key);
+  final ShippingUpdate shipping;
+  final bool isShipping;
 
   @override
   _UpdateShippingState createState() => _UpdateShippingState();
@@ -20,10 +25,26 @@ class _UpdateShippingState extends State<UpdateShipping> {
   TextEditingController addressOneController = TextEditingController();
   TextEditingController addressTwoController = TextEditingController();
   TextEditingController cityController = TextEditingController();
+  TextEditingController stateController = TextEditingController();
   TextEditingController postalController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   final ApiManager _apiManager = ApiManager();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  Future<void> getEmail() async {
+    final SharedPreferences _prefs = await SharedPreferences.getInstance();
+    final email = _prefs.getString(
+          widget.isShipping ? 'shipping_email' : 'billing_email',
+        ) ??
+        '';
+    final state = _prefs.getString(
+          widget.isShipping ? 'shipping_user_state' : 'billing_user_state',
+        ) ??
+        '';
+    emailController.text = email;
+    stateController.text = state;
+  }
 
   @override
   void initState() {
@@ -33,6 +54,7 @@ class _UpdateShippingState extends State<UpdateShipping> {
     cityController.text = widget.shipping.town.toString();
     postalController.text = widget.shipping.postCode.toString();
     mobileController.text = widget.shipping.mobile.toString();
+    getEmail();
     super.initState();
   }
 
@@ -45,7 +67,7 @@ class _UpdateShippingState extends State<UpdateShipping> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
-          'Shipping Address',
+          widget.isShipping ? 'Shipping Address' : 'Billing Address',
           style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
@@ -60,7 +82,9 @@ class _UpdateShippingState extends State<UpdateShipping> {
                 height: 50.0,
               ),
               Text(
-                'Update Shipping Address',
+                widget.isShipping
+                    ? 'Update Shipping Address'
+                    : 'Update Billing Address',
                 style: kTextStyle.copyWith(
                     fontWeight: FontWeight.bold, fontSize: 18.0),
               ),
@@ -156,6 +180,26 @@ class _UpdateShippingState extends State<UpdateShipping> {
               ),
               AppTextField(
                 textFieldType: TextFieldType.NAME,
+                controller: stateController,
+                decoration: InputDecoration(
+                  labelText: 'State',
+                  labelStyle: kTextStyle,
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: kMainColor),
+                  ),
+                  hintText: 'Enter Your State',
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFE8E7E5),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              AppTextField(
+                textFieldType: TextFieldType.NAME,
                 controller: postalController,
                 decoration: InputDecoration(
                   labelText: 'Post Code',
@@ -194,18 +238,42 @@ class _UpdateShippingState extends State<UpdateShipping> {
               const SizedBox(
                 height: 20.0,
               ),
+              AppTextField(
+                textFieldType: TextFieldType.PHONE,
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  labelStyle: kTextStyle,
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: kMainColor),
+                  ),
+                  hintText: 'Enter Your Email',
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFE8E7E5),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
               ButtonGlobal(
                 buttontext: 'Update',
                 buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
                 onPressed: () async {
                   if (addressOneController.text.isEmpty) {
-                    toast("Please input your Address to Signup");
+                    toast("Please input your Address to proceed");
                   } else if (cityController.text.isEmpty) {
-                    toast("Please input your city to signup");
+                    toast("Please input your city to proceed");
                   } else if (fullNameOneController.text.isEmpty) {
-                    toast("Please input your Full name to signup");
+                    toast("Please input your Full name to proceed");
                   } else if (postalController.text.isEmpty) {
-                    toast("Please input your post code to signup");
+                    toast("Please input your post code to proceed");
+                  } else if (emailController.text.isEmpty) {
+                    toast("Please input your email to proceed");
+                  } else if (stateController.text.isEmpty) {
+                    toast("Please input your state to proceed");
                   } else if (addressOneController.text.isNotEmpty &&
                       cityController.text.isNotEmpty &&
                       postalController.text.isNotEmpty) {
@@ -216,31 +284,107 @@ class _UpdateShippingState extends State<UpdateShipping> {
                       if (token == '') {
                         EasyLoading.showError('Token Not Found');
                       } else {
-                        final shipping = await _apiManager.setShippingInfo(
-                          token.toString(),
-                          fullNameOneController.text.toString(),
-                          addressOneController.text.toString(),
-                          addressTwoController.text.toString(),
-                          cityController.text.toString(),
-                          postalController.text.toString(),
-                          widget.shipping.countryId.toString(),
-                          mobileController.text.toString(),
-                        );
-                        final billing = await _apiManager.setBillingInfo(
-                          token.toString(),
-                          addressOneController.text.toString(),
-                          widget.shipping.mobile.toString(),
-                          cityController.text.toString(),
-                          postalController.text.toString(),
-                          widget.shipping.countryId.toString(),
-                        );
-                        if (billing.success == true &&
-                            shipping.success == true) {
-                          EasyLoading.showSuccess(
-                              'Shipping Address Successfully Saved');
-                          Navigator.pop(context);
+                        if (widget.isShipping) {
+                          final shipping = await _apiManager.setShippingInfo(
+                            token.toString(),
+                            fullNameOneController.text.toString(),
+                            addressOneController.text.toString(),
+                            addressTwoController.text.toString(),
+                            cityController.text.toString(),
+                            postalController.text.toString(),
+                            widget.shipping.countryId.toString(),
+                            mobileController.text.toString(),
+                          );
+                          if (shipping.success == true) {
+                            await _prefs
+                              ..setString(
+                                'shipping_postal_Code',
+                                postalController.text,
+                              )
+                              ..setString(
+                                'shipping_user_state',
+                                stateController.text,
+                              )
+                              ..setString(
+                                'shipping_user_city',
+                                cityController.text,
+                              )
+                              ..setString(
+                                'shipping_add_one',
+                                addressOneController.text,
+                              )
+                              ..setString(
+                                'shipping_add_two',
+                                addressTwoController.text,
+                              )
+                              ..setString(
+                                'shipping_full_name',
+                                fullNameOneController.text,
+                              )
+                              ..setString(
+                                'shipping_phone',
+                                mobileController.text,
+                              )
+                              ..setString(
+                                'shipping_email',
+                                emailController.text,
+                              );
+                            EasyLoading.showSuccess(
+                                'Shipping Address Successfully Saved');
+                            Navigator.pop(context);
+                          } else {
+                            EasyLoading.showError(shipping.message.toString());
+                          }
                         } else {
-                          EasyLoading.showError(billing.message.toString());
+                          final billing = await _apiManager.setBillingInfo(
+                            token.toString(),
+                            addressOneController.text.toString(),
+                            widget.shipping.mobile.toString(),
+                            cityController.text.toString(),
+                            postalController.text.toString(),
+                            widget.shipping.countryId.toString(),
+                          );
+                          if (billing.success == true) {
+                            await _prefs
+                              ..setString(
+                                'billing_postal_Code',
+                                postalController.text,
+                              )
+                              ..setString(
+                                'billing_user_state',
+                                stateController.text,
+                              )
+                              ..setString(
+                                'billing_user_city',
+                                cityController.text,
+                              )
+                              ..setString(
+                                'billing_add_one',
+                                addressOneController.text,
+                              )
+                              ..setString(
+                                'billing_add_two',
+                                addressTwoController.text,
+                              )
+                              ..setString(
+                                'billing_full_name',
+                                fullNameOneController.text,
+                              )
+                              ..setString(
+                                'billing_email',
+                                emailController.text,
+                              )
+                              ..setString(
+                                'billing_phone',
+                                mobileController.text,
+                              );
+                            EasyLoading.showSuccess(
+                              'Shipping Address Successfully Saved',
+                            );
+                            Navigator.pop(context);
+                          } else {
+                            EasyLoading.showError(billing.message.toString());
+                          }
                         }
                       }
                     } catch (e) {
@@ -265,13 +409,16 @@ class ShippingUpdate {
   String? town;
   String? countryId;
   String? mobile;
+  String? email;
 
-  ShippingUpdate(
-      {this.fullName,
-      this.addressOne,
-      this.addressTwo,
-      this.countryId,
-      this.town,
-      this.postCode,
-      this.mobile});
+  ShippingUpdate({
+    this.fullName,
+    this.addressOne,
+    this.addressTwo,
+    this.countryId,
+    this.town,
+    this.postCode,
+    this.mobile,
+    this.email,
+  });
 }

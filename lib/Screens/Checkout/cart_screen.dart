@@ -118,11 +118,13 @@ class _CartScreenState extends State<CartScreen> {
                     itemCount: cartItemUi.length,
                     itemBuilder: (_, index) {
                       // productQuantity = ref.read(cartProvider).cartItems[index].quantity;
-                      minQuantity =
-                          ref.read(cartProvider).cartItems[index].minQuantity;
+
                       ref.read(cartItemUiProvider.notifier).updateQuantity(
                             cartItemUi[index].id ?? 0,
-                            minimumQuantity: minQuantity,
+                            minimumQuantity: ref
+                                .read(cartProvider)
+                                .cartItems[index]
+                                .minQuantity,
                           );
                       ref.read(cartProvider.notifier).updatePrice(
                             cartItemUi[index].id ?? 0,
@@ -215,7 +217,10 @@ class _CartScreenState extends State<CartScreen> {
                                             Icons.remove,
                                             color: kTitleColor,
                                           ).onTap(() {
-                                            if (minQuantity <
+                                            if (ref
+                                                    .read(cartProvider)
+                                                    .cartItems[index]
+                                                    .minQuantity <
                                                 ref
                                                     .read(cartItemUiProvider
                                                         .notifier)
@@ -240,7 +245,7 @@ class _CartScreenState extends State<CartScreen> {
                                                           .toInt());
                                             } else {
                                               toast(
-                                                'Minimum purchase quantity for product is $minQuantity',
+                                                'Minimum purchase quantity for product is ${ref.read(cartProvider).cartItems[index].minQuantity}',
                                                 bgColor: Colors.red,
                                               );
                                             }
@@ -565,9 +570,6 @@ class _CartScreenState extends State<CartScreen> {
                                   toast('Please sign In to Checkout');
                                   const SignIn().launch(context);
                                 }
-
-                                print(productQuantity);
-                                print(minQuantity);
                               },
                             ),
                           ],

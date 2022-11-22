@@ -45,10 +45,17 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+
+    tabController.addListener(() {
+      if (tabController.indexIsChanging) {
+        setState(() {});
+      }
+    });
   }
 
   @override
   void dispose() {
+    tabController.removeListener(() {});
     tabController.dispose();
     mobileController.dispose();
     otpController.dispose();

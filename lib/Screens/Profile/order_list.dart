@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
 
 import '../../Models/order_list_model.dart';
-import '../../Screens/Checkout/delivery_status.dart';
 import '../../Services/api_manager.dart';
 import '../../GlobalComponents/button_global.dart';
 import '../../constant.dart';
@@ -80,20 +77,12 @@ class _OrderListState extends State<OrderList> {
                               itemCount:
                                   snapshot.data?.value?.data?.length ?? 0,
                               itemBuilder: (BuildContext context, index) {
-                                DateFormat dateFormat =
-                                    DateFormat("yyyy-MM-dd");
-                                String formattedDate = dateFormat
-                                    .parse(snapshot.data?.value?.data?[index]
-                                            .createdAt ??
-                                        '')
-                                    .toString();
                                 return ListView.builder(
                                     shrinkWrap: true,
                                     physics:
                                         const NeverScrollableScrollPhysics(),
-                                    itemCount: snapshot.data?.value
-                                            ?.data?[index].details?.length ??
-                                        1,
+                                    itemCount:
+                                        snapshot.data?.value?.data?.length ?? 1,
                                     itemBuilder: (_, i) {
                                       return Card(
                                         shape: RoundedRectangleBorder(
@@ -102,46 +91,48 @@ class _OrderListState extends State<OrderList> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(10.0),
                                           child: ListTile(
-                                            /* leading: Image.network(snapshot
-                                                    .data
-                                                    ?.value
-                                                    ?.data?[index]
-                                                    .details?[i]
-                                                    .product
-                                                    ?.images?[0]
-                                                    .image ??
-                                                ''),*/
+                                            leading: Image.network(
+                                              snapshot
+                                                      .data
+                                                      ?.value
+                                                      ?.data?[index]
+                                                      .product
+                                                      ?.images?[0]
+                                                      .imageUrl ??
+                                                  '',
+                                              cacheHeight: 200,
+                                              cacheWidth: 200,
+                                            ),
                                             title: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                /* Text(
+                                                Text(
                                                   snapshot
                                                           .data
                                                           ?.value
                                                           ?.data?[index]
-                                                          .details?[i]
                                                           .product
                                                           ?.name ??
                                                       '',
                                                   style: kTextStyle.copyWith(
                                                       color: kTitleColor),
-                                                ),*/
+                                                ),
                                                 Row(
                                                   children: [
                                                     Text(
-                                                      '#${snapshot.data?.value?.data?[index].orderNo}',
+                                                      '#${snapshot.data?.value?.data?[index].orderId ?? 'order Id'}',
                                                       style: kTextStyle.copyWith(
                                                           color:
                                                               kGreyTextColor),
                                                     ),
                                                     const Spacer(),
                                                     Text(
-                                                      '$currencyIcon ${snapshot.data?.value?.data?[index].details?[i].salePrice}',
+                                                      '$currencyIcon ${snapshot.data?.value?.data?[index].grandTotal ?? 'Sale Price'}',
                                                       style:
                                                           kTextStyle.copyWith(
-                                                              color:
-                                                                  kMainColor),
+                                                        color: kMainColor,
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
@@ -149,13 +140,15 @@ class _OrderListState extends State<OrderList> {
                                             ),
                                             subtitle: Padding(
                                               padding: const EdgeInsets.only(
-                                                  top: 5.0),
+                                                top: 5,
+                                              ),
                                               child: Row(
                                                 children: [
                                                   Container(
                                                     padding:
                                                         const EdgeInsets.all(
-                                                            4.0),
+                                                      4.0,
+                                                    ),
                                                     decoration: BoxDecoration(
                                                       color: kBgColor,
                                                       borderRadius:
@@ -163,21 +156,26 @@ class _OrderListState extends State<OrderList> {
                                                               4.0),
                                                     ),
                                                     child: Text(
-                                                      snapshot
-                                                              .data
-                                                              ?.value
-                                                              ?.data?[index]
-                                                              .paymentBy ??
-                                                          '',
+                                                      'x${snapshot.data?.value?.data?[index].qty ?? 'quantity'}',
                                                       style:
                                                           kTextStyle.copyWith(
-                                                              color: kRedColor),
-                                                    ).onTap(() {}),
+                                                        color: kRedColor,
+                                                      ),
+                                                    ),
                                                   ),
                                                   const Spacer(),
                                                   Text(
-                                                    formattedDate.substring(
-                                                        0, 10),
+                                                    DateFormat.yMMMd().format(
+                                                      DateTime.parse(
+                                                        snapshot
+                                                                .data
+                                                                ?.value
+                                                                ?.data?[index]
+                                                                .createdAt ??
+                                                            DateTime.now()
+                                                                .toIso8601String(),
+                                                      ),
+                                                    ),
                                                     style: kTextStyle.copyWith(
                                                         color: kGreyTextColor),
                                                   ),
@@ -186,31 +184,33 @@ class _OrderListState extends State<OrderList> {
                                             ),
                                           ),
                                         ),
-                                      ).onTap(
-                                        () => DeliveryStatus(
-                                          details: snapshot.data!.value!
-                                              .data![index].details![i],
-                                          orderId: snapshot
-                                              .data!.value!.data![index].id
-                                              .toString(),
-                                        ).launch(context),
                                       );
+                                      // .onTap(
+                                      //   () => DeliveryStatus(
+                                      //     details: snapshot.data!.value!
+                                      //         .data![index].details![i],
+                                      //     orderId: snapshot
+                                      //         .data!.value!.data![index].id
+                                      //         .toString(),
+                                      //   ).launch(context),
+                                      // );
                                     });
                               }),
                           GestureDetector(
-                              onTap: () {
-                                int page = widget.page + 1;
-                                OrderList(page: page).launch(context);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  'See Previous Orders',
-                                  style:
-                                      kTextStyle.copyWith(color: kTitleColor),
-                                ).visible(snapshot.data!.value!.lastPage !=
-                                    widget.page),
-                              )),
+                            onTap: () {
+                              int page = widget.page + 1;
+                              OrderList(page: page).launch(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                'See Previous Orders',
+                                style: kTextStyle.copyWith(color: kTitleColor),
+                              ).visible(
+                                snapshot.data!.value!.lastPage != widget.page,
+                              ),
+                            ),
+                          ),
                         ],
                       );
                     } else {

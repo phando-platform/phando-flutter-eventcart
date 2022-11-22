@@ -1,25 +1,35 @@
+import 'dart:convert';
+
 class OrderListModel {
   bool? success;
   String? message;
   Value? value;
+  OrderListModel({
+    this.success,
+    this.message,
+    this.value,
+  });
 
-  OrderListModel({this.success, this.message, this.value});
-
-  OrderListModel.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
-    message = json['message'];
-    value = json['value'] != null ? Value.fromJson(json['value']) : null;
+  Map<String, dynamic> toMap() {
+    return {
+      'success': success,
+      'message': message,
+      'value': value?.toMap(),
+    };
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.value != null) {
-      data['value'] = this.value!.toJson();
-    }
-    return data;
+  factory OrderListModel.fromMap(Map<String, dynamic> map) {
+    return OrderListModel(
+      success: map['success'],
+      message: map['message'],
+      value: map['value'] != null ? Value.fromMap(map['value']) : null,
+    );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory OrderListModel.fromJson(String source) =>
+      OrderListModel.fromMap(json.decode(source));
 }
 
 class Value {
@@ -36,221 +46,162 @@ class Value {
   int? prevPageUrl;
   int? to;
   int? total;
+  Value({
+    this.currentPage,
+    this.data,
+    this.firstPageUrl,
+    this.from,
+    this.lastPage,
+    this.lastPageUrl,
+    this.links,
+    this.nextPageUrl,
+    this.path,
+    this.perPage,
+    this.prevPageUrl,
+    this.to,
+    this.total,
+  });
 
-  Value(
-      {this.currentPage,
-      this.data,
-      this.firstPageUrl,
-      this.from,
-      this.lastPage,
-      this.lastPageUrl,
-      this.links,
-      this.nextPageUrl,
-      this.path,
-      this.perPage,
-      this.prevPageUrl,
-      this.to,
-      this.total});
-
-  Value.fromJson(Map<String, dynamic> json) {
-    currentPage = json['current_page'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
-    firstPageUrl = json['first_page_url'];
-    from = json['from'];
-    lastPage = json['last_page'];
-    lastPageUrl = json['last_page_url'];
-    if (json['links'] != null) {
-      links = <Links>[];
-      json['links'].forEach((v) {
-        links!.add(new Links.fromJson(v));
-      });
-    }
-    nextPageUrl = json['next_page_url'];
-    path = json['path'];
-    perPage = json['per_page'];
-    prevPageUrl = json['prev_page_url'];
-    to = json['to'];
-    total = json['total'];
+  Map<String, dynamic> toMap() {
+    return {
+      'currentPage': currentPage,
+      'data': data?.map((x) => x.toMap()).toList(),
+      'firstPageUrl': firstPageUrl,
+      'from': from,
+      'lastPage': lastPage,
+      'lastPageUrl': lastPageUrl,
+      'links': links?.map((x) => x.toMap()).toList(),
+      'nextPageUrl': nextPageUrl,
+      'path': path,
+      'perPage': perPage,
+      'prevPageUrl': prevPageUrl,
+      'to': to,
+      'total': total,
+    };
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['current_page'] = this.currentPage;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    data['first_page_url'] = this.firstPageUrl;
-    data['from'] = this.from;
-    data['last_page'] = this.lastPage;
-    data['last_page_url'] = this.lastPageUrl;
-    if (this.links != null) {
-      data['links'] = this.links!.map((v) => v.toJson()).toList();
-    }
-    data['next_page_url'] = this.nextPageUrl;
-    data['path'] = this.path;
-    data['per_page'] = this.perPage;
-    data['prev_page_url'] = this.prevPageUrl;
-    data['to'] = this.to;
-    data['total'] = this.total;
-    return data;
+  factory Value.fromMap(Map<String, dynamic> map) {
+    return Value(
+      currentPage: map['currentPage']?.toInt(),
+      data: map['data'] != null
+          ? List<Data>.from(map['data']?.map((x) => Data.fromMap(x)))
+          : null,
+      firstPageUrl: map['firstPageUrl'],
+      from: map['from']?.toInt(),
+      lastPage: map['lastPage']?.toInt(),
+      lastPageUrl: map['lastPageUrl'],
+      links: map['links'] != null
+          ? List<Links>.from(map['links']?.map((x) => Links.fromMap(x)))
+          : null,
+      nextPageUrl: map['nextPageUrl']?.toInt(),
+      path: map['path'],
+      perPage: map['perPage']?.toInt(),
+      prevPageUrl: map['prevPageUrl']?.toInt(),
+      to: map['to']?.toInt(),
+      total: map['total']?.toInt(),
+    );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory Value.fromJson(String source) => Value.fromMap(json.decode(source));
 }
 
 class Data {
   int? id;
-  String? orderNo;
+  int? sellerId;
+  int? userId;
+  int? orderId;
+  int? orderStat;
+  int? productId;
+  int? salePrice;
+  int? qty;
   int? discount;
-  int? couponDiscount;
   int? tax;
   int? shippingCost;
+  int? totalShippingCost;
   int? totalPrice;
-  int? couponId;
+  int? grandTotal;
   int? currencyId;
   int? exchangeRate;
-  String? shippingName;
-  String? shippingAddress1;
-  String? shippingAddress2;
-  String? shippingMobile;
-  String? shippingEmail;
-  String? shippingPost;
-  String? shippingTown;
-  int? shippingCountryId;
-  String? shippingNote;
-  String? paymentBy;
-  int? userId;
-  String? userFirstName;
-  String? userLastName;
-  String? userAddress1;
-  String? userPostCode;
-  String? userCity;
-  int? userCountryId;
-  String? userMobile;
-  String? userEmail;
   String? createdAt;
   String? updatedAt;
-  int? grandTotal;
-  List<Details>? details;
+  ProductModel? product;
 
   Data({
     this.id,
-    this.orderNo,
+    this.sellerId,
+    this.userId,
+    this.orderId,
+    this.orderStat,
+    this.productId,
+    this.salePrice,
+    this.qty,
     this.discount,
-    this.couponDiscount,
     this.tax,
     this.shippingCost,
+    this.totalShippingCost,
     this.totalPrice,
-    this.couponId,
+    this.grandTotal,
     this.currencyId,
     this.exchangeRate,
-    this.shippingName,
-    this.shippingAddress1,
-    this.shippingAddress2,
-    this.shippingMobile,
-    this.shippingEmail,
-    this.shippingPost,
-    this.shippingTown,
-    this.shippingCountryId,
-    this.shippingNote,
-    this.paymentBy,
-    this.userId,
-    this.userFirstName,
-    this.userLastName,
-    this.userAddress1,
-    this.userPostCode,
-    this.userCity,
-    this.userCountryId,
-    this.userMobile,
-    this.userEmail,
     this.createdAt,
     this.updatedAt,
-    this.details,
-    this.grandTotal,
+    this.product,
   });
 
-  Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    orderNo = json['order_no'];
-    discount = json['discount'];
-    couponDiscount = json['coupon_discount'];
-    tax = json['tax'];
-    shippingCost = json['shipping_cost'];
-    totalPrice = json['total_price'];
-    couponId = json['coupon_id'];
-    currencyId = json['currency_id'];
-    exchangeRate = json['exchange_rate'];
-    shippingName = json['shipping_name'];
-    shippingAddress1 = json['shipping_address_1'];
-    shippingAddress2 = json['shipping_address_2'];
-    shippingMobile = json['shipping_mobile'];
-    shippingEmail = json['shipping_email'];
-    shippingPost = json['shipping_post'];
-    shippingTown = json['shipping_town'];
-    shippingCountryId = json['shipping_country_id'];
-    shippingNote = json['shipping_note'];
-    paymentBy = json['payment_by'];
-    userId = json['user_id'];
-    userFirstName = json['user_first_name'];
-    userLastName = json['user_last_name'];
-    userAddress1 = json['user_address_1'];
-    userPostCode = json['user_post_code'];
-    userCity = json['user_city'];
-    userCountryId = json['user_country_id'];
-    userMobile = json['user_mobile'];
-    userEmail = json['user_email'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    grandTotal = json['grand_total'];
-    if (json['details'] != null) {
-      details = <Details>[];
-      json['details'].forEach((v) {
-        details!.add(new Details.fromJson(v));
-      });
-    }
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'sellerId': sellerId,
+      'userId': userId,
+      'orderId': orderId,
+      'orderStat': orderStat,
+      'productId': productId,
+      'salePrice': salePrice,
+      'qty': qty,
+      'discount': discount,
+      'tax': tax,
+      'shippingCost': shippingCost,
+      'totalShippingCost': totalShippingCost,
+      'totalPrice': totalPrice,
+      'grandTotal': grandTotal,
+      'currencyId': currencyId,
+      'exchangeRate': exchangeRate,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      'product': product?.toMap(),
+    };
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['order_no'] = this.orderNo;
-    data['discount'] = this.discount;
-    data['coupon_discount'] = this.couponDiscount;
-    data['tax'] = this.tax;
-    data['shipping_cost'] = this.shippingCost;
-    data['total_price'] = this.totalPrice;
-    data['coupon_id'] = this.couponId;
-    data['currency_id'] = this.currencyId;
-    data['exchange_rate'] = this.exchangeRate;
-    data['shipping_name'] = this.shippingName;
-    data['shipping_address_1'] = this.shippingAddress1;
-    data['shipping_address_2'] = this.shippingAddress2;
-    data['shipping_mobile'] = this.shippingMobile;
-    data['shipping_email'] = this.shippingEmail;
-    data['shipping_post'] = this.shippingPost;
-    data['shipping_town'] = this.shippingTown;
-    data['shipping_country_id'] = this.shippingCountryId;
-    data['shipping_note'] = this.shippingNote;
-    data['payment_by'] = this.paymentBy;
-    data['user_id'] = this.userId;
-    data['user_first_name'] = this.userFirstName;
-    data['user_last_name'] = this.userLastName;
-    data['user_address_1'] = this.userAddress1;
-    data['user_post_code'] = this.userPostCode;
-    data['user_city'] = this.userCity;
-    data['user_country_id'] = this.userCountryId;
-    data['user_mobile'] = this.userMobile;
-    data['user_email'] = this.userEmail;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    if (this.details != null) {
-      data['details'] = this.details!.map((v) => v.toJson()).toList();
-    }
-    return data;
+  factory Data.fromMap(Map<String, dynamic> map) {
+    return Data(
+      id: map['id']?.toInt(),
+      sellerId: map['sellerId']?.toInt(),
+      userId: map['userId']?.toInt(),
+      orderId: map['orderId']?.toInt(),
+      orderStat: map['orderStat']?.toInt(),
+      productId: map['productId']?.toInt(),
+      salePrice: map['salePrice']?.toInt(),
+      qty: map['qty']?.toInt(),
+      discount: map['discount']?.toInt(),
+      tax: map['tax']?.toInt(),
+      shippingCost: map['shippingCost']?.toInt(),
+      totalShippingCost: map['totalShippingCost']?.toInt(),
+      totalPrice: map['totalPrice']?.toInt(),
+      grandTotal: map['grandTotal']?.toInt(),
+      currencyId: map['currencyId']?.toInt(),
+      exchangeRate: map['exchangeRate']?.toInt(),
+      createdAt: map['createdAt'],
+      updatedAt: map['updatedAt'],
+      product:
+          map['product'] != null ? ProductModel.fromMap(map['product']) : null,
+    );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory Data.fromJson(String source) => Data.fromMap(json.decode(source));
 }
 
 class Details {
@@ -354,20 +305,115 @@ class Links {
   String? url;
   String? label;
   bool? active;
+  Links({
+    this.url,
+    this.label,
+    this.active,
+  });
 
-  Links({this.url, this.label, this.active});
-
-  Links.fromJson(Map<String, dynamic> json) {
-    url = json['url'];
-    label = json['label'];
-    active = json['active'];
+  Map<String, dynamic> toMap() {
+    return {
+      'url': url,
+      'label': label,
+      'active': active,
+    };
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['url'] = this.url;
-    data['label'] = this.label;
-    data['active'] = this.active;
-    return data;
+  factory Links.fromMap(Map<String, dynamic> map) {
+    return Links(
+      url: map['url'],
+      label: map['label'],
+      active: map['active'],
+    );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory Links.fromJson(String source) => Links.fromMap(json.decode(source));
+}
+
+class ProductModel {
+  String? name;
+  String? slug;
+  String? unit;
+  String? sku;
+  int? quantity;
+  String? discription;
+  List<ProductImageModel>? images;
+  ProductModel({
+    this.name,
+    this.slug,
+    this.unit,
+    this.sku,
+    this.quantity,
+    this.discription,
+    this.images,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'slug': slug,
+      'unit': unit,
+      'sku': sku,
+      'quantity': quantity,
+      'discription': discription,
+      'images': images?.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  factory ProductModel.fromMap(Map<String, dynamic> map) {
+    return ProductModel(
+      name: map['name'],
+      slug: map['slug'],
+      unit: map['unit'],
+      sku: map['sku'],
+      quantity: map['quantity']?.toInt(),
+      discription: map['discription'],
+      images: map['images'] != null
+          ? List<ProductImageModel>.from(
+              map['images']?.map(
+                (x) => ProductImageModel.fromMap(x),
+              ),
+            )
+          : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ProductModel.fromJson(String source) =>
+      ProductModel.fromMap(json.decode(source));
+}
+
+class ProductImageModel {
+  int? imageId;
+  int? productId;
+  String? imageUrl;
+  ProductImageModel({
+    this.imageId,
+    this.productId,
+    this.imageUrl,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'imageId': imageId,
+      'productId': productId,
+      'imageUrl': imageUrl,
+    };
+  }
+
+  factory ProductImageModel.fromMap(Map<String, dynamic> map) {
+    return ProductImageModel(
+      imageId: map['id']?.toInt(),
+      productId: map['product_id']?.toInt(),
+      imageUrl: map['image'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ProductImageModel.fromJson(String source) =>
+      ProductImageModel.fromMap(json.decode(source));
 }

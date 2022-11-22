@@ -119,14 +119,18 @@ class _OrderReviewState extends State<OrderReview> {
                   print("119");
                   return Center(
                     child: SizedBox(
-                        height: 60.0,
-                        child: ButtonGlobal(
-                            buttontext: 'Add Shipping Id',
-                            buttonDecoration:
-                                kButtonDecoration.copyWith(color: kMainColor),
-                            onPressed: () => AddBilling(
-                                    country: country, mobile: mobile, status: 2)
-                                .launch(context))),
+                      height: 60.0,
+                      child: ButtonGlobal(
+                        buttontext: 'Add Shipping Id',
+                        buttonDecoration:
+                            kButtonDecoration.copyWith(color: kMainColor),
+                        onPressed: () => AddBilling(
+                          country: country,
+                          mobile: mobile,
+                          status: 2,
+                        ).launch(context),
+                      ),
+                    ),
                   );
                 }
                 return SingleChildScrollView(
@@ -184,23 +188,25 @@ class _OrderReviewState extends State<OrderReview> {
                               ),
                               onTap: () {
                                 ShippingUpdate shipUpdate = ShippingUpdate(
-                                    fullName: snapshot
-                                        .data?.value?.shipping?.shippingName,
-                                    addressOne: snapshot
-                                        .data?.value?.shipping?.addressLineOne,
-                                    addressTwo: snapshot
-                                        .data?.value?.shipping?.addressLineTwo,
-                                    town: snapshot
-                                        .data?.value?.shipping?.shippingTown,
-                                    countryId: snapshot
-                                        .data?.value?.shipping?.country?.id
-                                        .toString(),
-                                    postCode: snapshot
-                                        .data?.value?.shipping?.shippingPost,
-                                    mobile: snapshot
-                                        .data?.value?.shipping?.shippingMobile);
-                                UpdateShipping(shipping: shipUpdate)
-                                    .launch(context);
+                                  fullName:
+                                      '${snapshot.data?.value?.billing?.firstName} ${snapshot.data?.value?.billing?.lastName}',
+                                  addressOne:
+                                      snapshot.data?.value?.billing?.address1,
+                                  addressTwo:
+                                      snapshot.data?.value?.billing?.userCity,
+                                  town: snapshot.data?.value?.billing?.userCity,
+                                  countryId: snapshot
+                                      .data?.value?.billing?.country?.id
+                                      .toString(),
+                                  postCode:
+                                      snapshot.data?.value?.billing?.postCode,
+                                  mobile: snapshot.data?.value?.billing?.mobile,
+                                  email: snapshot.data?.value?.billing?.email,
+                                );
+                                UpdateShipping(
+                                  shipping: shipUpdate,
+                                  isShipping: false,
+                                ).launch(context);
                               },
                             ),
                             const SizedBox(
@@ -239,23 +245,28 @@ class _OrderReviewState extends State<OrderReview> {
                               ),
                               onTap: () {
                                 ShippingUpdate shipUpdate = ShippingUpdate(
-                                    fullName: snapshot
-                                        .data?.value?.shipping?.shippingName,
-                                    addressOne: snapshot
-                                        .data?.value?.shipping?.addressLineOne,
-                                    addressTwo: snapshot
-                                        .data?.value?.shipping?.addressLineTwo,
-                                    town: snapshot
-                                        .data?.value?.shipping?.shippingTown,
-                                    countryId: snapshot
-                                        .data?.value?.shipping?.country?.id
-                                        .toString(),
-                                    postCode: snapshot
-                                        .data?.value?.shipping?.shippingPost,
-                                    mobile: snapshot
-                                        .data?.value?.shipping?.shippingMobile);
-                                UpdateShipping(shipping: shipUpdate)
-                                    .launch(context);
+                                  fullName: snapshot
+                                      .data?.value?.shipping?.shippingName,
+                                  addressOne: snapshot
+                                      .data?.value?.shipping?.addressLineOne,
+                                  addressTwo: snapshot
+                                      .data?.value?.shipping?.addressLineTwo,
+                                  town: snapshot
+                                      .data?.value?.shipping?.shippingTown,
+                                  countryId: snapshot
+                                      .data?.value?.shipping?.country?.id
+                                      .toString(),
+                                  postCode: snapshot
+                                      .data?.value?.shipping?.shippingPost,
+                                  mobile: snapshot
+                                      .data?.value?.shipping?.shippingMobile,
+                                  email: snapshot
+                                      .data?.value?.shipping?.shippingEmail,
+                                );
+                                UpdateShipping(
+                                  shipping: shipUpdate,
+                                  isShipping: true,
+                                ).launch(context);
                               },
                             ),
                             const SizedBox(
@@ -455,7 +466,8 @@ class _OrderReviewState extends State<OrderReview> {
                                   onPressed: () async {
                                     try {
                                       EasyLoading.show(
-                                          status: 'Creating Order');
+                                        status: 'Creating Order',
+                                      );
                                       double subtotal = (ref
                                               .read(cartProvider.notifier)
                                               .getTotalCharge() -
@@ -468,41 +480,43 @@ class _OrderReviewState extends State<OrderReview> {
                                       Currency currency =
                                           Currency(exchangeRate: '1', id: '1');
                                       OrderCreateModel model = OrderCreateModel(
-                                          couponId: info.couponId ?? "1",
-                                          couponDiscount:
-                                              info.discountAmount == null
-                                                  ? "0.0"
-                                                  : discount.toString(),
-                                          subTotal: subtotal.toString(),
-                                          totalShipping: shipping.toString(),
-                                          total: total.toString(),
-                                          shippingAddressId: snapshot
-                                              .data?.value?.shipping?.id
-                                              .toString(),
-                                          billingAddressId: snapshot
-                                              .data?.value?.billing?.id
-                                              .toString(),
-                                          cart: cartItems,
-                                          currency: currency,
-                                          paymentBy: 'cod');
+                                        couponId: info.couponId ?? "1",
+                                        couponDiscount:
+                                            info.discountAmount == null
+                                                ? "0.0"
+                                                : discount.toString(),
+                                        subTotal: subtotal.toString(),
+                                        totalShipping: shipping.toString(),
+                                        total: total.toString(),
+                                        shippingAddressId: snapshot
+                                            .data?.value?.shipping?.id
+                                            .toString(),
+                                        billingAddressId: snapshot
+                                            .data?.value?.billing?.id
+                                            .toString(),
+                                        cart: cartItems,
+                                        currency: currency,
+                                        paymentBy: 'cod',
+                                      );
                                       final order =
                                           await _apiManager.createOrder(
-                                              model,
-                                              token,
-                                              'cod',
-                                              subtotal.toString(),
-                                              shipping.toString(),
-                                              total.toString(),
-                                              info.discountAmount == null
-                                                  ? "0.0"
-                                                  : discount.toString(),
-                                              info.couponId ?? "0",
-                                              snapshot.data?.value?.shipping?.id
-                                                      .toString() ??
-                                                  '',
-                                              snapshot.data?.value?.billing?.id
-                                                      .toString() ??
-                                                  '');
+                                        model,
+                                        token,
+                                        'cod',
+                                        subtotal.toString(),
+                                        shipping.toString(),
+                                        total.toString(),
+                                        info.discountAmount == null
+                                            ? "0.0"
+                                            : discount.toString(),
+                                        info.couponId ?? "0",
+                                        snapshot.data?.value?.shipping?.id
+                                                .toString() ??
+                                            '',
+                                        snapshot.data?.value?.billing?.id
+                                                .toString() ??
+                                            '',
+                                      );
 
                                       print("Order response" +
                                           " " +
