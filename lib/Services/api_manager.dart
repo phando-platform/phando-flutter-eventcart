@@ -403,8 +403,16 @@ class ApiManager {
     }
   }
 
-  Future<AddBillingModel> setBillingInfo(String token, String address,
-      String mobile, String city, String post, String countryId) async {
+  Future<AddBillingModel> setBillingInfo({
+    required String token,
+    required String address,
+    required String mobile,
+    required String city,
+    required String post,
+    required String countryId,
+    required String state,
+    required String email,
+  }) async {
     final response = await http.post(
       Uri.parse(apiUrl + 'profile/billing'),
       headers: {
@@ -417,6 +425,8 @@ class ApiManager {
         'mobile': mobile,
         'post_code': post,
         'country_id': countryId,
+        'state': state,
+        'email': email,
       },
     );
     print(" api manager setBillingInfo : ");
@@ -432,14 +442,19 @@ class ApiManager {
   }
 
   Future<AddBillingModel> setShippingInfo(
-      String token,
-      String name,
-      String address,
-      String addressTwo,
-      String city,
-      String post,
-      String countryId,
-      String mobile) async {
+      {
+      required String token,
+      required String name,
+      required String address,
+      required String addressTwo,
+      required String city,
+      required String post,
+      required String countryId,
+      required String mobile,
+      required String state,
+      required String email,
+
+      }) async {
     final response = await http.post(
       Uri.parse(apiUrl + 'profile/shipping'),
       headers: {
@@ -453,7 +468,9 @@ class ApiManager {
         'address_line_two': addressTwo,
         'shipping_post': post,
         'shipping_country_id': countryId,
-        'shipping_mobile': mobile
+        'shipping_mobile': mobile,
+        'shipping_state':state,
+        'shipping_email':email,
       },
     );
     if (response.statusCode == 200) {

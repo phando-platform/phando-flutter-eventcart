@@ -242,23 +242,25 @@ class Billing {
   String? updatedAt;
   String? deletedAt;
   Country? country;
+  String? state;
 
-  Billing(
-      {this.id,
-      this.userId,
-      this.firstName,
-      this.lastName,
-      this.address1,
-      this.postCode,
-      this.userCity,
-      this.countryId,
-      this.mobile,
-      this.email,
-      this.isActive,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt,
-      this.country});
+  Billing({
+    this.id,
+    this.userId,
+    this.firstName,
+    this.lastName,
+    this.address1,
+    this.postCode,
+    this.userCity,
+    this.countryId,
+    this.mobile,
+    this.email,
+    this.isActive,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+    this.country,
+  });
 
   Billing.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -275,6 +277,7 @@ class Billing {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    state = json['state'];
     country =
         json['country'] != null ? new Country.fromJson(json['country']) : null;
   }
@@ -295,6 +298,7 @@ class Billing {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
+    data['state'] = this.state;
     if (this.country != null) {
       data['country'] = this.country!.toJson();
     }
@@ -370,6 +374,7 @@ class Shipping {
   String? createdAt;
   String? updatedAt;
   Country? country;
+  String? shippingState;
 
   Shipping(
       {this.id,
@@ -395,6 +400,7 @@ class Shipping {
     addressLineTwo = json['address_line_two'];
     shippingMobile = json['shipping_mobile'];
     shippingEmail = json['shipping_email'] ?? '';
+    shippingState = json['shipping_state'] ?? '';
     shippingTown = json['shipping_town'];
     shippingPost = json['shipping_post'];
     shippingCountryId = json['shipping_country_id'];
@@ -414,6 +420,7 @@ class Shipping {
     data['address_line_two'] = this.addressLineTwo;
     data['shipping_mobile'] = this.shippingMobile;
     data['shipping_email'] = this.shippingEmail;
+    data['shipping_state'] = this.shippingState;
     data['shipping_town'] = this.shippingTown;
     data['shipping_post'] = this.shippingPost;
     data['shipping_country_id'] = this.shippingCountryId;

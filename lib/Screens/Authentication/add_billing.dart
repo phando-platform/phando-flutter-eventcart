@@ -269,29 +269,33 @@ class _AddBillingState extends State<AddBilling> {
                           EasyLoading.showError('Token Not Found');
                         } else {
                           final shipping = await _apiManager.setShippingInfo(
-                            token.toString(),
-                            fullNameOneController.text.toString(),
-                            addressOneController.text.toString(),
-                            addressTwoController.text.isEmpty
+                            token: token.toString(),
+                            name: fullNameOneController.text.toString(),
+                            address: addressOneController.text.toString(),
+                            addressTwo: addressTwoController.text.isEmpty
                                 ? 'N/A'
                                 : addressTwoController.text.toString(),
-                            cityController.text.toString(),
-                            postalController.text.toString(),
-                            "104",
+                            city: cityController.text.toString(),
+                            post: postalController.text.toString(),
+                            countryId: "104",
                             /*India*/
                             //  widget.country.toString(),
-                            widget.mobile.toString(),
+                            mobile: widget.mobile.toString(),
+                            email: emailController.text.toString(),
+                            state: stateController.text.toString(),
                           );
 
                           print("shipping response");
                           print(shipping.success);
                           final billing = await _apiManager.setBillingInfo(
-                            token.toString(),
-                            addressOneController.text.toString(),
-                            widget.mobile.toString(),
-                            cityController.text.toString(),
-                            postalController.text.toString(),
-                            "104",
+                            token: token.toString(),
+                            address: addressOneController.text.toString(),
+                            mobile: widget.mobile.toString(),
+                            city: cityController.text.toString(),
+                            post: postalController.text.toString(),
+                            countryId: "104",
+                            email: emailController.text.toString(),
+                            state: stateController.text.toString(),
                           );
                           /* widget.country.toString());*/
                           print("billing response");

@@ -54,9 +54,15 @@ class CartNotifier extends ChangeNotifier {
     return carts;
   }
 
-  void removeItem(int id) {
+  void removeItem(int id) async {
     cartItems.remove(cartItems.firstWhere((element) => element.id == id));
-    notifyListeners();
+    final result = await pref.setStringList(
+      'cart_items',
+      cartItems.map((e) => jsonEncode(e.toJson())).toList(),
+    );
+    if (result) {
+      notifyListeners();
+    }
   }
 
   bool checkCart(int id, String size, String color) {

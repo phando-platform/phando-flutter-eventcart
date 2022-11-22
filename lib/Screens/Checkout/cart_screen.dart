@@ -119,14 +119,15 @@ class _CartScreenState extends State<CartScreen> {
                       ref.read(cartItemUiProvider.notifier).updateQuantity(
                             cartItemUi[index].id ?? 0,
                             minimumQuantity: ref
-                                .read(cartProvider)
-                                .cartItems[index]
-                                .minQuantity,
+                                .read(cartItemUiProvider)
+                                .cartItemUis[index]
+                                .minimumQtd
+                                .toInt(),
                           );
                       ref.read(cartProvider.notifier).updatePrice(
                             cartItemUi[index].id ?? 0,
                             ref
-                                .read(cartItemUiProvider.notifier)
+                                .read(cartItemUiProvider)
                                 .cartItemUis[index]
                                 .productQuantity!
                                 .toInt(),
@@ -215,12 +216,12 @@ class _CartScreenState extends State<CartScreen> {
                                             color: kTitleColor,
                                           ).onTap(() {
                                             if (ref
-                                                    .read(cartProvider)
-                                                    .cartItems[index]
-                                                    .minQuantity <
+                                                    .read(cartItemUiProvider)
+                                                    .cartItemUis[index]
+                                                    .minimumQtd
+                                                    .toInt() <
                                                 ref
-                                                    .read(cartItemUiProvider
-                                                        .notifier)
+                                                    .read(cartItemUiProvider)
                                                     .cartItemUis[index]
                                                     .productQuantity!) {
                                               ref

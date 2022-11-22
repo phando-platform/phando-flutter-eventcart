@@ -202,6 +202,7 @@ class _OrderReviewState extends State<OrderReview> {
                                       snapshot.data?.value?.billing?.postCode,
                                   mobile: snapshot.data?.value?.billing?.mobile,
                                   email: snapshot.data?.value?.billing?.email,
+                                  state: snapshot.data?.value?.billing?.state,
                                 );
                                 UpdateShipping(
                                   shipping: shipUpdate,
@@ -262,6 +263,8 @@ class _OrderReviewState extends State<OrderReview> {
                                       .data?.value?.shipping?.shippingMobile,
                                   email: snapshot
                                       .data?.value?.shipping?.shippingEmail,
+                                  state: snapshot
+                                      .data?.value?.shipping?.shippingState,
                                 );
                                 UpdateShipping(
                                   shipping: shipUpdate,

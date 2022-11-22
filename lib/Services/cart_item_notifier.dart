@@ -84,17 +84,23 @@ class CartItemNotifier extends ChangeNotifier {
       'cart_ui_items',
       cartItemUis.map((e) => jsonEncode(e)).toList(),
     );
-    log(result.toString());
     if (result) {
       notifyListeners();
     }
   }
 
   // Let's allow removing todos
-  void removeUiItem(int itemId) {
+  void removeUiItem(int itemId) async {
     cartItemUis
         .remove(cartItemUis.firstWhere((element) => element.id == itemId));
-    notifyListeners();
+    pref = await SharedPreferences.getInstance();
+    final result = await pref.setStringList(
+      'cart_ui_items',
+      cartItemUis.map((e) => jsonEncode(e)).toList(),
+    );
+    if (result) {
+      notifyListeners();
+    }
   }
 
   void updateQuantity(int itemId, {int? minimumQuantity}) {

@@ -42,8 +42,8 @@ class _UpdateShippingState extends State<UpdateShipping> {
           widget.isShipping ? 'shipping_user_state' : 'billing_user_state',
         ) ??
         '';
-    emailController.text = email;
-    stateController.text = state;
+    emailController.text = widget.shipping.email ?? email;
+    stateController.text = widget.shipping.state ?? state;
   }
 
   @override
@@ -201,6 +201,7 @@ class _UpdateShippingState extends State<UpdateShipping> {
               AppTextField(
                 textFieldType: TextFieldType.NAME,
                 controller: postalController,
+                maxLength: 6,
                 decoration: InputDecoration(
                   labelText: 'Post Code',
                   labelStyle: kTextStyle,
@@ -221,6 +222,7 @@ class _UpdateShippingState extends State<UpdateShipping> {
               AppTextField(
                 textFieldType: TextFieldType.PHONE,
                 controller: mobileController,
+                maxLength: 10,
                 decoration: InputDecoration(
                   labelText: 'Mobile Number',
                   labelStyle: kTextStyle,
@@ -286,14 +288,16 @@ class _UpdateShippingState extends State<UpdateShipping> {
                       } else {
                         if (widget.isShipping) {
                           final shipping = await _apiManager.setShippingInfo(
-                            token.toString(),
-                            fullNameOneController.text.toString(),
-                            addressOneController.text.toString(),
-                            addressTwoController.text.toString(),
-                            cityController.text.toString(),
-                            postalController.text.toString(),
-                            widget.shipping.countryId.toString(),
-                            mobileController.text.toString(),
+                            token: token.toString(),
+                            name: fullNameOneController.text.toString(),
+                            address: addressOneController.text.toString(),
+                            addressTwo: addressTwoController.text.toString(),
+                            city: cityController.text.toString(),
+                            post: postalController.text.toString(),
+                            countryId: widget.shipping.countryId.toString(),
+                            mobile: mobileController.text.toString(),
+                            email: emailController.text.toString(),
+                            state: stateController.text.toString(),
                           );
                           if (shipping.success == true) {
                             await _prefs
@@ -337,12 +341,14 @@ class _UpdateShippingState extends State<UpdateShipping> {
                           }
                         } else {
                           final billing = await _apiManager.setBillingInfo(
-                            token.toString(),
-                            addressOneController.text.toString(),
-                            widget.shipping.mobile.toString(),
-                            cityController.text.toString(),
-                            postalController.text.toString(),
-                            widget.shipping.countryId.toString(),
+                            token: token.toString(),
+                            address: addressOneController.text.toString(),
+                            mobile: mobileController.text.toString(),
+                            city: cityController.text.toString(),
+                            post: postalController.text.toString(),
+                            countryId: widget.shipping.countryId.toString(),
+                            state: stateController.text.toString(),
+                            email: emailController.text.toString(),
                           );
                           if (billing.success == true) {
                             await _prefs
@@ -410,6 +416,7 @@ class ShippingUpdate {
   String? countryId;
   String? mobile;
   String? email;
+  String? state;
 
   ShippingUpdate({
     this.fullName,
@@ -420,5 +427,6 @@ class ShippingUpdate {
     this.postCode,
     this.mobile,
     this.email,
+    this.state,
   });
 }

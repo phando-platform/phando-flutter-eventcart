@@ -169,7 +169,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                   'Null') ==
                                       false) {
                                     EasyLoading.show(
-                                        status: 'Adding To The Cart');
+                                      status: 'Adding To The Cart',
+                                    );
                                     Cart cartItem = Cart(
                                       id: snapshot.data?.value?.id ?? 'Null',
                                       price: snapshot.data?.value?.salePrice ??

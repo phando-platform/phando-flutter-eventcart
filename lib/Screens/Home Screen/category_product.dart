@@ -14,7 +14,7 @@ import '../../constant.dart';
 import 'home_screen.dart';
 
 class CategoryProduct extends StatefulWidget {
-   CategoryProduct(
+  CategoryProduct(
       {Key? key,
       required this.subCatModel,
       required this.clickIndex,
@@ -22,9 +22,9 @@ class CategoryProduct extends StatefulWidget {
       required this.page,
       required this.catName})
       : super(key: key);
-   int catId, page,clickIndex;
-   String catName;
-   HomeModel? subCatModel;
+  int catId, page, clickIndex;
+  String catName;
+  HomeModel? subCatModel;
 
   @override
   _CategoryProductState createState() => _CategoryProductState();
@@ -38,21 +38,21 @@ class _CategoryProductState extends State<CategoryProduct> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   @override
   void initState() {
-
     getProduct();
     super.initState();
   }
 
   bool isLoading = false;
   getProduct() async {
-    subCatListSize=widget.subCatModel?.value?.category?.data?[widget.clickIndex].subcat?.length??0;
+    subCatListSize = widget.subCatModel?.value?.category
+            ?.data?[widget.clickIndex].subcat?.length ??
+        0;
     final value = await _apiManager.categoryProduct(widget.catId, widget.page);
     toast(value.message.toString());
   }
+
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kWhiteColor,
@@ -62,7 +62,9 @@ class _CategoryProductState extends State<CategoryProduct> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
                   ModalRoute.withName("/Home"));
             }),
         title: Text(
@@ -73,113 +75,132 @@ class _CategoryProductState extends State<CategoryProduct> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            if(subCatListSize!=0)
+            if (subCatListSize != 0)
               Visibility(
                   child: Column(
-                    children: [
-                      SizedBox(
-                        height: 10.0,
+                children: [
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 30, bottom: 10),
+                      child: Text(
+                        "Sub Category",
+                        style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
                       ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 30,bottom: 10),
-                          child: Text(
-                            "Sub Category",
-                            style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
+                    ),
+                  ),
 
-                      /*Sub Cat work*/
-                      GridView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        gridDelegate:
+                  /*Sub Cat work*/
+                  GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: 0.7,
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 1.0,
-                        ),
-                        itemCount: widget.subCatModel?.value?.category?.data?[widget.clickIndex].subcat?.length ?? 10,
-                        itemBuilder: (_, i) {
-                          return GestureDetector(
-                            onTap: ()async{
-
-                              widget.catId=widget.subCatModel?.value?.category?.data?[widget.clickIndex].subcat?[i].id??0;
-                              widget.page=1;
-                              final value = await _apiManager.categoryProduct(widget.catId, widget.page);
-                              Fluttertoast.showToast(msg: "Please wait products are loading..");
-                              setState(() {
-                                strProdcuts='Products';
-                              });
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 20,left: 20),
-                              child: Card(
-                                elevation: 0.0,
-                                color: kWhiteColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                      childAspectRatio: 1,
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 1,
+                    ),
+                    itemCount: widget.subCatModel?.value?.category
+                            ?.data?[widget.clickIndex].subcat?.length ??
+                        10,
+                    itemBuilder: (_, i) {
+                      return GestureDetector(
+                        onTap: () async {
+                          widget.catId = widget.subCatModel?.value?.category
+                                  ?.data?[widget.clickIndex].subcat?[i].id ??
+                              0;
+                          widget.page = 1;
+                          final value = await _apiManager.categoryProduct(
+                              widget.catId, widget.page);
+                          Fluttertoast.showToast(
+                              msg: "Please wait products are loading..");
+                          setState(() {
+                            strProdcuts = 'Products';
+                          });
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 20, left: 20),
+                          child: Card(
+                            elevation: 0.0,
+                            color: kWhiteColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Stack(
                                   children: [
-                                    Stack(
-
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: const BorderRadius.only(
-                                            topRight: Radius.circular(10.0),
-                                            topLeft: Radius.circular(10.0),
-                                            bottomLeft: Radius.circular(10.0),
-                                            bottomRight: Radius.circular(10.0),
-                                          ),
-                                          child: Image(
-                                            image: CachedNetworkImageProvider(widget.subCatModel?.value?.category?.data?[widget.clickIndex].subcat?[i].icon??''),
-                                            height: 160.0,
-                                            width: 160,
-                                            fit: BoxFit.fill,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-                                      child: Container(
-                                        width: 150,
-                                        child: Text(
-                                          widget.subCatModel?.value?.category?.data?[widget.clickIndex].subcat?[i].name??'Null',
-                                          style: kTextStyle,
-                                          textAlign: TextAlign.center,
-                                          maxLines: 3,
-                                        ),
+                                    ClipRRect(
+                                      borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(10.0),
+                                        topLeft: Radius.circular(10.0),
+                                        bottomLeft: Radius.circular(10.0),
+                                        bottomRight: Radius.circular(10.0),
+                                      ),
+                                      child: Image(
+                                        image: CachedNetworkImageProvider(widget
+                                                .subCatModel
+                                                ?.value
+                                                ?.category
+                                                ?.data?[widget.clickIndex]
+                                                .subcat?[i]
+                                                .icon ??
+                                            ''),
+                                        height: 160.0,
+                                        width: 160,
+                                        fit: BoxFit.fill,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, top: 10.0),
+                                  child: Container(
+                                    width: 150,
+                                    child: Text(
+                                      widget
+                                              .subCatModel
+                                              ?.value
+                                              ?.category
+                                              ?.data?[widget.clickIndex]
+                                              .subcat?[i]
+                                              .name ??
+                                          'Null',
+                                      style: kTextStyle,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 3,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                      ),
-                    ],
-                  )
-              ),
-               Align(
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              )),
+            Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: EdgeInsets.only(left: 30,bottom: 5),
+                padding: EdgeInsets.only(left: 30, bottom: 5),
                 child: Text(
                   strProdcuts,
                   style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-             Container(
+            Container(
               padding: const EdgeInsets.all(10.0),
               child: FutureBuilder<TrendsModel>(
-                  future: _apiManager.categoryProduct(widget.catId, widget.page),
+                  future:
+                      _apiManager.categoryProduct(widget.catId, widget.page),
                   builder: (BuildContext context, snapshot) {
                     if (snapshot.hasData && snapshot.data != null) {
                       return Column(
@@ -225,20 +246,29 @@ class _CategoryProductState extends State<CategoryProduct> {
                                 onBookMarkPressed: () async {
                                   try {
                                     EasyLoading.show(status: 'Adding...');
-                                    final SharedPreferences prefs = await _prefs;
-                                    final wishlist = await _apiManager.addToWishList(snapshot.data?.value?.data![i].id.toString() ?? 'null', prefs.getString('token').toString());
+                                    final SharedPreferences prefs =
+                                        await _prefs;
+                                    final wishlist =
+                                        await _apiManager.addToWishList(
+                                            snapshot.data?.value?.data![i].id
+                                                    .toString() ??
+                                                'null',
+                                            prefs
+                                                .getString('token')
+                                                .toString());
                                     if (wishlist.success == true) {
-                                      EasyLoading.showSuccess(wishlist.message.toString());
-
+                                      EasyLoading.showSuccess(
+                                          wishlist.message.toString());
                                     } else {
                                       print(wishlist.message.toString());
-                                      if(wishlist.message.toString()=="Unprocessable Content"){
-                                        EasyLoading.showError("Product Already Added");
+                                      if (wishlist.message.toString() ==
+                                          "Unprocessable Content") {
+                                        EasyLoading.showError(
+                                            "Product Already Added");
+                                      } else {
+                                        EasyLoading.showError(
+                                            wishlist.message.toString());
                                       }
-                                      else{
-                                        EasyLoading.showError(wishlist.message.toString());
-                                      }
-
                                     }
                                   } catch (e) {
                                     toast(e.toString());
