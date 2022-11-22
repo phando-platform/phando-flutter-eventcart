@@ -100,8 +100,12 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                       thickness: 1.0,
                     ),
                     ClipOval(
-                      child: Image.network(strUserImage ?? "strUserImage",
-                          fit: BoxFit.cover, width: 90.0, height: 90.0),
+                      child: Image.network(
+                        strUserImage,
+                        fit: BoxFit.cover,
+                        width: 90.0,
+                        height: 90.0,
+                      ),
                     ),
                     const SizedBox(
                       height: 10.0,
@@ -528,7 +532,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
         final SharedPreferences prefs = await _prefs;
         prefs.setString(
           'userImage',
-          strUserImage ?? 'Guest',
+          strUserImage,
         );
         setState(() {});
       } else {
