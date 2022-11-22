@@ -240,6 +240,35 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     ref
                                         .read(cartItemUiProvider.notifier)
                                         .addUiItem(cartUi);
+                                    List<CartItemUi> cartItemUi = ref
+                                        .watch(cartItemUiProvider)
+                                        .cartItemUis;
+                                    List<Cart> cartItems =
+                                        ref.watch(cartProvider).cartItems;
+                                    ref
+                                        .read(cartItemUiProvider.notifier)
+                                        .updateQuantity(
+                                          cartUi.id ?? 0,
+                                          minimumQuantity: ref
+                                              .read(cartItemUiProvider)
+                                              .cartItemUis[ref
+                                                  .read(cartItemUiProvider)
+                                                  .cartItemUis
+                                                  .indexOf(cartUi)]
+                                              .minimumQtd
+                                              .toInt(),
+                                        );
+                                    ref.read(cartProvider.notifier).updatePrice(
+                                          cartUi.id ?? 0,
+                                          ref
+                                              .read(cartItemUiProvider)
+                                              .cartItemUis[ref
+                                                  .read(cartItemUiProvider)
+                                                  .cartItemUis
+                                                  .indexOf(cartUi)]
+                                              .productQuantity!
+                                              .toInt(),
+                                        );
                                     EasyLoading.showSuccess('Added To Cart');
                                     setState(() {});
                                   } else {

@@ -71,7 +71,7 @@ class CartNotifier extends ChangeNotifier {
       if (item.id == id && item.size == size ||
           item.id == id && item.color == color) {
         isAdded = true;
-        notifyListeners();
+        // notifyListeners();
       }
     }
     return isAdded;
@@ -82,7 +82,7 @@ class CartNotifier extends ChangeNotifier {
     for (var item in cartItems) {
       charge = item.shippingCost + charge;
     }
-    notifyListeners();
+    // notifyListeners();
     return charge;
   }
 
@@ -91,7 +91,7 @@ class CartNotifier extends ChangeNotifier {
     for (var item in cartItems) {
       charge = item.productPriceTotal + charge;
     }
-    notifyListeners();
+    // notifyListeners();
     return charge;
   }
 

@@ -32,6 +32,8 @@ class _CartScreenState extends State<CartScreen> {
   String token = '';
   double discount = 0.0;
   String? username;
+  late List<CartItemUi> cartItemUi;
+  late List<Cart> cartItems;
 
   Future<void> getToken() async {
     SharedPreferences preferences = await _prefs;
@@ -44,6 +46,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     getToken();
+
     super.initState();
   }
 
@@ -51,9 +54,8 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (BuildContext context, ref, watch) {
-        List<CartItemUi> cartItemUi = ref.watch(cartItemUiProvider).cartItemUis;
-        List<Cart> cartItems = ref.watch(cartProvider).cartItems;
-
+        cartItemUi = ref.watch(cartItemUiProvider).cartItemUis;
+        cartItems = ref.watch(cartProvider).cartItems;
         if (cartItems.isEmpty) {
           return Scaffold(
               appBar: AppBar(
@@ -116,22 +118,6 @@ class _CartScreenState extends State<CartScreen> {
                     shrinkWrap: true,
                     itemCount: cartItemUi.length,
                     itemBuilder: (_, index) {
-                      ref.read(cartItemUiProvider.notifier).updateQuantity(
-                            cartItemUi[index].id ?? 0,
-                            minimumQuantity: ref
-                                .read(cartItemUiProvider)
-                                .cartItemUis[index]
-                                .minimumQtd
-                                .toInt(),
-                          );
-                      ref.read(cartProvider.notifier).updatePrice(
-                            cartItemUi[index].id ?? 0,
-                            ref
-                                .read(cartItemUiProvider)
-                                .cartItemUis[index]
-                                .productQuantity!
-                                .toInt(),
-                          );
                       return Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Card(
@@ -252,12 +238,15 @@ class _CartScreenState extends State<CartScreen> {
                                             width: 10.0,
                                           ),
                                           Text(
-                                            ref
-                                                .read(
-                                                    cartItemUiProvider.notifier)
-                                                .cartItemUis[index]
+                                            cartItemUi[index]
                                                 .productQuantity
                                                 .toString(),
+                                            // ref
+                                            //     .read(
+                                            //         cartItemUiProvider.notifier)
+                                            //     .cartItemUis[index]
+                                            //     .productQuantity
+                                            //     .toString(),
                                             style: kTextStyle.copyWith(
                                                 color: kMainColor,
                                                 fontSize: 18.0),
@@ -273,17 +262,19 @@ class _CartScreenState extends State<CartScreen> {
                                                 .read(
                                                     cartItemUiProvider.notifier)
                                                 .updateQuantity(
-                                                    cartItemUi[index].id ?? 0);
+                                                  cartItemUi[index].id ?? 0,
+                                                );
                                             ref
                                                 .read(cartProvider.notifier)
                                                 .updatePrice(
-                                                    cartItemUi[index].id ?? 0,
-                                                    ref
-                                                        .read(cartItemUiProvider
-                                                            .notifier)
-                                                        .cartItemUis[index]
-                                                        .productQuantity!
-                                                        .toInt());
+                                                  cartItemUi[index].id ?? 0,
+                                                  ref
+                                                      .read(cartItemUiProvider
+                                                          .notifier)
+                                                      .cartItemUis[index]
+                                                      .productQuantity!
+                                                      .toInt(),
+                                                );
                                             /*if (productQuantity == 10) {
                                               toast(
                                                   'You can\'t buy more than 10 products');
