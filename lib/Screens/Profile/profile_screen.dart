@@ -41,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final wish = await _apiManager.wishList(token);
     final value = await _apiManager.getProfileInfo(token);
     setState(() {
-      wishLength = wish.value == null ? 0 : wish.value!.data!.length;
+      wishLength = wish.value?.data?.length ?? 0;
     });
   }
 
