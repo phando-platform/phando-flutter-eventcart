@@ -44,6 +44,82 @@ class _OrderReviewState extends State<OrderReview> {
     });
   }
 
+  void saveBillingAndShippingData({
+    required Billing? billing,
+    required Shipping? shipping,
+  }) async {
+    if (billing != null) {
+      await _prefs
+        ..setString(
+          'billing_postal_Code',
+          billing.postCode ?? '',
+        )
+        ..setString(
+          'billing_user_state',
+          billing.state ?? '',
+        )
+        ..setString(
+          'billing_user_city',
+          billing.state ?? '',
+        )
+        ..setString(
+          'billing_add_one',
+          billing.address1 ?? '',
+        )
+        ..setString(
+          'billing_add_two',
+          '',
+        )
+        ..setString(
+          'billing_full_name',
+          '${billing.firstName ?? ''} ${billing.lastName ?? ''}',
+        )
+        ..setString(
+          'billing_email',
+          billing.email ?? '',
+        )
+        ..setString(
+          'billing_phone',
+          billing.mobile ?? '',
+        );
+    }
+    if (shipping != null) {
+      await _prefs
+        ..setString(
+          'shipping_postal_Code',
+          shipping.shippingPost ?? '',
+        )
+        ..setString(
+          'shipping_user_state',
+          shipping.shippingState ?? '',
+        )
+        ..setString(
+          'shipping_user_city',
+          shipping.shippingTown ?? '',
+        )
+        ..setString(
+          'shipping_add_one',
+          shipping.addressLineOne ?? '',
+        )
+        ..setString(
+          'shipping_add_two',
+          shipping.addressLineTwo ?? '',
+        )
+        ..setString(
+          'shipping_full_name',
+          shipping.shippingName ?? '',
+        )
+        ..setString(
+          'shipping_phone',
+          shipping.shippingMobile ?? '',
+        )
+        ..setString(
+          'shipping_email',
+          shipping.shippingEmail ?? '',
+        );
+    }
+  }
+
   late Razorpay _razorpay;
   @override
   void initState() {
@@ -114,9 +190,11 @@ class _OrderReviewState extends State<OrderReview> {
             future: _apiManager.getProfileInfo(token),
             builder: (BuildContext context, snapshot) {
               if (snapshot.hasData) {
-                print("177");
+                saveBillingAndShippingData(
+                  billing: snapshot.data?.value?.billing,
+                  shipping: snapshot.data?.value?.shipping,
+                );
                 if (snapshot.data?.value?.shipping == null) {
-                  print("119");
                   return Center(
                     child: SizedBox(
                       height: 60.0,

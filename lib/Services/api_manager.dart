@@ -441,20 +441,18 @@ class ApiManager {
     }
   }
 
-  Future<AddBillingModel> setShippingInfo(
-      {
-      required String token,
-      required String name,
-      required String address,
-      required String addressTwo,
-      required String city,
-      required String post,
-      required String countryId,
-      required String mobile,
-      required String state,
-      required String email,
-
-      }) async {
+  Future<AddBillingModel> setShippingInfo({
+    required String token,
+    required String name,
+    required String address,
+    required String addressTwo,
+    required String city,
+    required String post,
+    required String countryId,
+    required String mobile,
+    required String state,
+    required String email,
+  }) async {
     final response = await http.post(
       Uri.parse(apiUrl + 'profile/shipping'),
       headers: {
@@ -469,8 +467,8 @@ class ApiManager {
         'shipping_post': post,
         'shipping_country_id': countryId,
         'shipping_mobile': mobile,
-        'shipping_state':state,
-        'shipping_email':email,
+        'shipping_state': state,
+        'shipping_email': email,
       },
     );
     if (response.statusCode == 200) {
@@ -518,7 +516,9 @@ class ApiManager {
     String? billingLastName = _prefs.getString('lastName') ?? "Not Specified";
     String? billingAddOne =
         _prefs.getString('billing_add_one') ?? "Not Specified";
-    String? billingPhone = _prefs.getString('billing_phone') ?? "Not Specified";
+    String? billingPhone = _prefs.getString('billing_phone') ??
+        _prefs.getString('phone') ??
+        '0000000000';
     String? billingEmail = _prefs.getString('billing_email') ?? "Not Specified";
     String? billingPostCode =
         _prefs.getString('billing_postal_Code') ?? "Not Specified";
@@ -532,8 +532,9 @@ class ApiManager {
         _prefs.getString('shipping_full_name') ?? "Not Specified";
     String? shippingAddOne =
         _prefs.getString('shipping_add_one') ?? "Not Specified";
-    String? shippingPhone =
-        _prefs.getString('shipping_phone') ?? "Not Specified";
+    String? shippingPhone = _prefs.getString('shipping_phone') ??
+        _prefs.getString('phone') ??
+        '0000000000';
     String? shippingEmail =
         _prefs.getString('shipping_email') ?? "Not Specified";
     String? shippingPostCode =
