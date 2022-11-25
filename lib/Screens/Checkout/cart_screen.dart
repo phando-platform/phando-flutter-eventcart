@@ -500,6 +500,19 @@ class _CartScreenState extends State<CartScreen> {
                               ),
                             ],
                           ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'T&C: Delivery fee is subjected to shipping address*',
+                                  style: kTextStyle.copyWith(
+                                    color: kGreyTextColor,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                           const SizedBox(
                             height: 5.0,
                           ),
@@ -540,7 +553,13 @@ class _CartScreenState extends State<CartScreen> {
                                 kButtonDecoration.copyWith(color: kMainColor),
                             onPressed: () {
                               if (token != 'Guest') {
-                                const OrderReview().launch(context);
+                                double weight = 0;
+                                OrderReview(
+                                  totalAmount: (ref
+                                          .read(cartProvider.notifier)
+                                          .getTotalCharge() -
+                                      discount),
+                                ).launch(context);
                               } else {
                                 toast('Please sign In to Checkout');
                                 const SignIn().launch(context);

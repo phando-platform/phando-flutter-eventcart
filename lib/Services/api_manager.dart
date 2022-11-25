@@ -1,6 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:event_app/Models/book_order/book_order_body_model.dart';
+import 'package:event_app/Models/book_order/book_order_reponse_model.dart';
+import 'package:event_app/Models/delivery/delivery_body_model.dart';
+import 'package:event_app/Models/delivery/delivery_reponse_model.dart';
+import 'package:event_app/Models/tracking_order/tracking_order_response_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:nb_utils/nb_utils.dart' hide log;
 import '../Models/add_billing_model.dart';
@@ -739,6 +744,127 @@ class ApiManager {
       return SendResetCodeModel.fromJson(data);
     } else {
       return SendResetCodeModel.fromJson(data);
+    }
+  }
+
+  Future<DeliveryResponseModel?> getDeliveryDetails({
+    required DeliveryBodyModel details,
+  }) async {
+    final response = await http.post(
+      Uri.parse('http://tca.paapos.in/api/Operations/getRateCard'),
+      headers: {
+        'Accept': '*/*',
+        'Authkey': 'mohitarfkjf8g2weqkaozy',
+        // 'Content-Type': 'application/json',
+      },
+      body: details.toMap(),
+    );
+    log('BODY: ' + details.toMap().toString());
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    log('RESPONSE: ' + data.toString());
+    if (response.statusCode == 200) {
+      if (data.containsKey('ReplyMsg') && data['ReplyMsg'] == 'Data Found') {
+        final dataList = data['Providers'] as List<Map<String, dynamic>>;
+        List<DeliveryResponseModel> deliveryData =
+            dataList.map((e) => DeliveryResponseModel.fromMap(e)).toList();
+        return deliveryData.first;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  Future<BookOrderResponseModel?> bookOrder({
+    required BookOrderBodyModel details,
+  }) async {
+    log('BODY: ' + details.toMap().toString());
+    final response = await http.post(
+      Uri.parse('http://tca.paapos.in/api/Order/bookOrder'),
+      headers: {
+        'Accept': '*/*',
+        'Authkey': 'mohitarfkjf8g2weqkaozy',
+      },
+      body: details.toMap(),
+    );
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    log('RESPONSE: ' + data.toString());
+    if (response.statusCode == 200) {
+      if (data.containsKey('ReplyCode') && data['ReplyMsg'] == 0) {
+        final bookOrder = BookOrderResponseModel.fromMap(data);
+        return bookOrder;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  Future<TrackingOrderResponseModel?> getTrackingDetails({
+    required String menifestId,
+  }) async {
+    final response = await http.post(
+      Uri.parse('http://tca.paapos.in/api/Order/TrackOrder'),
+      headers: {
+        'Accept': '*/*',
+        'Authkey': 'mohitarfkjf8g2weqkaozy',
+        // 'Content-Type': 'application/json',
+      },
+      body: {
+        'ManifestID': menifestId,
+      },
+    );
+    log('BODY: ' + menifestId);
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    log('RESPONSE: ' + data.toString());
+    if (response.statusCode == 200) {
+      if (data.containsKey('ReplyCode') && data['ReplyCode'] == 0) {
+        final dataList = List<Map<String, dynamic>>.from(data['ShipSum']);
+        List<TrackingOrderResponseModel> deliveryData =
+            dataList.map((e) => TrackingOrderResponseModel.fromMap(e)).toList();
+        return deliveryData.first;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  Future<String> cancelOrderMain({
+    required String menifestId,
+    required String awbNo,
+    required String reason,
+  }) async {
+    final response = await http.post(
+      Uri.parse('http://tca.paapos.in/api/Order/CancelOrder'),
+      headers: {
+        'Accept': '*/*',
+        'Authkey': 'mohitarfkjf8g2weqkaozy',
+        // 'Content-Type': 'application/json',
+      },
+      body: {
+        'ManifestID': menifestId,
+        "AWBno": awbNo,
+        "Reason": reason,
+      },
+    );
+    log(
+      'BODY: ' +
+          {
+            'ManifestID': menifestId,
+            "AWBno": awbNo,
+            "Reason": reason,
+          }.toString(),
+    );
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    log('RESPONSE: ' + data.toString());
+    if (response.statusCode == 200) {
+      return data['ReplyMsg'];
+    } else {
+      return 'Unable to reach server.\nPlease check your internet connection & try again.';
     }
   }
 }

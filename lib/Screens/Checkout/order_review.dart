@@ -1,8 +1,15 @@
+import 'dart:developer';
+import 'dart:math' hide log;
+
+import 'package:event_app/Models/book_order/book_order_body_model.dart';
+import 'package:event_app/Models/book_order/book_order_product_model.dart';
+import 'package:event_app/Models/delivery/delivery_body_model.dart';
+import 'package:event_app/Models/delivery/delivery_reponse_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../../GlobalComponents/button_global.dart';
 import '../../Models/order_create_model.dart';
@@ -19,9 +26,14 @@ import '../Home Screen/home.dart';
 import '../Profile/order_list.dart';
 
 class OrderReview extends StatefulWidget {
-  const OrderReview({Key? key}) : super(key: key);
+  const OrderReview({
+    Key? key,
+    required this.totalAmount,
+  }) : super(key: key);
   @override
   _OrderReviewState createState() => _OrderReviewState();
+
+  final double totalAmount;
 }
 
 class _OrderReviewState extends State<OrderReview> {
@@ -34,6 +46,7 @@ class _OrderReviewState extends State<OrderReview> {
   String orderNo = '';
   int? country;
   String? mobile;
+  DeliveryResponseModel? deliveryDetails;
 
   Future<void> getToken() async {
     SharedPreferences preferences = await _prefs;
@@ -117,6 +130,17 @@ class _OrderReviewState extends State<OrderReview> {
           'shipping_email',
           shipping.shippingEmail ?? '',
         );
+    }
+    if (billing != null && shipping != null) {
+      deliveryDetails = await _apiManager.getDeliveryDetails(
+        details: DeliveryBodyModel(
+          pinCode: int.parse(shipping.shippingPost ?? '110030'),
+          codAmount: isCod ? widget.totalAmount : 0,
+          shippingLocalArea: shipping.shippingTown ?? '',
+          shippingCity: shipping.shippingTown ?? '',
+          shippingState: shipping.shippingState ?? '',
+        ),
+      );
     }
   }
 
@@ -285,7 +309,9 @@ class _OrderReviewState extends State<OrderReview> {
                                 UpdateShipping(
                                   shipping: shipUpdate,
                                   isShipping: false,
-                                ).launch(context);
+                                ).launch(context).then((_) {
+                                  setState(() {});
+                                });
                               },
                             ),
                             const SizedBox(
@@ -347,7 +373,9 @@ class _OrderReviewState extends State<OrderReview> {
                                 UpdateShipping(
                                   shipping: shipUpdate,
                                   isShipping: true,
-                                ).launch(context);
+                                ).launch(context).then((_) {
+                                  setState(() {});
+                                });
                               },
                             ),
                             const SizedBox(
@@ -500,8 +528,7 @@ class _OrderReviewState extends State<OrderReview> {
                           ],
                         ),
                       ),
-                      Container(
-                        height: 150.0,
+                      DecoratedBox(
                         decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
@@ -531,12 +558,26 @@ class _OrderReviewState extends State<OrderReview> {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      '$currencyIcon ${((ref.read(cartProvider.notifier).getTotalCharge() - discount) + ref.read(cartProvider.notifier).getShippingCharge()).toString()}',
+                                      '$currencyIcon ${((ref.read(cartProvider.notifier).getTotalCharge() - discount) + (deliveryDetails != null ? deliveryDetails?.price ?? 0 : ref.read(cartProvider.notifier).getShippingCharge())).toString()}',
                                       style: kTextStyle.copyWith(
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
+                                if (deliveryDetails != null)
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          'Shipping Charges has been updated,\nbased on your shipping address*\nNew Shipping Charge : $currencyIcon ${deliveryDetails?.price ?? 0} ',
+                                          style: kTextStyle.copyWith(
+                                            fontSize: 10,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 const SizedBox(
                                   height: 20.0,
                                 ),
@@ -553,9 +594,11 @@ class _OrderReviewState extends State<OrderReview> {
                                               .read(cartProvider.notifier)
                                               .getTotalCharge() -
                                           discount);
-                                      double shipping = ref
-                                          .read(cartProvider.notifier)
-                                          .getShippingCharge();
+                                      double shipping = deliveryDetails != null
+                                          ? deliveryDetails?.price ?? 0
+                                          : ref
+                                              .read(cartProvider.notifier)
+                                              .getShippingCharge();
                                       double total = (subtotal + shipping);
 
                                       Currency currency =
@@ -567,7 +610,10 @@ class _OrderReviewState extends State<OrderReview> {
                                                 ? "0.0"
                                                 : discount.toString(),
                                         subTotal: subtotal.toString(),
-                                        totalShipping: shipping.toString(),
+                                        totalShipping: deliveryDetails != null
+                                            ? (deliveryDetails?.price ?? 0)
+                                                .toString()
+                                            : shipping.toString(),
                                         total: total.toString(),
                                         shippingAddressId: snapshot
                                             .data?.value?.shipping?.id
@@ -579,54 +625,127 @@ class _OrderReviewState extends State<OrderReview> {
                                         currency: currency,
                                         paymentBy: 'cod',
                                       );
-                                      final order =
-                                          await _apiManager.createOrder(
-                                        model,
-                                        token,
-                                        'cod',
-                                        subtotal.toString(),
-                                        shipping.toString(),
-                                        total.toString(),
-                                        info.discountAmount == null
-                                            ? "0.0"
-                                            : discount.toString(),
-                                        info.couponId ?? "0",
-                                        snapshot.data?.value?.shipping?.id
-                                                .toString() ??
-                                            '',
-                                        snapshot.data?.value?.billing?.id
-                                                .toString() ??
-                                            '',
+                                      Random _random = Random();
+                                      final _randomBillNumber =
+                                          _random.nextInt(900000) + 100000;
+                                      final bookOrder =
+                                          await _apiManager.bookOrder(
+                                        details: BookOrderBodyModel(
+                                          orderType: isCod ? 'COD' : 'Prepaid',
+                                          orderNo: _randomBillNumber.toString(),
+                                          paymentStatus:
+                                              isCod ? 'COD' : 'Prepaid',
+                                          customerName: snapshot.data?.value
+                                                  ?.shipping?.shippingName ??
+                                              '',
+                                          customerCity: snapshot.data?.value
+                                                  ?.shipping?.shippingTown ??
+                                              '',
+                                          customerState: snapshot.data?.value
+                                                  ?.shipping?.shippingState ??
+                                              '',
+                                          zipCode: snapshot.data?.value
+                                                  ?.shipping?.shippingPost ??
+                                              '',
+                                          customerAddress: (snapshot
+                                                      .data
+                                                      ?.value
+                                                      ?.shipping
+                                                      ?.addressLineOne ??
+                                                  '') +
+                                              (snapshot.data?.value?.shipping
+                                                      ?.addressLineTwo ??
+                                                  ''),
+                                          customerEmail: snapshot.data?.value
+                                                  ?.shipping?.shippingEmail ??
+                                              '',
+                                          customerMobileNo: snapshot.data?.value
+                                                  ?.shipping?.shippingMobile ??
+                                              '',
+                                          collectibleAmount:
+                                              isCod ? total.toString() : '0',
+                                          declaredValue: total.toString(),
+                                          provider:
+                                              deliveryDetails?.provider ?? '8',
+                                          orderID: _randomBillNumber.toString(),
+                                          isCod: isCod ? '1' : '0',
+                                          courierCharges:
+                                              (deliveryDetails?.price ?? 0)
+                                                  .toString(),
+                                          rateId: deliveryDetails?.rateId ?? 34,
+                                          productJson: (ref
+                                              .read(cartItemUiProvider.notifier)
+                                              .cartItemUis
+                                              .map(
+                                                (e) => BookOrderProductModel(
+                                                  pname: e.productName ?? '',
+                                                  hsn: (e.id ?? '').toString(),
+                                                  qty: e.productQuantity ?? 1,
+                                                  tax: 0,
+                                                  price: double.parse(
+                                                    e.productPrice.toString(),
+                                                  ),
+                                                  dis: 0,
+                                                ).toMap(),
+                                              )
+                                              .toList()
+                                              .toString()),
+                                          cDiscount: discount.toString(),
+                                        ),
                                       );
-
-                                      print("Order response" +
-                                          " " +
-                                          order.toString());
-                                      if (order.success == true) {
-                                        EasyLoading.showSuccess(
-                                            'Create Successfull');
-                                        ref
-                                            .read(cartProvider)
-                                            .cartItems
-                                            .clear();
-                                        ref
-                                            .read(cartItemUiProvider)
-                                            .cartItemUis
-                                            .clear();
-                                        setState(() {
-                                          //  orderNo = order.value?.orders?.orderNo ?? '';
-                                          orderNo = '';
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => Home()),
-                                              ModalRoute.withName("/Home"));
-                                        });
+                                      if (bookOrder != null) {
+                                        final order =
+                                            await _apiManager.createOrder(
+                                          model,
+                                          token,
+                                          'cod',
+                                          subtotal.toString(),
+                                          shipping.toString(),
+                                          total.toString(),
+                                          info.discountAmount == null
+                                              ? "0.0"
+                                              : discount.toString(),
+                                          info.couponId ?? "0",
+                                          snapshot.data?.value?.shipping?.id
+                                                  .toString() ??
+                                              '',
+                                          snapshot.data?.value?.billing?.id
+                                                  .toString() ??
+                                              '',
+                                        );
+                                        if (order.success == true) {
+                                          EasyLoading.showSuccess(
+                                              'Create Successfull');
+                                          ref
+                                              .read(cartProvider)
+                                              .cartItems
+                                              .clear();
+                                          ref
+                                              .read(cartItemUiProvider)
+                                              .cartItemUis
+                                              .clear();
+                                          setState(() {
+                                            //  orderNo = order.value?.orders?.orderNo ?? '';
+                                            orderNo = '';
+                                            Navigator.pushAndRemoveUntil(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const Home(),
+                                                ),
+                                                ModalRoute.withName("/Home"));
+                                          });
+                                        } else {
+                                          EasyLoading.showError(
+                                              order.message.toString());
+                                        }
                                       } else {
                                         EasyLoading.showError(
-                                            order.message.toString());
+                                          'This order could not be placed!',
+                                        );
                                       }
-                                    } catch (e) {
+                                    } catch (e, strackTrace) {
+                                      log(strackTrace.toString());
                                       EasyLoading.showError(e.toString());
                                     }
                                   },
