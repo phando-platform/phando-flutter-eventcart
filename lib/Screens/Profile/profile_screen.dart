@@ -208,7 +208,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             snapshot.data?.value?.customer?.lastName ?? '',
                         mobile: snapshot.data?.value?.customer?.mobile ?? '',
                         email: snapshot.data?.value?.customer?.email ?? '',
-                      ).launch(context);
+                      ).launch(context).then((value) {
+                        setState(() {});
+                      });
                     },
                     leading: Container(
                       padding: const EdgeInsets.all(5.0),

@@ -81,7 +81,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
             return Scaffold(
-              extendBodyBehindAppBar: true,
+              extendBodyBehindAppBar: false,
               appBar: AppBar(
                 elevation: 0.0,
                 iconTheme: const IconThemeData(color: kBlackColor),
@@ -240,11 +240,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     ref
                                         .read(cartItemUiProvider.notifier)
                                         .addUiItem(cartUi);
-                                    List<CartItemUi> cartItemUi = ref
-                                        .watch(cartItemUiProvider)
-                                        .cartItemUis;
-                                    List<Cart> cartItems =
-                                        ref.watch(cartProvider).cartItems;
+                                    // List<CartItemUi> cartItemUiList = ref
+                                    //     .watch(cartItemUiProvider)
+                                    //     .cartItemUis;
+                                    // List<Cart> cartItemsList =
+                                    //     ref.watch(cartProvider).cartItems;
                                     ref
                                         .read(cartItemUiProvider.notifier)
                                         .updateQuantity(
@@ -398,6 +398,30 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     ref
                                         .read(cartItemUiProvider.notifier)
                                         .addUiItem(cartUi);
+                                    ref
+                                        .read(cartItemUiProvider.notifier)
+                                        .updateQuantity(
+                                          cartUi.id ?? 0,
+                                          minimumQuantity: ref
+                                              .read(cartItemUiProvider)
+                                              .cartItemUis[ref
+                                                  .read(cartItemUiProvider)
+                                                  .cartItemUis
+                                                  .indexOf(cartUi)]
+                                              .minimumQtd
+                                              .toInt(),
+                                        );
+                                    ref.read(cartProvider.notifier).updatePrice(
+                                          cartUi.id ?? 0,
+                                          ref
+                                              .read(cartItemUiProvider)
+                                              .cartItemUis[ref
+                                                  .read(cartItemUiProvider)
+                                                  .cartItemUis
+                                                  .indexOf(cartUi)]
+                                              .productQuantity!
+                                              .toInt(),
+                                        );
                                     const CartScreen().launch(context);
                                   } else {
                                     const CartScreen().launch(context);
@@ -488,8 +512,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 10),
+                        horizontal: 16.0,
+                        vertical: 0,
+                      ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
@@ -516,7 +543,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                               const Spacer(),
                               IconButton(
-                                icon: Icon(Icons.share),
+                                icon: const Icon(Icons.share),
                                 color: kGreyTextColor,
                                 onPressed: () => shareProductLink(
                                     "Event Cart",
@@ -531,33 +558,29 @@ class _ProductDetailsState extends State<ProductDetails> {
                           const SizedBox(
                             height: 10.0,
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                (snapshot.data?.value?.name.toString() ??
-                                    'T-Shirt'),
-                                style: kTextStyle.copyWith(fontSize: 18.0),
-                                maxLines: 2,
-                              ),
-                            ],
+                          Text(
+                            (snapshot.data?.value?.name.toString() ??
+                                'T-Shirt'),
+                            style: kTextStyle.copyWith(fontSize: 18.0),
+                            maxLines: 2,
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
-                          Row(
-                            children: [
-                              RatingBarWidget(
-                                onRatingChanged: null,
-                                rating: 4.7,
-                                size: 12.0,
-                              ),
-                              Text(
-                                '(4.7)',
-                                style: kTextStyle.copyWith(
-                                    color: kGreyTextColor, fontSize: 10.0),
-                              ),
-                            ],
-                          ).visible(false),
+                          // Row(
+                          //   children: [
+                          //     RatingBarWidget(
+                          //       onRatingChanged: null,
+                          //       rating: 4.7,
+                          //       size: 12.0,
+                          //     ),
+                          //     Text(
+                          //       '(4.7)',
+                          //       style: kTextStyle.copyWith(
+                          //           color: kGreyTextColor, fontSize: 10.0),
+                          //     ),
+                          //   ],
+                          // ).visible(true),
                           // Row(
                           //   children: [
                           //     Column(
@@ -670,9 +693,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   Text(
                                     'Size',
                                     style: kTextStyle,
-                                  ).visible(
-                                      snapshot.data?.value?.sizes?.isNotEmpty ??
-                                          false),
+                                  ),
                                   HorizontalList(
                                     spacing: 0,
                                     itemCount:
@@ -716,6 +737,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 ],
                               ),
                             ],
+                          ).visible(
+                            snapshot.data?.value?.sizes?.isNotEmpty ?? false,
                           ),
                           Row(
                             children: [
@@ -770,19 +793,31 @@ class _ProductDetailsState extends State<ProductDetails> {
                               }),
                             ],
                           ),
+                          Text(
+                            parse(
+                              snapshot.data?.value?.description ?? '',
+                            ).body!.text,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text.rich(
                                 TextSpan(
                                   children: [
-                                    TextSpan(
-                                      text: parse(
-                                        snapshot.data?.value?.description,
-                                      ).body!.text,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                    // TextSpan(
+                                    //   text:
+                                    //       // snapshot.data?.value?.description
+                                    //       //         .toString() ??
+                                    //       //     '',
+                                    //       parse(
+                                    //     snapshot.data?.value?.description ?? '',
+                                    //   ).body!.text,
+                                    //   style: const TextStyle(
+                                    //     fontWeight: FontWeight.bold,
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               )
@@ -799,48 +834,48 @@ class _ProductDetailsState extends State<ProductDetails> {
                               )),*/
 
                               ),
-                          Card(
-                            elevation: 1.0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            color: kWhiteColor,
-                            child: Column(
-                              children: [
-                                ListTile(
-                                  leading: const CircleAvatar(
-                                    backgroundColor: kMainColor,
-                                    backgroundImage:
-                                        AssetImage('images/pd1.png'),
-                                  ),
-                                  title: Text(
-                                    'Ibne Riead',
-                                    style: kTextStyle,
-                                  ),
-                                  subtitle: RatingBarWidget(
-                                    onRatingChanged: null,
-                                    rating: 5.0,
-                                    size: 12.0,
-                                  ),
-                                  trailing: Text(
-                                    '2 Days Ago',
-                                    style: kTextStyle.copyWith(
-                                        color: kGreyTextColor, fontSize: 14.0),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    // snapshot.data?.value?.
-                                    //                 .toString()??
-                                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit pharetra eu ut ut enim laoreet. Scel eri sque vitae, dui tortor tortor.',
-                                    style: kTextStyle,
-                                    maxLines: 5,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ).visible(!description),
+                          // Card(
+                          //   elevation: 1.0,
+                          //   shape: RoundedRectangleBorder(
+                          //     borderRadius: BorderRadius.circular(10.0),
+                          //   ),
+                          //   color: kWhiteColor,
+                          //   child: Column(
+                          //     children: [
+                          //       ListTile(
+                          //         leading: const CircleAvatar(
+                          //           backgroundColor: kMainColor,
+                          //           backgroundImage:
+                          //               AssetImage('images/pd1.png'),
+                          //         ),
+                          //         title: Text(
+                          //           'Ibne Riead',
+                          //           style: kTextStyle,
+                          //         ),
+                          //         subtitle: RatingBarWidget(
+                          //           onRatingChanged: null,
+                          //           rating: 5.0,
+                          //           size: 12.0,
+                          //         ),
+                          //         trailing: Text(
+                          //           '2 Days Ago',
+                          //           style: kTextStyle.copyWith(
+                          //               color: kGreyTextColor, fontSize: 14.0),
+                          //         ),
+                          //       ),
+                          //       Padding(
+                          //         padding: const EdgeInsets.all(8.0),
+                          //         child: Text(
+                          //           // snapshot.data?.value?.
+                          //           //                 .toString()??
+                          //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit pharetra eu ut ut enim laoreet. Scel eri sque vitae, dui tortor tortor.',
+                          //           style: kTextStyle,
+                          //           maxLines: 5,
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ).visible(!description),
                         ],
                       ),
                     ),

@@ -724,7 +724,7 @@ class ProductCard extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.only(right: 10, left: 10),
+          padding: const EdgeInsets.only(right: 10, left: 10),
           child: Card(
             elevation: 0.0,
             color: kWhiteColor,
@@ -746,7 +746,8 @@ class ProductCard extends StatelessWidget {
                       ),
                       child: Image(
                         image: CachedNetworkImageProvider(
-                            productData.productImage),
+                          productData.productImage,
+                        ),
                         height: 160.0,
                         width: 160,
                         fit: BoxFit.fill,

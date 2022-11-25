@@ -584,6 +584,7 @@ class _CancelOrderDialogState extends State<_CancelOrderDialog> {
                         controller: reasonController,
                         cursorColor: kMainColor,
                         maxLines: 6,
+                        style: kTextStyle.copyWith(color: Colors.red),
                         decoration: InputDecoration(
                           hintText: 'Cancellation reason...',
                           hintStyle: kTextStyle.copyWith(

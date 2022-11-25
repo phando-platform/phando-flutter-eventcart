@@ -77,119 +77,123 @@ class _CategoryProductState extends State<CategoryProduct> {
           children: [
             if (subCatListSize != 0)
               Visibility(
-                  child: Column(
-                children: [
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 30, bottom: 10),
-                      child: Text(
-                        "Sub Category",
-                        style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 30, bottom: 10),
+                        child: Text(
+                          "Sub Category",
+                          style:
+                              kTextStyle.copyWith(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
-                  ),
 
-                  /*Sub Cat work*/
-                  GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 1,
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 1,
-                    ),
-                    itemCount: widget.subCatModel?.value?.category
-                            ?.data?[widget.clickIndex].subcat?.length ??
-                        10,
-                    itemBuilder: (_, i) {
-                      return GestureDetector(
-                        onTap: () async {
-                          widget.catId = widget.subCatModel?.value?.category
-                                  ?.data?[widget.clickIndex].subcat?[i].id ??
-                              0;
-                          widget.page = 1;
-                          final value = await _apiManager.categoryProduct(
-                              widget.catId, widget.page);
-                          Fluttertoast.showToast(
-                              msg: "Please wait products are loading..");
-                          setState(() {
-                            strProdcuts = 'Products';
-                          });
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 20, left: 20),
-                          child: Card(
-                            elevation: 0.0,
-                            color: kWhiteColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Stack(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: const BorderRadius.only(
-                                        topRight: Radius.circular(10.0),
-                                        topLeft: Radius.circular(10.0),
-                                        bottomLeft: Radius.circular(10.0),
-                                        bottomRight: Radius.circular(10.0),
-                                      ),
-                                      child: Image(
-                                        image: CachedNetworkImageProvider(widget
-                                                .subCatModel
-                                                ?.value
-                                                ?.category
-                                                ?.data?[widget.clickIndex]
-                                                .subcat?[i]
-                                                .icon ??
-                                            ''),
-                                        height: 160.0,
-                                        width: 160,
-                                        fit: BoxFit.fill,
-                                      ),
+                    /*Sub Cat work*/
+                    GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 1,
+                        mainAxisExtent: 220,
+                      ),
+                      itemCount: widget.subCatModel?.value?.category
+                              ?.data?[widget.clickIndex].subcat?.length ??
+                          10,
+                      itemBuilder: (_, i) {
+                        return GestureDetector(
+                          onTap: () async {
+                            widget.catId = widget.subCatModel?.value?.category
+                                    ?.data?[widget.clickIndex].subcat?[i].id ??
+                                0;
+                            widget.page = 1;
+                            final value = await _apiManager.categoryProduct(
+                                widget.catId, widget.page);
+                            Fluttertoast.showToast(
+                                msg: "Please wait products are loading..");
+                            setState(() {
+                              strProdcuts = 'Products';
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 20, left: 20),
+                            child: Card(
+                              elevation: 0.0,
+                              color: kWhiteColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(10.0),
+                                      topLeft: Radius.circular(10.0),
+                                      bottomLeft: Radius.circular(10.0),
+                                      bottomRight: Radius.circular(10.0),
                                     ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10.0, top: 10.0),
-                                  child: Container(
-                                    width: 150,
-                                    child: Text(
-                                      widget
+                                    child: Image(
+                                      image: CachedNetworkImageProvider(widget
                                               .subCatModel
                                               ?.value
                                               ?.category
                                               ?.data?[widget.clickIndex]
                                               .subcat?[i]
-                                              .name ??
-                                          'Null',
-                                      style: kTextStyle,
-                                      textAlign: TextAlign.center,
-                                      maxLines: 3,
+                                              .icon ??
+                                          ''),
+                                      height: 160.0,
+                                      width: 160,
+                                      fit: BoxFit.fill,
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 10.0,
+                                        top: 10.0,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          widget
+                                                  .subCatModel
+                                                  ?.value
+                                                  ?.category
+                                                  ?.data?[widget.clickIndex]
+                                                  .subcat?[i]
+                                                  .name ??
+                                              'Null',
+                                          style: kTextStyle,
+                                          textAlign: TextAlign.center,
+                                          maxLines: 3,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              )),
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                  ],
+                ),
+              ),
             Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: EdgeInsets.only(left: 30, bottom: 5),
+                padding: const EdgeInsets.only(left: 30, bottom: 5),
                 child: Text(
                   strProdcuts,
                   style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
@@ -210,9 +214,11 @@ class _CategoryProductState extends State<CategoryProduct> {
                             shrinkWrap: true,
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
-                              childAspectRatio: 0.7,
+                              // childAspectRatio: 0.7,
                               crossAxisCount: 2,
-                              mainAxisSpacing: 5.0,
+                              mainAxisSpacing: 5,
+                              crossAxisSpacing: 5,
+                              mainAxisExtent: 280,
                             ),
                             itemCount: snapshot.data?.value?.data?.length ?? 10,
                             itemBuilder: (_, i) {

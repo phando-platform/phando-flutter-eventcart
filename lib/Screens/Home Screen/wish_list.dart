@@ -51,7 +51,7 @@ class _WishListState extends State<WishList> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: kBlackColor),
         title: Text(
-          'WishListed products',
+          'Wishlisted Product',
           style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
