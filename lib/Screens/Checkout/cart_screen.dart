@@ -129,6 +129,7 @@ class _CartScreenState extends State<CartScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Expanded(
                                     flex: 2,
@@ -151,6 +152,7 @@ class _CartScreenState extends State<CartScreen> {
                                 Expanded(
                                   flex: 3,
                                   child: Column(
+                                    mainAxisSize: MainAxisSize.max,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
@@ -164,36 +166,39 @@ class _CartScreenState extends State<CartScreen> {
                                         style: kTextStyle.copyWith(
                                             color: kMainColor, fontSize: 12.0),
                                       ),
-                                      RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: 'Color: ',
-                                              style: kTextStyle.copyWith(
-                                                  color: kGreyTextColor,
-                                                  fontSize: 12.0),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: 'Size: ',
-                                              style: kTextStyle.copyWith(
-                                                  color: kGreyTextColor,
-                                                  fontSize: 12.0),
-                                            ),
-                                            TextSpan(
-                                              text:
-                                                  cartItemUi[index].productSize,
-                                              style: kTextStyle.copyWith(
-                                                  color: kMainColor,
-                                                  fontSize: 12.0),
-                                            ),
-                                          ],
-                                        ),
+                                      // RichText(
+                                      //   text: TextSpan(
+                                      //     children: [
+                                      //       TextSpan(
+                                      //         text: 'Color: ',
+                                      //         style: kTextStyle.copyWith(
+                                      //             color: kGreyTextColor,
+                                      //             fontSize: 12.0),
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      // ),
+                                      // RichText(
+                                      //   text: TextSpan(
+                                      //     children: [
+                                      //       TextSpan(
+                                      //         text: 'Size: ',
+                                      //         style: kTextStyle.copyWith(
+                                      //             color: kGreyTextColor,
+                                      //             fontSize: 12.0),
+                                      //       ),
+                                      //       TextSpan(
+                                      //         text:
+                                      //             cartItemUi[index].productSize,
+                                      //         style: kTextStyle.copyWith(
+                                      //             color: kMainColor,
+                                      //             fontSize: 12.0),
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      // ),
+                                      const SizedBox(
+                                        height: 20,
                                       ),
                                       Row(
                                         children: [

@@ -204,23 +204,6 @@ class _SignUpState extends State<SignUp> {
                         color: Color(0xFFE8E7E5),
                       ),
                     ),
-                    prefixIcon: CountryCodePicker(
-                      padding: EdgeInsets.zero,
-                      onChanged: (country) {
-                        print(country.name);
-                        print(country.code);
-                        setState(() {
-                          String name = country.name?.toUpperCase() ?? 'INDIA';
-                          countryCode = country.code?.toUpperCase() ?? 'IN';
-                          countryId = countries.indexOf(name, 0) + 1;
-                        });
-                      },
-                      initialSelection: 'IN',
-                      showFlag: true,
-                      showDropDownButton: true,
-                      showCountryOnly: true,
-                      alignLeft: false,
-                    ),
                   ),
                 ),
               ),
