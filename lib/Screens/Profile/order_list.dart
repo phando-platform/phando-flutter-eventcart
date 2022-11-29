@@ -1,15 +1,13 @@
-import 'dart:developer';
-
-import 'package:event_app/Models/tracking_order/tracking_order_response_model.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
 
+import 'package:event_app/Models/tracking_order/tracking_order_response_model.dart';
+
+import '../../GlobalComponents/button_global.dart';
 import '../../Models/order_list_model.dart';
 import '../../Services/api_manager.dart';
-import '../../GlobalComponents/button_global.dart';
 import '../../constant.dart';
 import '../Home Screen/home.dart';
 
@@ -190,9 +188,15 @@ class _OrderListState extends State<OrderList> {
                                                             ),
                                                           ),
                                                           child:
-                                                              const _TrackOrderDialog(
-                                                            manifestId:
-                                                                '6380343140187499371770',
+                                                              _TrackOrderDialog(
+                                                            manifestId: snapshot
+                                                                    .data
+                                                                    ?.value
+                                                                    ?.data?[
+                                                                        index]
+                                                                    .menifestId
+                                                                    .toString() ??
+                                                                '',
                                                           ),
                                                         );
                                                       },
@@ -224,10 +228,48 @@ class _OrderListState extends State<OrderList> {
                                                             ),
                                                           ),
                                                           child:
-                                                              const _CancelOrderDialog(
-                                                            menifestId:
-                                                                '6380377395462364156418',
-                                                            awbNo: '70620',
+                                                              _CancelOrderDialog(
+                                                            menifestId: snapshot
+                                                                    .data
+                                                                    ?.value
+                                                                    ?.data?[
+                                                                        index]
+                                                                    .menifestId
+                                                                    .toString() ??
+                                                                '',
+                                                            token: token,
+                                                            orderDetailsId: snapshot
+                                                                    .data
+                                                                    ?.value
+                                                                    ?.data?[
+                                                                        index]
+                                                                    .id
+                                                                    .toString() ??
+                                                                '',
+                                                            description: snapshot
+                                                                    .data
+                                                                    ?.value
+                                                                    ?.data?[
+                                                                        index]
+                                                                    .id
+                                                                    .toString() ??
+                                                                '',
+                                                            orderId: snapshot
+                                                                    .data
+                                                                    ?.value
+                                                                    ?.data?[
+                                                                        index]
+                                                                    .orderId
+                                                                    .toString() ??
+                                                                '',
+                                                            productId: snapshot
+                                                                    .data
+                                                                    ?.value
+                                                                    ?.data?[
+                                                                        index]
+                                                                    .productId
+                                                                    .toString() ??
+                                                                '',
                                                           ),
                                                         );
                                                       },
@@ -339,9 +381,13 @@ class _TrackOrderDialogState extends State<_TrackOrderDialog> {
     required String menifestId,
   }) async {
     final ApiManager _apiManager = ApiManager();
+    String token = '';
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    token = preferences.getString('token') ?? "";
     try {
       _trackingDetails = await _apiManager.getTrackingDetails(
         menifestId: menifestId,
+        token: token,
       );
       if (_trackingDetails != null) {
         _status = TrackingStatus.loaded;
@@ -514,11 +560,19 @@ class _CancelOrderDialog extends StatefulWidget {
   const _CancelOrderDialog({
     Key? key,
     required this.menifestId,
-    required this.awbNo,
+    required this.token,
+    required this.orderDetailsId,
+    required this.description,
+    required this.productId,
+    required this.orderId,
   }) : super(key: key);
 
   final String menifestId;
-  final String awbNo;
+  final String token;
+  final String orderDetailsId;
+  final String description;
+  final String productId;
+  final String orderId;
 
   @override
   State<_CancelOrderDialog> createState() => _CancelOrderDialogState();
@@ -530,15 +584,19 @@ class _CancelOrderDialogState extends State<_CancelOrderDialog> {
     setState(() {
       _status = CancellationStatus.loading;
     });
-    final response = await _apiManager.cancelOrderMain(
-      menifestId: widget.menifestId,
-      awbNo: widget.awbNo,
+    final cancel = await _apiManager.cancelOrder(
+      token: widget.token,
+      orderDetailsId: widget.orderDetailsId.toString(),
+      description: widget.description.toString(),
       reason: reasonController.text,
+      orderId: widget.orderId,
+      productId: widget.productId,
     );
 
     setState(() {
       _status = CancellationStatus.loaded;
-      cancellationMessage = response;
+      cancellationMessage = cancel?.message.toString() ??
+          'Cannot cancel this order at the moment';
     });
   }
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class OrderCreateModel {
   OrderCreateModel({
     String? couponDiscount,
@@ -103,85 +105,80 @@ class OrderCreateModel {
 /// estimated_shipping_days : null
 
 class Carts {
+  String? id;
+  String? price;
+  String? quantity;
+  String? color;
+  String? size;
+  String? shippingCost;
+  String? productPriceTotal;
+  String? estimatedShippingDays;
+  String? minQuantity;
   Carts({
-    String? id,
-    String? price,
-    String? quantity,
-    String? color,
-    String? size,
-    String? shippingCost,
-    String? productPriceTotal,
-    String? estimatedShippingDays,
-    String? minQuantity,
-  }) {
-    _id = id;
-    _price = price;
-    _quantity = quantity;
-    _color = color;
-    _size = size;
-    _shippingCost = shippingCost;
-    _productPriceTotal = productPriceTotal;
-    _estimatedShippingDays = estimatedShippingDays;
-    _minQuantity = minQuantity;
+    this.id,
+    this.price,
+    this.quantity,
+    this.color,
+    this.size,
+    this.shippingCost,
+    this.productPriceTotal,
+    this.estimatedShippingDays,
+    this.minQuantity,
+  });
+
+  // String? get id => _id;
+
+  // String? get price => _price;
+
+  // String? get quantity => _quantity;
+
+  // String? get color => _color;
+
+  // String? get size => _size;
+
+  // String? get shippingCost => _shippingCost;
+
+  // // ignore: unnecessary_getters_setters
+  // String? get productPriceTotal => _productPriceTotal;
+
+  // String? get estimatedShippingDays => _estimatedShippingDays;
+  // String? get minQuantity => _minQuantity;
+
+  // set productPriceTotal(dynamic p) {
+  //   _productPriceTotal = p;
+  // }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'price': price,
+      'quantity': quantity,
+      'color': color,
+      'size': size,
+      'shipping_cost': shippingCost,
+      'product_price_total': productPriceTotal,
+      'estimated_shipping_days': estimatedShippingDays,
+      'min_quantity': minQuantity,
+    };
   }
 
-  Carts.fromJson(dynamic json) {
-    _id = json['id'];
-    _price = json['price'];
-    _quantity = json['quantity'];
-    _color = json['color'];
-    _size = json['size'];
-    _shippingCost = json['shipping_cost'];
-    _productPriceTotal = json['product_price_total'];
-    _estimatedShippingDays = json['estimated_shipping_days'];
-    _minQuantity = json['minimum_qty'];
+  factory Carts.fromMap(Map<String, dynamic> map) {
+    return Carts(
+      id: map['id'],
+      price: map['price'],
+      quantity: map['quantity'],
+      color: map['color'],
+      size: map['size'],
+      shippingCost: map['shipping_cost'],
+      productPriceTotal: map['product_price_total'],
+      estimatedShippingDays: map['estimated_shipping_days'],
+      minQuantity: map['min_quantity'],
+    );
   }
 
-  String? _id;
-  String? _price;
-  String? _quantity;
-  String? _color;
-  String? _size;
-  String? _shippingCost;
-  String? _productPriceTotal;
-  String? _estimatedShippingDays;
-  String? _minQuantity;
+  String toJson() => json.encode(toMap());
 
-  String? get id => _id;
-
-  String? get price => _price;
-
-  String? get quantity => _quantity;
-
-  String? get color => _color;
-
-  String? get size => _size;
-
-  String? get shippingCost => _shippingCost;
-
-  // ignore: unnecessary_getters_setters
-  String? get productPriceTotal => _productPriceTotal;
-
-  String? get estimatedShippingDays => _estimatedShippingDays;
-  String? get minQuantity => _minQuantity;
-
-  set productPriceTotal(dynamic p) {
-    _productPriceTotal = p;
-  }
-
-  Map<String, String> toJson() {
-    final map = <String, String>{};
-    map['id'] = _id!;
-    map['price'] = _price!;
-    map['quantity'] = _quantity!;
-    map['color'] = _color!;
-    map['size'] = _size!;
-    map['shipping_cost'] = _shippingCost!;
-    map['product_price_total'] = _productPriceTotal!;
-    map['estimated_shipping_days'] = _estimatedShippingDays!;
-    map['minimum_qty'] = _minQuantity!;
-    return map;
-  }
+  factory Carts.fromJson(String source) => Carts.fromMap(json.decode(source));
 }
 
 class Cart {
@@ -271,34 +268,139 @@ class Cart {
   }
 }
 
-/// id : 29
-/// exchange_rate : null
-
 class Currency {
+  String? id;
+  String? exchangeRate;
   Currency({
-    String? id,
-    String? exchangeRate,
-  }) {
-    _id = id;
-    _exchangeRate = exchangeRate;
+    this.id,
+    this.exchangeRate,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'exchange_rate': exchangeRate,
+    };
   }
 
-  Currency.fromJson(dynamic json) {
-    _id = json['id'];
-    _exchangeRate = json['exchange_rate'];
+  factory Currency.fromMap(Map<String, dynamic> map) {
+    return Currency(
+      id: map['id'],
+      exchangeRate: map['exchange_rate'],
+    );
   }
 
-  String? _id;
-  String? _exchangeRate;
+  String toJson() => json.encode(toMap());
 
-  String? get id => _id;
+  factory Currency.fromJson(String source) =>
+      Currency.fromMap(json.decode(source));
+}
 
-  String? get exchangeRate => _exchangeRate;
+class CreateOrderBody {
+  final String first_name;
+  final String last_name;
+  final String user_address_1;
+  final String user_mobile;
+  final String user_email;
+  final String user_post_code;
+  final String user_city;
+  final String user_country_id;
+  final String shipping_name;
+  final String shipping_mobile;
+  final String shipping_email;
+  final String shipping_post;
+  final String shipping_town;
+  final String shipping_state;
+  final String address_line_one;
+  final String shipping_country_id;
+  final String payment_by;
+  final String subTotal;
+  final String totalShipping;
+  final String total;
+  final Currency currency;
+  final List<Carts> cart;
 
-  Map<String, dynamic> toJson() {
-    final map = <String, String>{};
-    map['id'] = _id!;
-    map['exchange_rate'] = _exchangeRate!;
-    return map;
+  CreateOrderBody({
+    required this.first_name,
+    required this.last_name,
+    required this.user_address_1,
+    required this.user_mobile,
+    required this.user_email,
+    required this.user_post_code,
+    required this.user_city,
+    required this.user_country_id,
+    required this.shipping_name,
+    required this.shipping_mobile,
+    required this.shipping_email,
+    required this.shipping_post,
+    required this.shipping_town,
+    required this.shipping_state,
+    required this.address_line_one,
+    required this.shipping_country_id,
+    required this.payment_by,
+    required this.subTotal,
+    required this.totalShipping,
+    required this.total,
+    required this.currency,
+    required this.cart,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'first_name': first_name,
+      'last_name': last_name,
+      'user_address_1': user_address_1,
+      'user_mobile': user_mobile,
+      'user_email': user_email,
+      'user_post_code': user_post_code,
+      'user_city': user_city,
+      'user_country_id': user_country_id,
+      'shipping_name': shipping_name,
+      'shipping_mobile': shipping_mobile,
+      'shipping_email': shipping_email,
+      'shipping_post': shipping_post,
+      'shipping_town': shipping_town,
+      'shipping_state': shipping_state,
+      'address_line_one': address_line_one,
+      'shipping_country_id': shipping_country_id,
+      'payment_by': payment_by,
+      'subTotal': subTotal,
+      'totalShipping': totalShipping,
+      'total': total,
+      'currency': currency.toJson(),
+      'cart': cart.map((x) => x.toJson()).toList(),
+    };
   }
+
+  factory CreateOrderBody.fromMap(Map<String, dynamic> map) {
+    return CreateOrderBody(
+      first_name: map['first_name'] ?? '',
+      last_name: map['last_name'] ?? '',
+      user_address_1: map['user_address_1'] ?? '',
+      user_mobile: map['user_mobile'] ?? '',
+      user_email: map['user_email'] ?? '',
+      user_post_code: map['user_post_code'] ?? '',
+      user_city: map['user_city'] ?? '',
+      user_country_id: map['user_country_id'] ?? '',
+      shipping_name: map['shipping_name'] ?? '',
+      shipping_mobile: map['shipping_mobile'] ?? '',
+      shipping_email: map['shipping_email'] ?? '',
+      shipping_post: map['shipping_post'] ?? '',
+      shipping_town: map['shipping_town'] ?? '',
+      shipping_state: map['shipping_state'] ?? '',
+      address_line_one: map['address_line_one'] ?? '',
+      shipping_country_id: map['shipping_country_id'] ?? '',
+      payment_by: map['payment_by'] ?? '',
+      subTotal: map['subTotal'] ?? '',
+      totalShipping: map['totalShipping'] ?? '',
+      total: map['total'] ?? '',
+      currency: Currency.fromMap(map['currency']),
+      cart: List<Carts>.from(map['cart']?.map((x) => Carts.fromMap(x))),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory CreateOrderBody.fromJson(String source) =>
+      CreateOrderBody.fromMap(json.decode(source));
 }

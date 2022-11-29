@@ -185,6 +185,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                                   height: 10.0,
                                 ),
                                 AppTextField(
+                                  enabled: false,
                                   textFieldType: TextFieldType.EMAIL,
                                   controller: emailController,
                                   decoration: InputDecoration(
@@ -205,6 +206,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                                   height: 10.0,
                                 ),
                                 AppTextField(
+                                  enabled: false,
                                   textFieldType: TextFieldType.NAME,
                                   controller: mobileController,
                                   maxLength: 10,
@@ -234,7 +236,8 @@ class _PersonalSettingsState extends State<PersonalSettings> {
                                         if (mobileController.text.length ==
                                             10) {
                                           EasyLoading.show(
-                                              status: 'Updating Profile');
+                                            status: 'Updating Profile',
+                                          );
                                           final profile =
                                               await _apiManager.updateProfile(
                                             token,

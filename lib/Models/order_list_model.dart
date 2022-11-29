@@ -112,6 +112,7 @@ class Data {
   int? sellerId;
   int? userId;
   int? orderId;
+  int? menifestId;
   int? orderStat;
   int? productId;
   int? salePrice;
@@ -148,6 +149,7 @@ class Data {
     this.createdAt,
     this.updatedAt,
     this.product,
+    this.menifestId,
   });
 
   Map<String, dynamic> toMap() {
@@ -171,6 +173,7 @@ class Data {
       'createdAt': createdAt,
       'updatedAt': updatedAt,
       'product': product?.toMap(),
+      'menifestId': menifestId,
     };
   }
 
@@ -193,6 +196,7 @@ class Data {
       currencyId: map['currencyId']?.toInt(),
       exchangeRate: map['exchangeRate']?.toInt(),
       createdAt: map['createdAt'],
+      menifestId: map['menifestId']?.toInt(),
       updatedAt: map['updatedAt'],
       product:
           map['product'] != null ? ProductModel.fromMap(map['product']) : null,

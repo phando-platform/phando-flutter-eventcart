@@ -3,11 +3,12 @@
 
 class SendResetCodeModel {
   SendResetCodeModel({
-      bool? success, 
-      String? message,}){
+    bool? success,
+    String? message,
+  }) {
     _success = success;
     _message = message;
-}
+  }
 
   SendResetCodeModel.fromJson(dynamic json) {
     _success = json['success'];
@@ -25,5 +26,4 @@ class SendResetCodeModel {
     map['message'] = _message;
     return map;
   }
-
 }

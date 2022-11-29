@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:event_app/Models/book_order/book_order_body_model.dart';
 import 'package:event_app/Models/book_order/book_order_reponse_model.dart';
 import 'package:event_app/Models/delivery/delivery_body_model.dart';
@@ -549,62 +550,71 @@ class ApiManager {
     String? shippingUserState =
         _prefs.getString('shipping_user_state') ?? "Not Specified";
 
-    // print(token);
-
-    log('first name:' + billingFirstName);
-    log('last name:' + billingLastName);
-    log('str add one:' + billingAddOne);
-    log('phone:' + billingPhone);
-    log('email:' + billingEmail);
-    log('postal code:' + billingPostCode);
-    log('payment:' + payment);
-    log('currency: ${model.currency?.id.toString()}');
-    log('sub total:' + subTotal);
-    log('total shipping:' + totalShipping);
-    log('total:' + total);
-    log('cart id:' + json.encode(model.cart?[0].id));
-    log('cart price:' + json.encode(model.cart?[0].price));
-    log('cart qty:' + json.encode(model.cart?[0].quantity));
-    log('shipping cost:' + json.encode(model.cart?[0].shippingCost));
-    log('productTotalPrice:' + json.encode(model.cart?[0].productPriceTotal));
-    log('shipping Days:' + json.encode(model.cart?[0].estimatedShippingDays));
-
     final response = await http.post(
       Uri.parse(apiUrl + 'order'),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
-      body: <dynamic, dynamic>{
-        'first_name': billingFirstName,
-        'last_name': billingLastName,
-        'user_address_1': billingAddOne,
-        'user_mobile': billingPhone,
-        'user_email': billingEmail,
-        'user_post_code': billingPostCode,
-        'user_city': billingUserCity,
-        'user_country_id': "104",
-        'shipping_name': shippingFirstName,
-        'shipping_mobile': shippingPhone,
-        'shipping_email': shippingEmail,
-        'shipping_post': shippingPostCode,
-        'shipping_town': shippingUserCity,
-        'shipping_state': shippingUserState,
-        'address_line_one': shippingAddOne,
-        'shipping_country_id': "104",
-        'payment_by': payment,
-        'subTotal': subTotal,
-        'totalShipping': totalShipping,
-        'total': total,
-        'currency[id]': model.currency?.id,
-        'currency[exchange_rate]': '1.35',
-        'cart[0][id]': model.cart?[0].id,
-        'cart[0][price]': model.cart?[0].price,
-        'cart[0][quantity]': model.cart?[0].quantity,
-        'cart[0][shipping_cost]': model.cart?[0].shippingCost,
-        'cart[0][product_price_total]': model.cart?[0].productPriceTotal,
-        'cart[0][estimated_shipping_days]': model.cart?[0].estimatedShippingDays
-      },
+      body: CreateOrderBody(
+        first_name: billingFirstName,
+        last_name: billingLastName,
+        user_address_1: billingAddOne,
+        user_mobile: billingPhone,
+        user_email: billingEmail,
+        user_post_code: billingPostCode,
+        user_city: billingUserCity,
+        user_country_id: "104",
+        shipping_name: shippingFirstName,
+        shipping_mobile: shippingPhone,
+        shipping_email: shippingEmail,
+        shipping_post: shippingPostCode,
+        shipping_town: shippingUserCity,
+        shipping_state: shippingUserState,
+        address_line_one: shippingAddOne,
+        shipping_country_id: "104",
+        payment_by: payment,
+        subTotal: subTotal,
+        totalShipping: totalShipping,
+        total: total,
+        currency: model.currency ??
+            Currency(
+              id: '7',
+              exchangeRate: '1',
+            ),
+        cart: model.cart ?? [],
+      ).toJson(),
+    );
+
+    log(
+      CreateOrderBody(
+        first_name: billingFirstName,
+        last_name: billingLastName,
+        user_address_1: billingAddOne,
+        user_mobile: billingPhone,
+        user_email: billingEmail,
+        user_post_code: billingPostCode,
+        user_city: billingUserCity,
+        user_country_id: "104",
+        shipping_name: shippingFirstName,
+        shipping_mobile: shippingPhone,
+        shipping_email: shippingEmail,
+        shipping_post: shippingPostCode,
+        shipping_town: shippingUserCity,
+        shipping_state: shippingUserState,
+        address_line_one: shippingAddOne,
+        shipping_country_id: "104",
+        payment_by: payment,
+        subTotal: subTotal,
+        totalShipping: totalShipping,
+        total: total,
+        currency: model.currency ??
+            Currency(
+              id: '7',
+              exchangeRate: '1',
+            ),
+        cart: model.cart ?? [],
+      ).toJson(),
     );
 
     log("api manager: create order");
@@ -630,6 +640,9 @@ class ApiManager {
     if (response.statusCode == 200) {
       // final data = jsonDecode(response.body);
       try {
+        log(
+          OrderListModel.fromJson(response.body).value?.data?[0].toJson() ?? "",
+        );
         return OrderListModel.fromJson(response.body);
       } catch (error, stackTrace) {
         log(error.toString());
@@ -703,8 +716,14 @@ class ApiManager {
     }
   }
 
-  Future<SendResetCodeModel> cancelOrder(String token, String orderId,
-      String orderDetailsId, String productId, String description) async {
+  Future<SendResetCodeModel?> cancelOrder({
+    required String orderDetailsId,
+    required String description,
+    required String reason,
+    required String token,
+    required String productId,
+    required String orderId,
+  }) async {
     final response = await http.post(
       Uri.parse(apiUrl + 'cancel_order'),
       headers: <String, String>{
@@ -712,14 +731,15 @@ class ApiManager {
         'Authorization': 'Bearer $token',
       },
       body: <String, String>{
-        'order_id': orderId,
         'order_details_id': orderDetailsId,
-        'product_id': productId,
         'order_stat_desc': description,
-        'remarks': ' ',
+        'order_id': orderId,
+        'product_id': productId,
+        'reason': reason,
       },
     );
-    final data = jsonDecode(response.body);
+    final data = Map<String, dynamic>.from(jsonDecode(response.body));
+    log(data.toString());
     if (response.statusCode == 200) {
       return SendResetCodeModel.fromJson(data);
     } else {
@@ -728,7 +748,9 @@ class ApiManager {
   }
 
   Future<SendResetCodeModel> removeWishList(
-      String token, String productId) async {
+    String token,
+    String productId,
+  ) async {
     final response = await http.post(
       Uri.parse(apiUrl + 'remove_from_wishlist'),
       headers: <String, String>{
@@ -776,55 +798,29 @@ class ApiManager {
     }
   }
 
-  Future<BookOrderResponseModel?> bookOrder({
-    required BookOrderBodyModel details,
-  }) async {
-    log('BODY: ' + details.toMap().toString());
-    final response = await http.post(
-      Uri.parse('http://tca.paapos.in/api/Order/bookOrder'),
-      headers: {
-        'Accept': '*/*',
-        'Authkey': 'mohitarfkjf8g2weqkaozy',
-      },
-      body: details.toMap(),
-    );
-    final data = jsonDecode(response.body) as Map<String, dynamic>;
-    log('RESPONSE: ' + data.toString());
-    if (response.statusCode == 200) {
-      if (data.containsKey('ReplyCode') && data['ReplyMsg'] == 0) {
-        final bookOrder = BookOrderResponseModel.fromMap(data);
-        return bookOrder;
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-  }
-
   Future<TrackingOrderResponseModel?> getTrackingDetails({
     required String menifestId,
+    required String token,
   }) async {
     final response = await http.post(
-      Uri.parse('http://tca.paapos.in/api/Order/TrackOrder'),
-      headers: {
-        'Accept': '*/*',
-        'Authkey': 'mohitarfkjf8g2weqkaozy',
-        // 'Content-Type': 'application/json',
+      Uri.parse(apiUrl + 'track_order'),
+      headers: <String, String>{
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
       },
       body: {
-        'ManifestID': menifestId,
+        'manifest_id': menifestId,
       },
     );
     log('BODY: ' + menifestId);
     final data = jsonDecode(response.body) as Map<String, dynamic>;
     log('RESPONSE: ' + data.toString());
     if (response.statusCode == 200) {
-      if (data.containsKey('ReplyCode') && data['ReplyCode'] == 0) {
-        final dataList = List<Map<String, dynamic>>.from(data['ShipSum']);
-        List<TrackingOrderResponseModel> deliveryData =
-            dataList.map((e) => TrackingOrderResponseModel.fromMap(e)).toList();
-        return deliveryData.first;
+      if (data.containsKey('success') && data['success'] == true) {
+        final dataList = Map<String, dynamic>.from(data['value']);
+        TrackingOrderResponseModel deliveryData =
+            TrackingOrderResponseModel.fromMap(dataList);
+        return deliveryData;
       } else {
         return null;
       }

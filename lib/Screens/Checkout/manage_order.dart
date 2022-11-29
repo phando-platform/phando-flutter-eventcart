@@ -76,17 +76,18 @@ class _ManageOrderState extends State<ManageOrder> {
                         try {
                           EasyLoading.show(status: 'Cancelling');
                           final cancel = await _apiManager.cancelOrder(
-                              token,
-                              widget.orderId,
-                              widget.details.id.toString(),
-                            // widget.details.product!.id.toString(),
-                              widget.details.id.toString(),/*need to remove*/
-                              reasonController.text);
-                          if (cancel.success == true) {
-                            EasyLoading.showSuccess(cancel.message.toString());
+                            token: token,
+                            orderDetailsId: widget.details.id.toString(),
+                            description: widget.details.id.toString(),
+                            reason: reasonController.text,
+                            orderId: widget.orderId,
+                            productId: widget.details.productId.toString(),
+                          );
+                          if (cancel?.success == true) {
+                            EasyLoading.showSuccess(cancel!.message.toString());
                             const Home().launch(context);
                           } else {
-                            EasyLoading.showError(cancel.message.toString());
+                            EasyLoading.showError(cancel!.message.toString());
                           }
                         } catch (e) {
                           EasyLoading.showError(e.toString());
@@ -145,7 +146,7 @@ class _ManageOrderState extends State<ManageOrder> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: ListTile(
-                       /* leading: Image.network(
+                        /* leading: Image.network(
                             widget.details.product!.images![0].image!),*/
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

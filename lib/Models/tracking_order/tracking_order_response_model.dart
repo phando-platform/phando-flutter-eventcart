@@ -18,23 +18,23 @@ class TrackingOrderResponseModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'StatusDate': statusDate,
-      'StatusTime': statusTime,
-      'Status': status,
-      'Location': location,
-      'Comment': comment,
-      'StatusCode': statusCode,
+      'status_date': statusDate,
+      'status_time': statusTime,
+      'status': status,
+      'location': location,
+      'status_comment': comment,
+      'status_code': statusCode,
     };
   }
 
   factory TrackingOrderResponseModel.fromMap(Map<String, dynamic> map) {
     return TrackingOrderResponseModel(
-      statusDate: map['StatusDate'] ?? '',
-      statusTime: map['StatusTime'] ?? '',
-      status: map['Status'] ?? '',
-      location: map['Location'] ?? '',
-      comment: map['Comment'] ?? '',
-      statusCode: map['StatusCode'] ?? '',
+      statusDate: map['status_date'] ?? '',
+      statusTime: map['status_time'] ?? '',
+      status: map['status'] ?? '',
+      location: map['location'] ?? '',
+      comment: map['status_comment'] ?? '',
+      statusCode: map['status_code'] ?? '',
     );
   }
 
