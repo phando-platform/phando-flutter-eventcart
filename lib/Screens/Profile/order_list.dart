@@ -166,126 +166,158 @@ class _OrderListState extends State<OrderList> {
                                                 ),
                                               ],
                                             ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (context) {
-                                                        return Dialog(
-                                                          backgroundColor:
-                                                              kBgColor,
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                              20,
+                                            if ((snapshot
+                                                        .data
+                                                        ?.value
+                                                        ?.data?[index]
+                                                        .orderStat ??
+                                                    2) !=
+                                                7)
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return Dialog(
+                                                            backgroundColor:
+                                                                kBgColor,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                20,
+                                                              ),
                                                             ),
-                                                          ),
-                                                          child:
-                                                              _TrackOrderDialog(
-                                                            manifestId: snapshot
-                                                                    .data
-                                                                    ?.value
-                                                                    ?.data?[
-                                                                        index]
-                                                                    .menifestId
-                                                                    .toString() ??
-                                                                '',
-                                                          ),
-                                                        );
-                                                      },
-                                                    );
-                                                  },
-                                                  child: Text(
-                                                    'Track Order',
-                                                    style: kTextStyle.copyWith(
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                      color: Colors.blue,
+                                                            child:
+                                                                _TrackOrderDialog(
+                                                              manifestId: snapshot
+                                                                      .data
+                                                                      ?.value
+                                                                      ?.data?[
+                                                                          index]
+                                                                      .menifestId
+                                                                      .toString() ??
+                                                                  '',
+                                                            ),
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    child: Text(
+                                                      'Track Order',
+                                                      style:
+                                                          kTextStyle.copyWith(
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                        color: Colors.blue,
+                                                      ),
                                                     ),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return Dialog(
+                                                            backgroundColor:
+                                                                kBgColor,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                20,
+                                                              ),
+                                                            ),
+                                                            child:
+                                                                _CancelOrderDialog(
+                                                              menifestId: snapshot
+                                                                      .data
+                                                                      ?.value
+                                                                      ?.data?[
+                                                                          index]
+                                                                      .menifestId
+                                                                      .toString() ??
+                                                                  '',
+                                                              token: token,
+                                                              orderDetailsId: snapshot
+                                                                      .data
+                                                                      ?.value
+                                                                      ?.data?[
+                                                                          index]
+                                                                      .id
+                                                                      .toString() ??
+                                                                  '',
+                                                              description: snapshot
+                                                                      .data
+                                                                      ?.value
+                                                                      ?.data?[
+                                                                          index]
+                                                                      .id
+                                                                      .toString() ??
+                                                                  '',
+                                                              orderId: snapshot
+                                                                      .data
+                                                                      ?.value
+                                                                      ?.data?[
+                                                                          index]
+                                                                      .orderId
+                                                                      .toString() ??
+                                                                  '',
+                                                              productId: snapshot
+                                                                      .data
+                                                                      ?.value
+                                                                      ?.data?[
+                                                                          index]
+                                                                      .productId
+                                                                      .toString() ??
+                                                                  '',
+                                                            ),
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    child: Text(
+                                                      'Cancel Order',
+                                                      style:
+                                                          kTextStyle.copyWith(
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                        color: Colors.red,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            else
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  color: Colors.red,
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 2,
+                                                  horizontal: 5,
+                                                ),
+                                                alignment: Alignment.center,
+                                                child: const Text(
+                                                  'Order Cancelled',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (context) {
-                                                        return Dialog(
-                                                          backgroundColor:
-                                                              kBgColor,
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                              20,
-                                                            ),
-                                                          ),
-                                                          child:
-                                                              _CancelOrderDialog(
-                                                            menifestId: snapshot
-                                                                    .data
-                                                                    ?.value
-                                                                    ?.data?[
-                                                                        index]
-                                                                    .menifestId
-                                                                    .toString() ??
-                                                                '',
-                                                            token: token,
-                                                            orderDetailsId: snapshot
-                                                                    .data
-                                                                    ?.value
-                                                                    ?.data?[
-                                                                        index]
-                                                                    .id
-                                                                    .toString() ??
-                                                                '',
-                                                            description: snapshot
-                                                                    .data
-                                                                    ?.value
-                                                                    ?.data?[
-                                                                        index]
-                                                                    .id
-                                                                    .toString() ??
-                                                                '',
-                                                            orderId: snapshot
-                                                                    .data
-                                                                    ?.value
-                                                                    ?.data?[
-                                                                        index]
-                                                                    .orderId
-                                                                    .toString() ??
-                                                                '',
-                                                            productId: snapshot
-                                                                    .data
-                                                                    ?.value
-                                                                    ?.data?[
-                                                                        index]
-                                                                    .productId
-                                                                    .toString() ??
-                                                                '',
-                                                          ),
-                                                        );
-                                                      },
-                                                    );
-                                                  },
-                                                  child: Text(
-                                                    'Cancel Order',
-                                                    style: kTextStyle.copyWith(
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                      color: Colors.red,
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
+                                              ),
                                           ],
                                         ),
                                       ),

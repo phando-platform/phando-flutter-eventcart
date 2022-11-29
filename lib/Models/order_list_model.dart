@@ -112,7 +112,7 @@ class Data {
   int? sellerId;
   int? userId;
   int? orderId;
-  int? menifestId;
+  String? menifestId;
   int? orderStat;
   int? productId;
   int? salePrice;
@@ -180,24 +180,24 @@ class Data {
   factory Data.fromMap(Map<String, dynamic> map) {
     return Data(
       id: map['id']?.toInt(),
-      sellerId: map['sellerId']?.toInt(),
-      userId: map['userId']?.toInt(),
-      orderId: map['orderId']?.toInt(),
-      orderStat: map['orderStat']?.toInt(),
-      productId: map['productId']?.toInt(),
-      salePrice: map['salePrice']?.toInt(),
+      sellerId: map['seller_id']?.toInt(),
+      userId: map['user_id']?.toInt(),
+      orderId: map['order_id']?.toInt(),
+      orderStat: map['order_stat']?.toInt(),
+      productId: map['product_id']?.toInt(),
+      salePrice: map['sale_price']?.toInt(),
       qty: map['qty']?.toInt(),
       discount: map['discount']?.toInt(),
       tax: map['tax']?.toInt(),
-      shippingCost: map['shippingCost']?.toInt(),
-      totalShippingCost: map['totalShippingCost']?.toInt(),
-      totalPrice: map['totalPrice']?.toInt(),
-      grandTotal: map['grandTotal']?.toInt(),
-      currencyId: map['currencyId']?.toInt(),
-      exchangeRate: map['exchangeRate']?.toInt(),
-      createdAt: map['createdAt'],
-      menifestId: map['menifestId']?.toInt(),
-      updatedAt: map['updatedAt'],
+      shippingCost: map['shipping_cost']?.toInt(),
+      totalShippingCost: map['total_shipping_cost']?.toInt(),
+      totalPrice: map['total_price']?.toInt(),
+      grandTotal: map['grand_total']?.toInt(),
+      currencyId: map['currency_id']?.toInt(),
+      exchangeRate: map['exchange_rate']?.toInt(),
+      createdAt: map['created_at'],
+      menifestId: map['menifestId'],
+      updatedAt: map['updated_at'],
       product:
           map['product'] != null ? ProductModel.fromMap(map['product']) : null,
     );

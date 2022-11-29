@@ -367,8 +367,8 @@ class CreateOrderBody {
       'subTotal': subTotal,
       'totalShipping': totalShipping,
       'total': total,
-      'currency': currency.toJson(),
-      'cart': cart.map((x) => x.toJson()).toList(),
+      'currency': currency.toMap(),
+      'cart': cart.map((x) => x.toMap()).toList(),
     };
   }
 

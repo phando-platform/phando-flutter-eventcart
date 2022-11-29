@@ -555,6 +555,7 @@ class ApiManager {
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
       },
       body: CreateOrderBody(
         first_name: billingFirstName,
