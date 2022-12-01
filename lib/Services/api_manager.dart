@@ -583,6 +583,7 @@ class ApiManager {
               exchangeRate: '1',
             ),
         cart: model.cart ?? [],
+        payment_txn_id: paymentId,
       ).toJson(),
     );
 
@@ -614,6 +615,7 @@ class ApiManager {
               exchangeRate: '1',
             ),
         cart: model.cart ?? [],
+        payment_txn_id: paymentId,
       ).toJson(),
     );
 

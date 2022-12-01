@@ -319,6 +319,7 @@ class CreateOrderBody {
   final String total;
   final Currency currency;
   final List<Carts> cart;
+  final String payment_txn_id;
 
   CreateOrderBody({
     required this.first_name,
@@ -343,6 +344,7 @@ class CreateOrderBody {
     required this.total,
     required this.currency,
     required this.cart,
+    required this.payment_txn_id,
   });
 
   Map<String, dynamic> toMap() {
@@ -369,6 +371,7 @@ class CreateOrderBody {
       'total': total,
       'currency': currency.toMap(),
       'cart': cart.map((x) => x.toMap()).toList(),
+      'payment_txn_id': payment_txn_id,
     };
   }
 
@@ -396,6 +399,7 @@ class CreateOrderBody {
       total: map['total'] ?? '',
       currency: Currency.fromMap(map['currency']),
       cart: List<Carts>.from(map['cart']?.map((x) => Carts.fromMap(x))),
+      payment_txn_id: map['payment_txn_id'] ?? '',
     );
   }
 
