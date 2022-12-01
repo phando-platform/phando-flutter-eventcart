@@ -676,29 +676,40 @@ class ApiManager {
     }
   }
 
-  Future<ProfileUpdateModel> updateProfile(String token, String firstName,
-      String lastName, String mobile, String email) async {
-    final response = await http.post(
-      Uri.parse(apiUrl + 'profile/update'),
-      headers: <String, String>{
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: <String, String>{
-        'first_name': firstName,
-        'last_name': lastName,
-        'email': email,
-        'mobile': mobile,
-        'dob': '2011-11-11',
-        'gender': '1'
-      },
-    );
-    final data = jsonDecode(response.body);
-    log(response.body);
-    if (response.statusCode == 200) {
-      return ProfileUpdateModel.fromJson(data);
-    } else {
-      return ProfileUpdateModel.fromJson(data);
+  Future<ProfileUpdateModel> updateProfile(
+    String token,
+    String firstName,
+    String lastName,
+    String mobile,
+    String email,
+  ) async {
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl + 'profile/update'),
+        headers: <String, String>{
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: <String, String>{
+          'first_name': firstName,
+          'last_name': lastName,
+          'email': email,
+          'mobile': mobile,
+          'dob': '2011-11-11',
+          'gender': '1'
+        },
+      );
+      final data = jsonDecode(response.body);
+      log(data.toString());
+      if (response.statusCode == 200) {
+        return ProfileUpdateModel.fromJson(data);
+      } else {
+        return ProfileUpdateModel.fromJson(data);
+      }
+    } catch (error, stackTrace) {
+      log(stackTrace.toString());
+      log(error.toString());
+      rethrow;
     }
   }
 
