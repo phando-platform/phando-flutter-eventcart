@@ -241,30 +241,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: kGreyTextColor,
                     ),
                   ),
-                  ListTile(
-                    onTap: () {
-                      toast('Coming soon');
-                    },
-                    leading: Container(
-                      padding: const EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF6ED),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: const Icon(
-                        Icons.price_change_outlined,
-                        color: kMainColor,
-                      ),
-                    ),
-                    title: Text(
-                      'Coupon',
-                      style: kTextStyle,
-                    ),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: kGreyTextColor,
-                    ),
-                  ),
+                  // ListTile(
+                  //   onTap: () {
+                  //     toast('Coming soon');
+                  //   },
+                  //   leading: Container(
+                  //     padding: const EdgeInsets.all(5.0),
+                  //     decoration: BoxDecoration(
+                  //       color: const Color(0xFFFFF6ED),
+                  //       borderRadius: BorderRadius.circular(10.0),
+                  //     ),
+                  //     child: const Icon(
+                  //       Icons.price_change_outlined,
+                  //       color: kMainColor,
+                  //     ),
+                  //   ),
+                  //   title: Text(
+                  //     'Coupon',
+                  //     style: kTextStyle,
+                  //   ),
+                  //   trailing: const Icon(
+                  //     Icons.arrow_forward_ios,
+                  //     color: kGreyTextColor,
+                  //   ),
+                  // ),
                   ListTile(
                     onTap: () {
                       OrderList(
@@ -291,54 +291,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: kGreyTextColor,
                     ),
                   ),
-                  ListTile(
-                    onTap: () {
-                      toast('Coming soon');
-                    },
-                    leading: Container(
-                      padding: const EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF6ED),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: const Icon(
-                        Icons.payment_outlined,
-                        color: kMainColor,
-                      ),
-                    ),
-                    title: Text(
-                      'Payment Method',
-                      style: kTextStyle,
-                    ),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: kGreyTextColor,
-                    ),
-                  ),
-                  ListTile(
-                    onTap: () {
-                      toast('Coming soon');
-                    },
-                    leading: Container(
-                      padding: const EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF6ED),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: const Icon(
-                        Icons.language_rounded,
-                        color: kMainColor,
-                      ),
-                    ),
-                    title: Text(
-                      'Language',
-                      style: kTextStyle,
-                    ),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: kGreyTextColor,
-                    ),
-                  ),
+                  // ListTile(
+                  //   onTap: () {
+                  //     toast('Coming soon');
+                  //   },
+                  //   leading: Container(
+                  //     padding: const EdgeInsets.all(5.0),
+                  //     decoration: BoxDecoration(
+                  //       color: const Color(0xFFFFF6ED),
+                  //       borderRadius: BorderRadius.circular(10.0),
+                  //     ),
+                  //     child: const Icon(
+                  //       Icons.payment_outlined,
+                  //       color: kMainColor,
+                  //     ),
+                  //   ),
+                  //   title: Text(
+                  //     'Payment Method',
+                  //     style: kTextStyle,
+                  //   ),
+                  //   trailing: const Icon(
+                  //     Icons.arrow_forward_ios,
+                  //     color: kGreyTextColor,
+                  //   ),
+                  // ),
+                  // ListTile(
+                  //   onTap: () {
+                  //     toast('Coming soon');
+                  //   },
+                  //   leading: Container(
+                  //     padding: const EdgeInsets.all(5.0),
+                  //     decoration: BoxDecoration(
+                  //       color: const Color(0xFFFFF6ED),
+                  //       borderRadius: BorderRadius.circular(10.0),
+                  //     ),
+                  //     child: const Icon(
+                  //       Icons.language_rounded,
+                  //       color: kMainColor,
+                  //     ),
+                  //   ),
+                  //   title: Text(
+                  //     'Language',
+                  //     style: kTextStyle,
+                  //   ),
+                  //   trailing: const Icon(
+                  //     Icons.arrow_forward_ios,
+                  //     color: kGreyTextColor,
+                  //   ),
+                  // ),
                   ListTile(
                     onTap: () => logout(),
                     leading: Container(
