@@ -325,21 +325,23 @@ class _OrderListState extends State<OrderList> {
                                   ),
                                 );
                               }),
-                          GestureDetector(
-                            onTap: () {
-                              int page = widget.page + 1;
-                              OrderList(page: page).launch(context);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                'See Previous Orders',
-                                style: kTextStyle.copyWith(color: kTitleColor),
-                              ).visible(
-                                snapshot.data!.value!.lastPage != widget.page,
+                          if (snapshot.data?.value?.data?.length == 10)
+                            GestureDetector(
+                              onTap: () {
+                                int page = widget.page + 1;
+                                OrderList(page: page).launch(context);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  'See Previous Orders',
+                                  style:
+                                      kTextStyle.copyWith(color: kTitleColor),
+                                ).visible(
+                                  snapshot.data!.value!.lastPage != widget.page,
+                                ),
                               ),
                             ),
-                          ),
                         ],
                       );
                     } else {

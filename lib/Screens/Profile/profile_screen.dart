@@ -25,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int wishLength = 0;
   int? country;
   String? mobile;
-  String? strUserImage;
+  late String strUserImage;
 
   Future<void> getToken() async {
     SharedPreferences preferences = await _prefs;
@@ -34,10 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       token = preferences.getString('token') ?? "";
       country = preferences.getInt('country');
       mobile = preferences.getString('phone');
-      strUserImage = preferences.getString('userImage') ??
-          "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-      print(country);
-      print(mobile);
+      strUserImage = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     });
     final wish = await _apiManager.wishList(token);
     final value = await _apiManager.getProfileInfo(token);
@@ -104,7 +101,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         ClipOval(
                           child: Image.network(
-                            strUserImage ?? "strUserImage",
+                            snapshot.data?.value?.customer?.image ??
+                                strUserImage,
                             fit: BoxFit.cover,
                             width: 90.0,
                             height: 90.0,
@@ -217,6 +215,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             snapshot.data?.value?.customer?.lastName ?? '',
                         mobile: snapshot.data?.value?.customer?.mobile ?? '',
                         email: snapshot.data?.value?.customer?.email ?? '',
+                        imageUrl: snapshot.data?.value?.customer?.image ??
+                            'https://cdn-icons-png.flaticon.com/512/149/149071.png',
                       ).launch(context).then((value) {
                         setState(() {});
                       });

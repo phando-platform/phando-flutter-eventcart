@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:event_app/Models/delivery/delivery_reponse_model.dart';
 import 'package:event_app/Models/order_create_model.dart';
 import 'package:event_app/Screens/Home%20Screen/home.dart';
@@ -9,7 +11,7 @@ import 'package:event_app/Services/cart_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class RazorPayMethods {
@@ -75,6 +77,8 @@ class RazorPayMethods {
     required String name,
   }) {
     final amountVal = (double.parse(amount) * 100).toString();
+    log(amountVal.toString());
+    log(amountVal.split('.')[0]);
     final options = {
       'key': key,
       'order_id': orderId,

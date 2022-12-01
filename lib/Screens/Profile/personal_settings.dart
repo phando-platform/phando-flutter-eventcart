@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide log;
 
 import '../../GlobalComponents/button_global.dart';
 import '../../Screens/Authentication/signin.dart';
@@ -15,14 +15,15 @@ import '../../Services/api_manager.dart';
 import '../../constant.dart';
 
 class PersonalSettings extends StatefulWidget {
-  const PersonalSettings(
-      {Key? key,
-      required this.mobile,
-      required this.lastName,
-      required this.firstName,
-      required this.email})
-      : super(key: key);
-  final String firstName, lastName, mobile, email;
+  const PersonalSettings({
+    Key? key,
+    required this.mobile,
+    required this.lastName,
+    required this.firstName,
+    required this.email,
+    required this.imageUrl,
+  }) : super(key: key);
+  final String firstName, lastName, mobile, email, imageUrl;
 
   @override
   _PersonalSettingsState createState() => _PersonalSettingsState();
@@ -42,18 +43,18 @@ class _PersonalSettingsState extends State<PersonalSettings> {
   String strAttachmentImageName = 'Attachment';
   File? attachmentFile;
   String attachmentBytedata = "";
-  String strUserImage = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+  late String strUserImage;
 
   Future<void> getToken() async {
     SharedPreferences preferences = await _prefs;
 
-    setState(
-      () {
-        token = preferences.getString('token')!;
-        strUserImage = preferences.getString('userImage') ??
-            "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-      },
-    );
+    // setState(
+    //   () {
+    //     token = preferences.getString('token')!;
+    //     strUserImage = preferences.getString('userImage') ??
+    //         "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+    //   },
+    // );
   }
 
   @override
@@ -62,6 +63,7 @@ class _PersonalSettingsState extends State<PersonalSettings> {
     lastNameController.text = widget.lastName;
     mobileController.text = widget.mobile;
     emailController.text = widget.email;
+    strUserImage = widget.imageUrl;
     getToken();
     super.initState();
   }
@@ -533,8 +535,11 @@ class _PersonalSettingsState extends State<PersonalSettings> {
   }
 
   Future<String> ImageFromGallery() async {
-    PickedFile? pickedFile = await ImagePicker()
-        .getImage(source: ImageSource.gallery, maxHeight: 200, maxWidth: 200);
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+      maxHeight: 200,
+      maxWidth: 200,
+    );
     if (pickedFile != null) {
       setState(() {
         attachmentFile = File(pickedFile.path);
@@ -550,20 +555,25 @@ class _PersonalSettingsState extends State<PersonalSettings> {
 
   Future<String> updateUserImage(PickedFile pickedFile) async {
     FormData formData = FormData.fromMap({
-      'image': await MultipartFile.fromFile(pickedFile.path,
-          filename: strAttachmentImageName),
+      'image': await MultipartFile.fromFile(
+        pickedFile.path,
+        filename: strAttachmentImageName,
+      ),
     });
     try {
       Dio dio = Dio();
-      Response response = await dio.post(ApiManager.apiUrl + "profile/image",
-          data: formData,
-          options: Options(headers: {
+      Response response = await dio.post(
+        ApiManager.apiUrl + "profile/image",
+        data: formData,
+        options: Options(
+          headers: {
             'Authorization': 'Bearer ' + ' ' + token,
-          }));
-
+          },
+        ),
+      );
+      log(formData.files.toString());
+      log(response.data.toString());
       if (response.data['message'] == 'Image has been updated') {
-        // Navigator.pop(context); //pop dialog
-
         final SharedPreferences prefs = await _prefs;
         prefs.setString(
           'userImage',
@@ -571,7 +581,6 @@ class _PersonalSettingsState extends State<PersonalSettings> {
         );
         return response.data['value'];
       } else {
-        //Navigator.pop(context);
         Fluttertoast.showToast(
           msg: "Something went wrong! Try after sometime.",
         );

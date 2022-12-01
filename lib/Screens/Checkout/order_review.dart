@@ -84,7 +84,7 @@ class _OrderReviewState extends State<OrderReview> {
       billingAddressId: "0",
       cart: widget.cart,
       currency: Currency(
-        id: '7',
+        id: '63',
         exchangeRate: '1',
       ),
       paymentBy: 'razorpay',
@@ -603,7 +603,7 @@ class _OrderReviewState extends State<OrderReview> {
                                         status: 'Processing Order',
                                       );
                                       Currency currency =
-                                          Currency(exchangeRate: '1', id: '1');
+                                          Currency(exchangeRate: '1', id: '63');
                                       OrderCreateModel model = OrderCreateModel(
                                         couponId: info.couponId ?? "1",
                                         couponDiscount:

@@ -579,7 +579,7 @@ class ApiManager {
         total: total,
         currency: model.currency ??
             Currency(
-              id: '7',
+              id: '63',
               exchangeRate: '1',
             ),
         cart: model.cart ?? [],
@@ -722,6 +722,7 @@ class ApiManager {
     required double amount,
     required String token,
   }) async {
+    final amountVal = (amount * 100).toString();
     final response = await http.post(
       Uri.parse(apiUrl + 'genraterazorpayorder'),
       headers: {
@@ -730,13 +731,13 @@ class ApiManager {
         'Content-Type': 'application/json',
       },
       body: json.encode({
-        "amount": amount,
+        "amount": amountVal.split('.')[0],
         "currency": "INR",
       }),
     );
     log('RAZORPAY BODY : ');
     log(json.encode({
-      "amount": amount,
+      "amount": amountVal.split('.')[0],
       "currency": "INR",
     }));
     final data = jsonDecode(response.body);
