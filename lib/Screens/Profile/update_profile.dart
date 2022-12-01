@@ -159,7 +159,7 @@ class _UpdateProfileWidgetState extends State<UpdateProfileWidget> {
                     height: 10.0,
                   ),
                   AppTextField(
-                    enabled: false,
+                    // enabled: false,
                     textFieldType: TextFieldType.EMAIL,
                     controller: widget.emailNameController,
                     decoration: InputDecoration(
@@ -180,7 +180,7 @@ class _UpdateProfileWidgetState extends State<UpdateProfileWidget> {
                     height: 10.0,
                   ),
                   AppTextField(
-                    enabled: false,
+                    // enabled: false,
                     textFieldType: TextFieldType.NAME,
                     controller: widget.mobileNameController,
                     maxLength: 10,
