@@ -1,3 +1,4 @@
+import 'package:event_app/Screens/Home%20Screen/wish_list.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -144,35 +145,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              wishLength.toString(),
-                              style: kTextStyle.copyWith(color: Colors.white),
-                            ),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            Text(
-                              'WishList',
-                              style: kTextStyle.copyWith(color: Colors.white),
-                            ),
-                          ],
+                        InkWell(
+                          onTap: () {
+                            const WishList().launch(context);
+                          },
+                          child: Column(
+                            children: [
+                              Text(
+                                wishLength.toString(),
+                                style: kTextStyle.copyWith(color: Colors.white),
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Text(
+                                'WishList',
+                                style: kTextStyle.copyWith(color: Colors.white),
+                              ),
+                            ],
+                          ),
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              snapshot.data!.value!.orders!.length.toString(),
-                              style: kTextStyle.copyWith(color: Colors.white),
-                            ),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            Text(
-                              'Orders',
-                              style: kTextStyle.copyWith(color: Colors.white),
-                            ),
-                          ],
+                        InkWell(
+                          onTap: () {
+                            OrderList(
+                              page: 1,
+                            ).launch(context);
+                          },
+                          child: Column(
+                            children: [
+                              Text(
+                                snapshot.data!.value!.orders!.length.toString(),
+                                style: kTextStyle.copyWith(color: Colors.white),
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Text(
+                                'Orders',
+                                style: kTextStyle.copyWith(color: Colors.white),
+                              ),
+                            ],
+                          ),
                         ),
                         Column(
                           children: [
@@ -192,12 +205,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(
-                      'General Settings',
-                      style: kTextStyle,
-                    ),
+                  const SizedBox(
+                    height: 10,
                   ),
                   ListTile(
                     onTap: () {

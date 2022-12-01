@@ -1,16 +1,17 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide log;
 import '../Models/order_create_model.dart';
 
 class CartNotifier extends ChangeNotifier {
-  late SharedPreferences pref;
+  final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
   List<Cart> cartItems = <Cart>[];
 
   void getSavedCart() async {
-    pref = await SharedPreferences.getInstance();
+    final pref = await _pref;
     if (pref.containsKey('cart_items')) {
       final savedCart = pref.getStringList('cart_items') ?? [];
       cartItems = savedCart
@@ -23,13 +24,15 @@ class CartNotifier extends ChangeNotifier {
     }
   }
 
-  void addItem(Cart cart) async {
+  Future<void> addItem(Cart cart) async {
+    final pref = await _pref;
     cartItems.add(cart);
-    pref = await SharedPreferences.getInstance();
+    log(cartItems.toString());
     final result = await pref.setStringList(
       'cart_items',
       cartItems.map((e) => jsonEncode(e.toJson())).toList(),
     );
+    log(result.toString());
     if (result) {
       notifyListeners();
     }
@@ -55,10 +58,23 @@ class CartNotifier extends ChangeNotifier {
   }
 
   void removeItem(int id) async {
+    final pref = await _pref;
     cartItems.remove(cartItems.firstWhere((element) => element.id == id));
     final result = await pref.setStringList(
       'cart_items',
       cartItems.map((e) => jsonEncode(e.toJson())).toList(),
+    );
+    if (result) {
+      notifyListeners();
+    }
+  }
+
+  void deleteCart() async {
+    final pref = await _pref;
+    cartItems.clear();
+    final result = await pref.setStringList(
+      'cart_items',
+      [],
     );
     if (result) {
       notifyListeners();
@@ -98,17 +114,25 @@ class CartNotifier extends ChangeNotifier {
   double getSubTotal() {
     double subTotal = 0.0;
     for (var item in cartItems) {
-      subTotal = double.parse(item.price * item.quantity);
+      subTotal = (double.parse(item.price.toString()) *
+              double.parse(item.quantity.toString())) +
+          subTotal;
     }
-    notifyListeners();
+    // notifyListeners();
     return subTotal;
   }
 
   void updatePrice(int itemId, int quantity) {
+    log('updated price called');
+    log(cartItems.toString());
     for (final item in cartItems) {
+      log(itemId.toString());
+      log(item.id.toString());
       if (item.id == itemId) {
         item.productPriceTotal = item.price * quantity;
         item.quantity = quantity;
+        log(item.productPriceTotal.toString());
+        log(item.quantity.toString());
         notifyListeners();
       }
     }

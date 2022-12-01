@@ -6,6 +6,7 @@ import 'package:event_app/Models/book_order/book_order_body_model.dart';
 import 'package:event_app/Models/book_order/book_order_reponse_model.dart';
 import 'package:event_app/Models/delivery/delivery_body_model.dart';
 import 'package:event_app/Models/delivery/delivery_reponse_model.dart';
+import 'package:event_app/Models/razorPay/razorpay_model.dart';
 import 'package:event_app/Models/tracking_order/tracking_order_response_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:nb_utils/nb_utils.dart' hide log;
@@ -505,17 +506,15 @@ class ApiManager {
     }
   }
 
-  Future<OrderCreateResponse> createOrder(
-      OrderCreateModel model,
-      String token,
-      String payment,
-      String subTotal,
-      String totalShipping,
-      String total,
-      String couponDiscount,
-      String couponId,
-      String shippingId,
-      String billingId) async {
+  Future<OrderCreateResponse> createOrder({
+    required OrderCreateModel model,
+    required String token,
+    required String payment,
+    required String subTotal,
+    required String totalShipping,
+    required String total,
+    required String paymentId,
+  }) async {
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
 
     String? billingFirstName = _prefs.getString('firstName') ?? "Not Specified";
@@ -717,6 +716,37 @@ class ApiManager {
     }
   }
 
+  Future<RazorPayModel?> getRazorPayId({
+    required double amount,
+    required String token,
+  }) async {
+    final response = await http.post(
+      Uri.parse(apiUrl + 'genraterazorpayorder'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        "amount": amount,
+        "currency": "INR",
+      }),
+    );
+    log('RAZORPAY BODY : ');
+    log(json.encode({
+      "amount": amount,
+      "currency": "INR",
+    }));
+    final data = jsonDecode(response.body);
+    log('RAZORPAY RESPONSE : $data');
+    if (response.statusCode == 200) {
+      final _razorPay = RazorPayModel.fromMap(data);
+      return _razorPay;
+    } else {
+      return null;
+    }
+  }
+
   Future<SendResetCodeModel?> cancelOrder({
     required String orderDetailsId,
     required String description,
@@ -770,27 +800,27 @@ class ApiManager {
     }
   }
 
-  Future<DeliveryResponseModel?> getDeliveryDetails({
+  Future<DeliveryResponseModel?> getShippingCharges({
     required DeliveryBodyModel details,
+    required String token,
   }) async {
     final response = await http.post(
-      Uri.parse('http://tca.paapos.in/api/Operations/getRateCard'),
+      Uri.parse(apiUrl + 'get_rate_card'),
       headers: {
-        'Accept': '*/*',
-        'Authkey': 'mohitarfkjf8g2weqkaozy',
-        // 'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
       },
-      body: details.toMap(),
+      body: details.toJson(),
     );
-    log('BODY: ' + details.toMap().toString());
+    log('Shipping Details BODY: ' + details.toJson());
     final data = jsonDecode(response.body) as Map<String, dynamic>;
-    log('RESPONSE: ' + data.toString());
+    log('Shipping Details RESPONSE: ' + data.toString());
     if (response.statusCode == 200) {
-      if (data.containsKey('ReplyMsg') && data['ReplyMsg'] == 'Data Found') {
-        final dataList = data['Providers'] as List<Map<String, dynamic>>;
-        List<DeliveryResponseModel> deliveryData =
-            dataList.map((e) => DeliveryResponseModel.fromMap(e)).toList();
-        return deliveryData.first;
+      if (data.containsKey('success') && data['success'] == true) {
+        DeliveryResponseModel deliveryData =
+            DeliveryResponseModel.fromMap(data);
+        return deliveryData;
       } else {
         return null;
       }

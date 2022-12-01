@@ -1,80 +1,47 @@
 import 'dart:convert';
 
-class DeliveryBodyModel {
-  final int pinCode;
-  final int productLenght;
-  final int productWidth;
-  final int productHeight;
-  final double codAmount;
-  final int wt;
-  final String cT;
-  final String billingCity;
-  final String billingState;
-  final String shippingLocalArea;
-  final String shippingCity;
-  final String shippingState;
+import 'package:event_app/Models/order_create_model.dart';
 
-  DeliveryBodyModel({
-    required this.pinCode,
-    this.productLenght = 0,
-    this.productWidth = 0,
-    this.productHeight = 0,
-    required this.codAmount,
-    this.wt = 1,
-    this.cT = "S",
-    this.billingCity = "Noida",
-    this.billingState = 'Uttar pradesh',
-    required this.shippingLocalArea,
-    required this.shippingCity,
+class DeliveryBodyModel {
+  final String addressLineOne;
+  final String shippingPost;
+  final String shippingTown;
+  final String shippingState;
+  final String subTotal;
+  final List<Carts> cart;
+  const DeliveryBodyModel({
+    required this.addressLineOne,
+    required this.shippingPost,
+    required this.shippingTown,
     required this.shippingState,
+    required this.subTotal,
+    required this.cart,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'Pincode': pinCode.toString(),
-      'L': productLenght.toString(),
-      'W': productWidth.toString(),
-      'H': productHeight.toString(),
-      'CodAmount': codAmount.toString(),
-      'Wt': wt.toString(),
-      'CT': cT,
-      'SCity': billingCity,
-      'SState': billingState,
-      'RLocalArea': shippingLocalArea,
-      'RCity': shippingCity,
-      'RState': shippingState,
+      'address_line_one': addressLineOne,
+      'shipping_post': shippingPost,
+      'shipping_town': shippingTown,
+      'shipping_state': shippingState,
+      'subTotal': subTotal,
+      'cart': cart.map((x) => x.toMap()).toList(),
     };
+  }
+
+  factory DeliveryBodyModel.fromMap(Map<String, dynamic> map) {
+    return DeliveryBodyModel(
+      addressLineOne: map['address_line_one'] ?? '',
+      shippingPost: map['shipping_post'] ?? '',
+      shippingTown: map['shipping_town'] ?? '',
+      shippingState: map['shipping_state'] ?? '',
+      subTotal: map['subTotal'] ?? '',
+      cart: List<Carts>.from(map['cart']?.map((x) => Carts.fromMap(x))),
+    );
   }
 
   String toJson() => json.encode(toMap());
 
-  DeliveryBodyModel copyWith({
-    int? pinCode,
-    int? productLenght,
-    int? productWidth,
-    int? productHeight,
-    double? codAmount,
-    int? wt,
-    String? cT,
-    String? billingCity,
-    String? billingState,
-    String? shippingLocalArea,
-    String? shippingCity,
-    String? shippingState,
-  }) {
-    return DeliveryBodyModel(
-      pinCode: pinCode ?? this.pinCode,
-      productLenght: productLenght ?? this.productLenght,
-      productWidth: productWidth ?? this.productWidth,
-      productHeight: productHeight ?? this.productHeight,
-      codAmount: codAmount ?? this.codAmount,
-      wt: wt ?? this.wt,
-      cT: cT ?? this.cT,
-      billingCity: billingCity ?? this.billingCity,
-      billingState: billingState ?? this.billingState,
-      shippingLocalArea: shippingLocalArea ?? this.shippingLocalArea,
-      shippingCity: shippingCity ?? this.shippingCity,
-      shippingState: shippingState ?? this.shippingState,
-    );
-  }
+  factory DeliveryBodyModel.fromJson(String source) =>
+      DeliveryBodyModel.fromMap(json.decode(source));
 }

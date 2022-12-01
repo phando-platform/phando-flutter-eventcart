@@ -77,7 +77,7 @@ class CartItemNotifier extends ChangeNotifier {
   }
 
   // Let's allow the UI to add todos.
-  void addUiItem(CartItemUi item) async {
+  Future<void> addUiItem(CartItemUi item) async {
     cartItemUis.add(item);
     pref = await SharedPreferences.getInstance();
     final result = await pref.setStringList(
@@ -97,6 +97,17 @@ class CartItemNotifier extends ChangeNotifier {
     final result = await pref.setStringList(
       'cart_ui_items',
       cartItemUis.map((e) => jsonEncode(e)).toList(),
+    );
+    if (result) {
+      notifyListeners();
+    }
+  }
+
+  void deleteUICart() async {
+    cartItemUis.clear();
+    final result = await pref.setStringList(
+      'cart_ui_items',
+      [],
     );
     if (result) {
       notifyListeners();

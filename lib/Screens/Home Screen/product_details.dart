@@ -306,7 +306,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ),
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 if (token != 'Guest' && token != 'Not Found') {
                                   if (ref.read(cartProvider.notifier).checkCart(
                                           snapshot.data?.value?.id ?? 10,
@@ -330,10 +330,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                   'Null') ==
                                       false) {
                                     Cart cartItem = Cart(
-                                        id: snapshot.data?.value?.id ?? 'Null',
+                                        id: snapshot.data?.value?.id ?? 0,
                                         price: snapshot
                                                 .data?.value?.salePrice ??
-                                            0.0,
+                                            0,
                                         quantity: productQuantity,
                                         size:
                                             snapshot.data!.value!.sizes!.isEmpty
@@ -392,15 +392,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         minimumQtd: snapshot
                                             .data!.value!.minimumQty
                                             .toString());
-                                    ref
-                                        .read(cartProvider.notifier)
+                                    await ref
+                                        .read(cartProvider)
                                         .addItem(cartItem);
-                                    ref
-                                        .read(cartItemUiProvider.notifier)
+                                    await ref
+                                        .read(cartItemUiProvider)
                                         .addUiItem(cartUi);
-                                    ref
-                                        .read(cartItemUiProvider.notifier)
-                                        .updateQuantity(
+                                    ref.read(cartItemUiProvider).updateQuantity(
                                           cartUi.id ?? 0,
                                           minimumQuantity: ref
                                               .read(cartItemUiProvider)
@@ -411,15 +409,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                                               .minimumQtd
                                               .toInt(),
                                         );
-                                    ref.read(cartProvider.notifier).updatePrice(
-                                          cartUi.id ?? 0,
+                                    ref.read(cartProvider).updatePrice(
+                                          cartItem.id ?? 'Null',
                                           ref
                                               .read(cartItemUiProvider)
                                               .cartItemUis[ref
                                                   .read(cartItemUiProvider)
                                                   .cartItemUis
                                                   .indexOf(cartUi)]
-                                              .productQuantity!
+                                              .minimumQtd!
                                               .toInt(),
                                         );
                                     const CartScreen().launch(context);

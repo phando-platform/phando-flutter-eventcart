@@ -12,9 +12,11 @@ class UpdateShipping extends StatefulWidget {
     Key? key,
     required this.shipping,
     required this.isShipping,
+    required this.callback,
   }) : super(key: key);
   final ShippingUpdate shipping;
   final bool isShipping;
+  final Function(ShippingUpdate)? callback;
 
   @override
   _UpdateShippingState createState() => _UpdateShippingState();
@@ -335,6 +337,14 @@ class _UpdateShippingState extends State<UpdateShipping> {
                               );
                             EasyLoading.showSuccess(
                                 'Shipping Address Successfully Saved');
+                            if (widget.callback != null) {
+                              widget.callback?.call(ShippingUpdate(
+                                addressOne: addressOneController.text,
+                                postCode: postalController.text,
+                                state: stateController.text,
+                                town: cityController.text,
+                              ));
+                            }
                             Navigator.pop(context);
                           } else {
                             EasyLoading.showError(shipping.message.toString());
@@ -387,7 +397,7 @@ class _UpdateShippingState extends State<UpdateShipping> {
                             EasyLoading.showSuccess(
                               'Shipping Address Successfully Saved',
                             );
-                            Navigator.pop(context);
+                            Navigator.of(context).pop();
                           } else {
                             EasyLoading.showError(billing.message.toString());
                           }

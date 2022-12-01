@@ -471,14 +471,9 @@ class _CartScreenState extends State<CartScreen> {
                               const Spacer(),
                               Text(
                                 currencyIcon +
-                                    (discount > 0.0
-                                            ? ref
-                                                    .read(cartProvider.notifier)
-                                                    .getTotalCharge() -
-                                                discount
-                                            : ref
-                                                .read(cartProvider.notifier)
-                                                .getTotalCharge())
+                                    ref
+                                        .read(cartProvider.notifier)
+                                        .getSubTotal()
                                         .toString(),
                                 style: kTextStyle,
                               ),
@@ -487,24 +482,24 @@ class _CartScreenState extends State<CartScreen> {
                           const SizedBox(
                             height: 5.0,
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                'Delivery Fee: ',
-                                style:
-                                    kTextStyle.copyWith(color: kGreyTextColor),
-                              ),
-                              const Spacer(),
-                              Text(
-                                currencyIcon +
-                                    ref
-                                        .read(cartProvider.notifier)
-                                        .getShippingCharge()
-                                        .toString(),
-                                style: kTextStyle,
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   children: [
+                          //     Text(
+                          //       'Delivery Fee: ',
+                          //       style:
+                          //           kTextStyle.copyWith(color: kGreyTextColor),
+                          //     ),
+                          //     const Spacer(),
+                          //     Text(
+                          //       currencyIcon +
+                          //           ref
+                          //               .read(cartProvider.notifier)
+                          //               .getShippingCharge()
+                          //               .toString(),
+                          //       style: kTextStyle,
+                          //     ),
+                          //   ],
+                          // ),
                           Row(
                             children: [
                               Expanded(
@@ -527,28 +522,28 @@ class _CartScreenState extends State<CartScreen> {
                           const SizedBox(
                             height: 5.0,
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                'Total Amount: ',
-                                style: kTextStyle.copyWith(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const Spacer(),
-                              Text(
-                                currencyIcon +
-                                    ((ref
-                                                    .read(cartProvider.notifier)
-                                                    .getTotalCharge() -
-                                                discount) +
-                                            ref
-                                                .read(cartProvider.notifier)
-                                                .getShippingCharge())
-                                        .toString(),
-                                style: kTextStyle,
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   children: [
+                          //     Text(
+                          //       'Total Amount: ',
+                          //       style: kTextStyle.copyWith(
+                          //           fontWeight: FontWeight.bold),
+                          //     ),
+                          //     const Spacer(),
+                          //     Text(
+                          //       currencyIcon +
+                          //           ((ref
+                          //                           .read(cartProvider.notifier)
+                          //                           .getTotalCharge() -
+                          //                       discount) +
+                          //                   ref
+                          //                       .read(cartProvider.notifier)
+                          //                       .getShippingCharge())
+                          //               .toString(),
+                          //       style: kTextStyle,
+                          //     ),
+                          //   ],
+                          // ),
                           const SizedBox(
                             height: 20.0,
                           ),
@@ -560,10 +555,12 @@ class _CartScreenState extends State<CartScreen> {
                               if (token != 'Guest') {
                                 double weight = 0;
                                 OrderReview(
-                                  totalAmount: (ref
+                                  subTotalAmount: (ref
                                           .read(cartProvider.notifier)
                                           .getTotalCharge() -
                                       discount),
+                                  cart: ref.watch(cartProvider).getItems(),
+                                  reference: ref,
                                 ).launch(context);
                               } else {
                                 toast('Please sign In to Checkout');

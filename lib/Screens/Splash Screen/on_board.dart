@@ -36,17 +36,17 @@ class _OnBoardState extends State<OnBoard> {
     {
       "icon": 'images/new_onboard_1.png',
       "title": 'Welcome to Event App',
-      "description": 'Lorem ipsum dolor sit amet, consectetuer adipisci elit',
+      "description": '',
     },
     {
       "icon": 'images/new_onboard_2.png',
-      "title": 'Find Your Fa vorite Item Here',
-      "description": 'Lorem ipsum dolor sit amet, consectetuer adipisci elit',
+      "title": 'Find Your Favorite Item Here',
+      "description": '',
     },
     {
       "icon": 'images/new_onboard_3.png',
       "title": 'Best Shopping Experience',
-      "description": 'Lorem ipsum dolor sit amet, consectetuer adipisci elit',
+      "description": '',
     },
   ];
 

@@ -1,21 +1,17 @@
 import 'dart:developer';
-import 'dart:math' hide log;
 
-import 'package:event_app/Models/book_order/book_order_body_model.dart';
-import 'package:event_app/Models/book_order/book_order_product_model.dart';
 import 'package:event_app/Models/delivery/delivery_body_model.dart';
 import 'package:event_app/Models/delivery/delivery_reponse_model.dart';
+import 'package:event_app/Screens/payment_helpers/create_order_helper.dart';
+import 'package:event_app/Screens/payment_helpers/razorpay_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../../GlobalComponents/button_global.dart';
 import '../../Models/order_create_model.dart';
 import '../../Models/profile_model.dart';
-import '../../Screens/Authentication/add_billing.dart';
-import './order_successfull.dart';
 import '../../Services/api_manager.dart';
 import '../../Services/cart_item_notifier.dart';
 import '../../Services/discount_provider.dart';
@@ -28,32 +24,94 @@ import '../Profile/order_list.dart';
 class OrderReview extends StatefulWidget {
   const OrderReview({
     Key? key,
-    required this.totalAmount,
+    required this.subTotalAmount,
+    required this.cart,
+    required this.reference,
   }) : super(key: key);
   @override
   _OrderReviewState createState() => _OrderReviewState();
 
-  final double totalAmount;
+  final double subTotalAmount;
+  final List<Carts> cart;
+  final WidgetRef reference;
 }
 
 class _OrderReviewState extends State<OrderReview> {
   final ApiManager _apiManager = ApiManager();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   String token = '';
-  bool isPaypal = false;
   bool isCod = true;
-  bool isRazorpay = false;
-  String orderNo = '';
   int? country;
   String? mobile;
+  DeliveryResponseModel? updatedAmount;
 
   Future<void> getToken() async {
     SharedPreferences preferences = await _prefs;
-    setState(() {
-      token = preferences.getString('token') ?? "";
-      country = preferences.getInt('country');
-      mobile = preferences.getString('phone');
-    });
+
+    token = preferences.getString('token') ?? "";
+    country = preferences.getInt('country');
+    mobile = preferences.getString('phone');
+
+    final profile = await _apiManager.getProfileInfo(token);
+
+    final finalAmount = await _apiManager.getShippingCharges(
+      details: DeliveryBodyModel(
+        addressLineOne: profile.value?.shipping?.addressLineOne ?? '',
+        shippingPost: profile.value?.shipping?.shippingPost ?? '',
+        shippingTown: profile.value?.shipping?.shippingTown ?? '',
+        shippingState: profile.value?.shipping?.shippingState ?? '',
+        subTotal: widget.subTotalAmount.toString(),
+        cart: widget.cart,
+      ),
+      token: token,
+    );
+
+    if (finalAmount?.success ?? false) {
+      updatedAmount = finalAmount;
+    }
+
+    setState(() {});
+
+    _razorpay = Razorpay();
+
+    OrderCreateModel model = OrderCreateModel(
+      couponId: "1",
+      couponDiscount: "0.0",
+      subTotal: updatedAmount?.value.subtotal.toString(),
+      totalShipping: updatedAmount?.value.shippingCost.toString(),
+      total: updatedAmount?.value.grandTotal.toString(),
+      shippingAddressId: "0",
+      billingAddressId: "0",
+      cart: widget.cart,
+      currency: Currency(
+        id: '7',
+        exchangeRate: '1',
+      ),
+      paymentBy: 'razorpay',
+    );
+
+    RazorPayMethods.initialise(
+      razorpay: _razorpay,
+      context: context,
+      apiManager: _apiManager,
+      model: model,
+      token: token,
+      updatedAmount: updatedAmount,
+      successCallbackFunction: () {
+        EasyLoading.showSuccess('Order Placed Successfully');
+        widget.reference.read(cartProvider).deleteCart();
+        widget.reference.read(cartItemUiProvider).deleteUICart();
+        setState(() {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Home(),
+            ),
+            ModalRoute.withName("/Home"),
+          );
+        });
+      },
+    );
   }
 
   void saveBillingAndShippingData({
@@ -133,54 +191,17 @@ class _OrderReviewState extends State<OrderReview> {
   }
 
   late Razorpay _razorpay;
+
   @override
   void initState() {
     super.initState();
     getToken();
-    _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
   @override
   void dispose() {
     super.dispose();
-    _razorpay.clear();
-  }
-
-  void openCheckout(double amount) async {
-    var options = {
-      'key': razorPayApiKey,
-      'amount': amount * 100,
-      'name': companyName,
-      'description': companyDescription,
-      'currency': currency,
-    };
-
-    try {
-      _razorpay.open(options);
-    } catch (e) {
-      print('catch block' + " " + e.toString());
-    }
-  }
-
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print('Success Response Message: ${response.paymentId}');
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    print('Error Response Message: $response');
-    /* Fluttertoast.showToast(
-        msg: "ERROR: " + response.code.toString() + " - " + response.message!,
-        toastLength: Toast.LENGTH_SHORT); */
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    print('External SDK Response: $response');
-    /* Fluttertoast.showToast(
-        msg: "EXTERNAL_WALLET: " + response.walletName!,
-        toastLength: Toast.LENGTH_SHORT); */
+    RazorPayMethods.dispose(razorpay: _razorpay);
   }
 
   @override
@@ -201,28 +222,11 @@ class _OrderReviewState extends State<OrderReview> {
           body: FutureBuilder<ProfileModel>(
             future: _apiManager.getProfileInfo(token),
             builder: (BuildContext context, snapshot) {
-              if (snapshot.hasData) {
+              if (snapshot.hasData && snapshot.data?.value?.shipping != null) {
                 saveBillingAndShippingData(
                   billing: snapshot.data?.value?.billing,
                   shipping: snapshot.data?.value?.shipping,
                 );
-                if (snapshot.data?.value?.shipping == null) {
-                  return Center(
-                    child: SizedBox(
-                      height: 60.0,
-                      child: ButtonGlobal(
-                        buttontext: 'Add Shipping Id',
-                        buttonDecoration:
-                            kButtonDecoration.copyWith(color: kMainColor),
-                        onPressed: () => AddBilling(
-                          country: country,
-                          mobile: mobile,
-                          status: 2,
-                        ).launch(context),
-                      ),
-                    ),
-                  );
-                }
                 return SingleChildScrollView(
                   child: Column(
                     children: [
@@ -297,6 +301,7 @@ class _OrderReviewState extends State<OrderReview> {
                                 UpdateShipping(
                                   shipping: shipUpdate,
                                   isShipping: false,
+                                  callback: null,
                                 ).launch(context).then((_) {
                                   setState(() {});
                                 });
@@ -358,12 +363,56 @@ class _OrderReviewState extends State<OrderReview> {
                                   state: snapshot
                                       .data?.value?.shipping?.shippingState,
                                 );
-                                UpdateShipping(
-                                  shipping: shipUpdate,
-                                  isShipping: true,
-                                ).launch(context).then((_) {
-                                  setState(() {});
-                                });
+                                Navigator.of(context)
+                                    .push<ShippingUpdate>(MaterialPageRoute(
+                                  builder: (context) => UpdateShipping(
+                                    shipping: shipUpdate,
+                                    isShipping: true,
+                                    callback: (value) async {
+                                      final finalAmount =
+                                          await _apiManager.getShippingCharges(
+                                        details: DeliveryBodyModel(
+                                          addressLineOne:
+                                              value.addressOne ?? '',
+                                          shippingPost: value.postCode ?? '',
+                                          shippingTown: value.town ?? '',
+                                          shippingState: value.state ?? '',
+                                          subTotal:
+                                              widget.subTotalAmount.toString(),
+                                          cart: widget.cart,
+                                        ),
+                                        token: token,
+                                      );
+                                      if (finalAmount?.success ?? false) {
+                                        updatedAmount = finalAmount;
+                                      }
+                                      setState(() {});
+                                    },
+                                  ),
+                                ));
+                                // UpdateShipping(
+                                //   shipping: shipUpdate,
+                                //   isShipping: true,
+                                // ).launch(context).then((v) async {
+                                //   final value = v as ShippingUpdate;
+                                //   final finalAmount =
+                                //       await _apiManager.getShippingCharges(
+                                //     details: DeliveryBodyModel(
+                                //       addressLineOne: value.addressOne ?? '',
+                                //       shippingPost: value.postCode ?? '',
+                                //       shippingTown: value.town ?? '',
+                                //       shippingState: value.state ?? '',
+                                //       subTotal:
+                                //           widget.subTotalAmount.toString(),
+                                //       cart: widget.cart,
+                                //     ),
+                                //     token: token,
+                                //   );
+                                //   if (finalAmount?.success ?? false) {
+                                //     updatedAmount = finalAmount;
+                                //   }
+                                //   setState(() {});
+                                // });
                               },
                             ),
                             const SizedBox(
@@ -414,13 +463,7 @@ class _OrderReviewState extends State<OrderReview> {
                                     onChanged: (val) {
                                       setState(() {
                                         isCod = val!;
-                                        if (isCod) {
-                                          isRazorpay = false;
-                                          isPaypal = false;
-                                        } else {
-                                          isRazorpay = false;
-                                          isPaypal = true;
-                                        }
+                                        log(isCod.toString());
                                       });
                                     }),
                               ),
@@ -498,17 +541,11 @@ class _OrderReviewState extends State<OrderReview> {
                                   maxLines: 2,
                                 ),
                                 trailing: Checkbox(
-                                    value: isRazorpay,
+                                    value: !isCod,
                                     onChanged: (val) {
                                       setState(() {
-                                        isRazorpay = val!;
-                                        if (isRazorpay) {
-                                          isCod = false;
-                                          isPaypal = false;
-                                        } else {
-                                          isPaypal = false;
-                                          isCod = true;
-                                        }
+                                        isCod = !isCod;
+                                        log(isCod.toString());
                                       });
                                     }),
                               ),
@@ -546,7 +583,7 @@ class _OrderReviewState extends State<OrderReview> {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      '$currencyIcon ${((ref.read(cartProvider.notifier).getTotalCharge() - discount) + ref.read(cartProvider.notifier).getShippingCharge()).toString()}',
+                                      '$currencyIcon ${updatedAmount?.value.grandTotal ?? 0 - discount}',
                                       style: kTextStyle.copyWith(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -556,23 +593,15 @@ class _OrderReviewState extends State<OrderReview> {
                                   height: 20.0,
                                 ),
                                 ButtonGlobal(
-                                  buttontext: 'Submit Order',
+                                  buttontext:
+                                      isCod ? 'Submit Order' : 'Proceed to Pay',
                                   buttonDecoration: kButtonDecoration.copyWith(
                                       color: kMainColor),
                                   onPressed: () async {
                                     try {
                                       EasyLoading.show(
-                                        status: 'Creating Order',
+                                        status: 'Processing Order',
                                       );
-                                      double subtotal = (ref
-                                              .read(cartProvider.notifier)
-                                              .getTotalCharge() -
-                                          discount);
-                                      double shipping = ref
-                                          .read(cartProvider.notifier)
-                                          .getShippingCharge();
-                                      double total = (subtotal + shipping);
-
                                       Currency currency =
                                           Currency(exchangeRate: '1', id: '1');
                                       OrderCreateModel model = OrderCreateModel(
@@ -581,9 +610,13 @@ class _OrderReviewState extends State<OrderReview> {
                                             info.discountAmount == null
                                                 ? "0.0"
                                                 : discount.toString(),
-                                        subTotal: subtotal.toString(),
-                                        totalShipping: shipping.toString(),
-                                        total: total.toString(),
+                                        subTotal: updatedAmount?.value.subtotal
+                                            .toString(),
+                                        totalShipping: updatedAmount
+                                            ?.value.shippingCost
+                                            .toString(),
+                                        total: updatedAmount?.value.grandTotal
+                                            .toString(),
                                         shippingAddressId: snapshot
                                             .data?.value?.shipping?.id
                                             .toString(),
@@ -594,294 +627,88 @@ class _OrderReviewState extends State<OrderReview> {
                                         currency: currency,
                                         paymentBy: 'cod',
                                       );
-                                      final order =
-                                          await _apiManager.createOrder(
-                                        model,
-                                        token,
-                                        isCod ? 'cod' : 'prepaid',
-                                        subtotal.toString(),
-                                        shipping.toString(),
-                                        total.toString(),
-                                        info.discountAmount == null
-                                            ? "0.0"
-                                            : discount.toString(),
-                                        info.couponId ?? "0",
-                                        snapshot.data?.value?.shipping?.id
-                                                .toString() ??
-                                            '',
-                                        snapshot.data?.value?.billing?.id
-                                                .toString() ??
-                                            '',
-                                      );
-                                      if (order.success == true) {
-                                        EasyLoading.showSuccess(
-                                            'Create Successfull');
-                                        ref
-                                            .read(cartProvider)
-                                            .cartItems
-                                            .clear();
-                                        ref
-                                            .read(cartItemUiProvider)
-                                            .cartItemUis
-                                            .clear();
-                                        setState(() {
-                                          //  orderNo = order.value?.orders?.orderNo ?? '';
-                                          orderNo = '';
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const Home(),
-                                              ),
-                                              ModalRoute.withName("/Home"));
-                                        });
+                                      // If the order is COD
+                                      if (isCod) {
+                                        final result =
+                                            await CreateOrderHelper.placeOrder(
+                                          token: token,
+                                          apiManager: _apiManager,
+                                          paymentBy: 'cod',
+                                          paymentId: '',
+                                          model: model,
+                                          amount: updatedAmount,
+                                        );
+                                        if (result) {
+                                          EasyLoading.showSuccess(
+                                            'Order Placed Successfully',
+                                          );
+                                          ref.read(cartProvider).deleteCart();
+                                          ref
+                                              .read(cartItemUiProvider)
+                                              .deleteUICart();
+                                          setState(() {
+                                            Navigator.pushAndRemoveUntil(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const Home(),
+                                                ),
+                                                ModalRoute.withName("/Home"));
+                                          });
+                                        } else {
+                                          EasyLoading.showError(
+                                            'Can not place order at the moment!\nPlease try again later.',
+                                          );
+                                        }
                                       } else {
-                                        EasyLoading.showError(
-                                            order.message.toString());
+                                        final prefs = await _prefs;
+                                        String? billingPhone =
+                                            prefs.getString('billing_phone') ??
+                                                prefs.getString('phone') ??
+                                                '0000000000';
+                                        String? billingEmail =
+                                            prefs.getString('billing_email') ??
+                                                "Not Specified";
+                                        String? billingFirstName =
+                                            prefs.getString('firstName') ??
+                                                "Not Specified";
+                                        String? billingLastName =
+                                            prefs.getString('lastName') ??
+                                                "Not Specified";
+
+                                        final razorPayDetails =
+                                            await _apiManager.getRazorPayId(
+                                          amount:
+                                              updatedAmount?.value.grandTotal ??
+                                                  0,
+                                          token: token,
+                                        );
+                                        if (razorPayDetails != null) {
+                                          RazorPayMethods.openRazopay(
+                                            razorpay: _razorpay,
+                                            orderId: razorPayDetails.orderId,
+                                            key: razorPayDetails.razorpayKey,
+                                            amount: (updatedAmount
+                                                        ?.value.grandTotal ??
+                                                    0)
+                                                .toString(),
+                                            contact: billingPhone,
+                                            email: billingEmail,
+                                            name:
+                                                '$billingFirstName $billingLastName',
+                                          );
+                                        } else {
+                                          EasyLoading.showError(
+                                            'Unable to connect to Razorpay at the moment.\nPlease try again later.',
+                                          );
+                                        }
                                       }
                                     } catch (e, strackTrace) {
                                       log(strackTrace.toString());
                                       EasyLoading.showError(e.toString());
                                     }
                                   },
-                                ).visible(isCod),
-                                ButtonGlobal(
-                                    buttontext: 'Pay with Paypal',
-                                    buttonDecoration: kButtonDecoration
-                                        .copyWith(color: kMainColor),
-                                    onPressed: () {
-                                      double subtotal = (ref
-                                              .read(cartProvider.notifier)
-                                              .getTotalCharge() -
-                                          discount);
-                                      double shipping = ref
-                                          .read(cartProvider.notifier)
-                                          .getShippingCharge();
-                                      double total = (subtotal + shipping);
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              UsePaypal(
-                                                  sandboxMode: sandbox,
-                                                  clientId: paypalClientId,
-                                                  secretKey: paypalClientSecret,
-                                                  returnURL:
-                                                      "https://samplesite.com/return",
-                                                  cancelURL:
-                                                      "https://samplesite.com/cancel",
-                                                  transactions: [
-                                                    {
-                                                      "amount": {
-                                                        "total": '$total',
-                                                        "currency": currency,
-                                                        "details": {
-                                                          "subtotal":
-                                                              '$subtotal',
-                                                          "shipping":
-                                                              '$shipping',
-                                                          "shipping_discount": 0
-                                                        }
-                                                      },
-                                                      "description":
-                                                          "The payment transaction description.",
-                                                      // "payment_options": {
-                                                      //   "allowed_payment_method":
-                                                      //       "INSTANT_FUNDING_SOURCE"
-                                                      // },
-                                                      "item_list": {
-                                                        "items": [
-                                                          {
-                                                            "name":
-                                                                "A demo product",
-                                                            "quantity": 1,
-                                                            "price":
-                                                                '$subtotal',
-                                                            "currency": currency
-                                                          }
-                                                        ],
-
-                                                        // shipping address is not required though
-                                                        "shipping_address": {
-                                                          "recipient_name":
-                                                              snapshot
-                                                                  .data
-                                                                  ?.value
-                                                                  ?.shipping
-                                                                  ?.shippingName,
-                                                          "line1": snapshot
-                                                              .data
-                                                              ?.value
-                                                              ?.shipping
-                                                              ?.addressLineOne,
-                                                          "line2": snapshot
-                                                              .data
-                                                              ?.value
-                                                              ?.shipping
-                                                              ?.addressLineTwo,
-                                                          "city": snapshot
-                                                              .data
-                                                              ?.value
-                                                              ?.shipping
-                                                              ?.shippingTown,
-                                                          "country_code":
-                                                              snapshot
-                                                                  .data
-                                                                  ?.value
-                                                                  ?.shipping
-                                                                  ?.country
-                                                                  ?.isoNo,
-                                                          "postal_code": snapshot
-                                                              .data
-                                                              ?.value
-                                                              ?.shipping
-                                                              ?.shippingPost,
-                                                          "phone": snapshot
-                                                              .data
-                                                              ?.value
-                                                              ?.shipping
-                                                              ?.shippingMobile,
-                                                        },
-                                                      }
-                                                    }
-                                                  ],
-                                                  note:
-                                                      "Contact us for any questions on your order.",
-                                                  onSuccess:
-                                                      (Map params) async {
-                                                    try {
-                                                      EasyLoading.show(
-                                                          status:
-                                                              'Creating Order');
-                                                      double subtotal = (ref
-                                                              .read(cartProvider
-                                                                  .notifier)
-                                                              .getTotalCharge() -
-                                                          discount);
-                                                      double shipping = ref
-                                                          .read(cartProvider
-                                                              .notifier)
-                                                          .getShippingCharge();
-                                                      double total =
-                                                          (subtotal + shipping);
-
-                                                      Currency currency =
-                                                          Currency(
-                                                              exchangeRate: '1',
-                                                              id: '1');
-                                                      OrderCreateModel model = OrderCreateModel(
-                                                          couponId: info.couponId ??
-                                                              "1",
-                                                          couponDiscount:
-                                                              info.discountAmount ==
-                                                                      null
-                                                                  ? "0.0"
-                                                                  : discount
-                                                                      .toString(),
-                                                          subTotal: subtotal
-                                                              .toString(),
-                                                          totalShipping: shipping
-                                                              .toString(),
-                                                          total:
-                                                              total.toString(),
-                                                          shippingAddressId:
-                                                              snapshot
-                                                                  .data
-                                                                  ?.value
-                                                                  ?.shipping
-                                                                  ?.id
-                                                                  .toString(),
-                                                          billingAddressId:
-                                                              snapshot
-                                                                  .data
-                                                                  ?.value
-                                                                  ?.billing
-                                                                  ?.id
-                                                                  .toString(),
-                                                          cart: cartItems,
-                                                          currency: currency,
-                                                          paymentBy: 'paypal');
-                                                      final order = await _apiManager.createOrder(
-                                                          model,
-                                                          token,
-                                                          'paypal',
-                                                          subtotal.toString(),
-                                                          shipping.toString(),
-                                                          total.toString(),
-                                                          info.discountAmount ==
-                                                                  null
-                                                              ? "0.0"
-                                                              : discount
-                                                                  .toString(),
-                                                          info.couponId ?? "0",
-                                                          snapshot.data?.value
-                                                                  ?.shipping?.id
-                                                                  .toString() ??
-                                                              '',
-                                                          snapshot.data?.value
-                                                                  ?.billing?.id
-                                                                  .toString() ??
-                                                              '');
-                                                      if (order.success ==
-                                                          true) {
-                                                        EasyLoading.showSuccess(
-                                                            'Create Successfull');
-                                                        ref
-                                                            .read(cartProvider)
-                                                            .cartItems
-                                                            .clear();
-                                                        ref
-                                                            .read(
-                                                                cartItemUiProvider)
-                                                            .cartItemUis
-                                                            .clear();
-                                                        setState(() {
-                                                          orderNo = order
-                                                                  .value
-                                                                  ?.orders?[0]
-                                                                  .orderId ??
-                                                              "";
-                                                        });
-                                                      } else {
-                                                        EasyLoading.showError(
-                                                            order.message
-                                                                .toString());
-                                                      }
-                                                    } catch (e) {
-                                                      EasyLoading.showError(
-                                                          e.toString());
-                                                    }
-                                                    OrderSuccessful(
-                                                      orderNumber:
-                                                          orderNo.toString(),
-                                                    ).launch(context);
-                                                  },
-                                                  onError: (error) {
-                                                    EasyLoading.showError(
-                                                        error.toString());
-                                                  },
-                                                  onCancel: (params) {
-                                                    EasyLoading.showError(
-                                                        'Payment Cancelled. Please try again');
-                                                  }),
-                                        ),
-                                      );
-                                    }).visible(isPaypal),
-                                ButtonGlobal(
-                                    buttontext: 'Pay with Razorpay',
-                                    buttonDecoration: kButtonDecoration
-                                        .copyWith(color: kMainColor),
-                                    onPressed: () {
-                                      double subtotal = (ref
-                                              .read(cartProvider.notifier)
-                                              .getTotalCharge() -
-                                          discount);
-                                      double shipping = ref
-                                          .read(cartProvider.notifier)
-                                          .getShippingCharge();
-                                      double total = (subtotal + shipping);
-                                      // double total = 1.0;
-                                      openCheckout(total);
-                                    }).visible(isRazorpay),
+                                ),
                               ],
                             ),
                           );
@@ -891,12 +718,11 @@ class _OrderReviewState extends State<OrderReview> {
                   ),
                 );
               } else {
-                print("Else");
                 return const Center(child: CircularProgressIndicator());
               }
             },
           ),
-        ).visible(orderNo == ''),
+        ).visible(true),
         Scaffold(
           body: Center(
             child: Column(
@@ -923,7 +749,7 @@ class _OrderReviewState extends State<OrderReview> {
                             fontSize: 14.0, color: kGreyTextColor),
                       ),
                       TextSpan(
-                        text: orderNo,
+                        text: '',
                         style: kTextStyle.copyWith(
                             fontSize: 14.0, color: kMainColor),
                       ),
@@ -953,7 +779,7 @@ class _OrderReviewState extends State<OrderReview> {
               ],
             ),
           ),
-        ).visible(orderNo != ''),
+        ).visible(false),
       ],
     );
   }
