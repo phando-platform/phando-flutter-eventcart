@@ -642,9 +642,6 @@ class ApiManager {
     if (response.statusCode == 200) {
       // final data = jsonDecode(response.body);
       try {
-        log(
-          OrderListModel.fromJson(response.body).value?.data?[0].toJson() ?? "",
-        );
         return OrderListModel.fromJson(response.body);
       } catch (error, stackTrace) {
         log(error.toString());
