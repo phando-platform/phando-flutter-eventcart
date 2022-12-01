@@ -1,6 +1,7 @@
 import 'package:event_app/Screens/Home%20Screen/wish_list.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Models/profile_model.dart';
 import './order_list.dart';
@@ -42,6 +43,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       wishLength = wish.value?.data?.length ?? 0;
     });
   }
+
+  List<String> policyList = [
+    'Contact Us',
+    'Privacy Policy',
+    'Return Policy',
+    'Cancellation Policy',
+  ];
 
   @override
   void initState() {
@@ -185,20 +193,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              '05',
-                              style: kTextStyle.copyWith(color: Colors.white),
-                            ),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            Text(
-                              'FAQ',
-                              style: kTextStyle.copyWith(color: Colors.white),
-                            ),
-                          ],
+                        InkWell(
+                          onTap: () async {
+                            final _url = Uri.parse(
+                              'https://eventcart.co.in/faq',
+                            );
+                            if (!await launchUrl(
+                              _url,
+                              mode: LaunchMode.inAppWebView,
+                            )) {
+                              Fluttertoast.showToast(
+                                msg: 'Could not launch $_url',
+                              );
+                            }
+                          },
+                          child: Column(
+                            children: [
+                              Text(
+                                '05',
+                                style: kTextStyle.copyWith(color: Colors.white),
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Text(
+                                'FAQ',
+                                style: kTextStyle.copyWith(color: Colors.white),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -339,6 +362,88 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   //     color: kGreyTextColor,
                   //   ),
                   // ),
+
+                  ...List.generate(
+                    4,
+                    (index) => ListTile(
+                      onTap: () async {
+                        if (policyList[index] == 'Contact Us') {
+                          final _url = Uri.parse(
+                            'https://eventcart.co.in/page/support',
+                          );
+                          if (!await launchUrl(
+                            _url,
+                            mode: LaunchMode.inAppWebView,
+                          )) {
+                            Fluttertoast.showToast(
+                              msg: 'Could not launch $_url',
+                            );
+                          }
+                        } else if (policyList[index] == 'Privacy Policy') {
+                          final _url = Uri.parse(
+                            'https://eventcart.co.in/page/privacy-n-policy',
+                          );
+                          if (!await launchUrl(
+                            _url,
+                            mode: LaunchMode.inAppWebView,
+                          )) {
+                            Fluttertoast.showToast(
+                              msg: 'Could not launch $_url',
+                            );
+                          }
+                        } else if (policyList[index] == 'Return Policy') {
+                          final _url = Uri.parse(
+                            'https://eventcart.co.in/page/order-n-returns',
+                          );
+                          if (!await launchUrl(
+                            _url,
+                            mode: LaunchMode.inAppWebView,
+                          )) {
+                            Fluttertoast.showToast(
+                              msg: 'Could not launch $_url',
+                            );
+                          }
+                        } else if (policyList[index] == 'Cancellation Policy') {
+                          final _url = Uri.parse(
+                            'https://eventcart.co.in/page/cancellation_policy',
+                          );
+                          if (!await launchUrl(
+                            _url,
+                            mode: LaunchMode.inAppWebView,
+                          )) {
+                            Fluttertoast.showToast(
+                              msg: 'Could not launch $_url',
+                            );
+                          }
+                        }
+                      },
+                      leading: Container(
+                        padding: const EdgeInsets.all(5.0),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF6ED),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Icon(
+                          index == 0
+                              ? Icons.contact_phone
+                              : index == 1
+                                  ? Icons.privacy_tip
+                                  : index == 2
+                                      ? Icons.u_turn_left
+                                      : Icons.cancel,
+                          color: kMainColor,
+                        ),
+                      ),
+                      title: Text(
+                        policyList[index],
+                        style: kTextStyle,
+                      ),
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios,
+                        color: kGreyTextColor,
+                      ),
+                    ),
+                  ),
                   ListTile(
                     onTap: () => logout(),
                     leading: Container(
