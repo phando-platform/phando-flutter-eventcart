@@ -209,9 +209,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           },
                           child: Column(
                             children: [
-                              Text(
-                                '05',
-                                style: kTextStyle.copyWith(color: Colors.white),
+                              const Icon(
+                                Icons.question_answer,
+                                color: Colors.white,
                               ),
                               const SizedBox(
                                 height: 5.0,
