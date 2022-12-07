@@ -4,19 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:slide_countdown/slide_countdown.dart';
 
-import '../../GlobalComponents/category_data.dart';
-import '../../GlobalComponents/product_data.dart';
-import '../../Models/home_model.dart';
 import './best_deals.dart';
 import './category_list.dart';
 import './category_product.dart';
 import './popular_products.dart';
 import './product_details.dart';
 import './search_result.dart';
-import '../../Services/api_manager.dart';
 import '../../GlobalComponents/button_global.dart';
+import '../../GlobalComponents/category_data.dart';
+import '../../GlobalComponents/product_data.dart';
+import '../../Models/home_model.dart';
+import '../../Services/api_manager.dart';
 import '../../constant.dart';
 import 'home.dart';
 
@@ -30,8 +29,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchController = TextEditingController();
   final ApiManager _apiManager = ApiManager();
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -76,19 +74,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Text(
                       'No product found in this shop',
-                      style: kTextStyle.copyWith(
-                          color: kTitleColor,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold),
+                      style: kTextStyle.copyWith(color: kTitleColor, fontSize: 20.0, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 20.0,
                     ),
-                    ButtonGlobal(
-                        buttontext: 'Reload App',
-                        buttonDecoration:
-                            kButtonDecoration.copyWith(color: kMainColor),
-                        onPressed: () => const Home().launch(context)),
+                    ButtonGlobal(buttontext: 'Reload App', buttonDecoration: kButtonDecoration.copyWith(color: kMainColor), onPressed: () => const Home().launch(context)),
                   ],
                 );
               }
@@ -109,9 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Expanded(
                               flex: 4,
                               child: Container(
-                                decoration: BoxDecoration(
-                                    color: const Color(0xFFF7F5F2),
-                                    borderRadius: BorderRadius.circular(12)),
+                                decoration: BoxDecoration(color: const Color(0xFFF7F5F2), borderRadius: BorderRadius.circular(12)),
                                 child: AppTextField(
                                   controller: searchController,
                                   textFieldType: TextFieldType.NAME,
@@ -160,17 +149,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       Center(
                         child: CarouselSlider.builder(
                           itemCount: snapshot.data?.value?.banners?.length ?? 0,
-                          itemBuilder: (BuildContext context, int itemIndex,
-                              int pageViewIndex) {
+                          itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
                             return Container(
                               width: context.width(),
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                    snapshot.data?.value?.banners![itemIndex]
-                                            .image
-                                            .toString() ??
-                                        '',
+                                    snapshot.data?.value?.banners![itemIndex].image.toString() ?? '',
                                   ),
                                   fit: BoxFit.cover,
                                 ),
@@ -184,15 +169,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     SizedBox(
                                         width: context.width() / 2,
                                         child: Text(
-                                          snapshot
-                                                  .data
-                                                  ?.value
-                                                  ?.banners![itemIndex]
-                                                  .subTitle ??
-                                              '',
-                                          style: kTextStyle.copyWith(
-                                              color: kWhiteColor,
-                                              fontWeight: FontWeight.bold),
+                                          snapshot.data?.value?.banners![itemIndex].subTitle ?? '',
+                                          style: kTextStyle.copyWith(color: kWhiteColor, fontWeight: FontWeight.bold),
                                           maxLines: 2,
                                         )),
                                     const SizedBox(
@@ -201,20 +179,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Container(
                                       padding: const EdgeInsets.all(10.0),
                                       decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                         /* color: kMainColor.withOpacity(0.5),*/
                                       ),
                                       child: Text(
-                                        snapshot
-                                                .data
-                                                ?.value
-                                                ?.banners![itemIndex]
-                                                .offerTitle ??
-                                            '',
-                                        style: kTextStyle.copyWith(
-                                            color: kWhiteColor,
-                                            fontWeight: FontWeight.bold),
+                                        snapshot.data?.value?.banners![itemIndex].offerTitle ?? '',
+                                        style: kTextStyle.copyWith(color: kWhiteColor, fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ],
@@ -223,14 +193,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             ).onTap(
                               () {
                                 CategoryProduct(
-                                  catName: snapshot.data?.value
-                                          ?.banners![itemIndex].subTitle ??
-                                      "NA",
+                                  catName: snapshot.data?.value?.banners![itemIndex].subTitle ?? "NA",
                                   subCatModel: null,
                                   clickIndex: itemIndex,
-                                  catId: snapshot.data?.value
-                                          ?.banners![itemIndex].categoryId ??
-                                      2,
+                                  catId: snapshot.data?.value?.banners![itemIndex].categoryId ?? 2,
                                   page: 1,
                                 ).launch(context);
                               },
@@ -246,8 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             reverse: false,
                             autoPlay: true,
                             autoPlayInterval: const Duration(seconds: 3),
-                            autoPlayAnimationDuration:
-                                const Duration(milliseconds: 800),
+                            autoPlayAnimationDuration: const Duration(milliseconds: 800),
                             autoPlayCurve: Curves.fastOutSlowIn,
                             enlargeCenterPage: true,
                             scrollDirection: Axis.horizontal,
@@ -265,8 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Text(
                               'Categories',
-                              style: kTextStyle.copyWith(
-                                  fontWeight: FontWeight.bold),
+                              style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
                             ),
                             const Spacer(),
                             GestureDetector(
@@ -277,8 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                               child: Text(
                                 'See All',
-                                style:
-                                    kTextStyle.copyWith(color: kGreyTextColor),
+                                style: kTextStyle.copyWith(color: kGreyTextColor),
                               ),
                             ),
                           ],
@@ -291,27 +254,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (_, i) {
                           return CategoryCard(
                             categoryData: CategoryData(
-                              catTitle: snapshot
-                                      .data?.value?.category?.data?[i].name ??
-                                  'Null',
-                              catIcon: snapshot
-                                      .data?.value?.category?.data?[i].banner
-                                      .toString() ??
-                                  'https://i.imgur.com/FPAXyqE.jpeg',
+                              catTitle: snapshot.data?.value?.category?.data?[i].name ?? 'Null',
+                              catIcon: snapshot.data?.value?.category?.data?[i].banner.toString() ?? 'https://i.imgur.com/FPAXyqE.jpeg',
                             ),
                           ).onTap(
                             () {
-                              print(snapshot.data?.value?.category?.data?[i]
-                                  .subcat?.length);
+                              print(snapshot.data?.value?.category?.data?[i].subcat?.length);
                               CategoryProduct(
                                 subCatModel: snapshot.data,
                                 clickIndex: i,
-                                catName: snapshot
-                                        .data?.value?.category?.data?[i].name ??
-                                    "NA",
-                                catId: snapshot
-                                        .data?.value?.category?.data?[i].id ??
-                                    2,
+                                catName: snapshot.data?.value?.category?.data?[i].name ?? "NA",
+                                catId: snapshot.data?.value?.category?.data?[i].id ?? 2,
                                 /*subCat: snapshot.data?.value?.category?.data?[i].subcat,*/
                                 page: 1,
                               ).launch(context);
@@ -431,8 +384,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Text(
                               'Best Selling',
-                              style: kTextStyle.copyWith(
-                                  fontWeight: FontWeight.bold),
+                              style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
                             ),
                             const Spacer(),
                             GestureDetector(
@@ -441,8 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                               child: Text(
                                 'See All',
-                                style:
-                                    kTextStyle.copyWith(color: kGreyTextColor),
+                                style: kTextStyle.copyWith(color: kGreyTextColor),
                               ),
                             ),
                           ],
@@ -454,45 +405,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (_, i) {
                           return ProductCard(
                             productData: ProductData(
-                              productTitle: snapshot
-                                      .data?.value?.trendsProducts![i].name
-                                      .toString() ??
-                                  'Null',
-                              productPrice: snapshot
-                                      .data?.value?.trendsProducts![i].salePrice
-                                      .toString() ??
-                                  'Null',
-                              productDiscount: snapshot
-                                      .data?.value?.trendsProducts![i].unitPrice
-                                      .toString() ??
-                                  'Null',
-                              productRating: snapshot
-                                      .data?.value?.trendsProducts![i].id
-                                      .toString() ??
-                                  'Null',
-                              productImage: snapshot.data?.value
-                                      ?.trendsProducts![i].images?[0].image
-                                      .toString() ??
-                                  'Null',
-                              productDescription: snapshot.data?.value
-                                      ?.trendsProducts![i].description
-                                      .toString() ??
-                                  'Null',
+                              productTitle: snapshot.data?.value?.trendsProducts![i].name.toString() ?? 'Null',
+                              productPrice: snapshot.data?.value?.trendsProducts![i].salePrice.toString() ?? 'Null',
+                              productDiscount: snapshot.data?.value?.trendsProducts![i].unitPrice.toString() ?? 'Null',
+                              productRating: snapshot.data?.value?.trendsProducts![i].id.toString() ?? 'Null',
+                              productImage: snapshot.data?.value?.trendsProducts![i].images?[0].image.toString() ?? 'Null',
+                              productDescription: snapshot.data?.value?.trendsProducts![i].description.toString() ?? 'Null',
                             ),
                             onBookMarkPressed: () async {
                               try {
                                 EasyLoading.show(status: 'Adding...');
                                 final SharedPreferences prefs = await _prefs;
                                 final wishlist =
-                                    await _apiManager.addToWishList(
-                                        snapshot.data?.value?.trendsProducts![i]
-                                                .id
-                                                .toString() ??
-                                            'null',
-                                        prefs.getString('token').toString());
+                                    await _apiManager.addToWishList(snapshot.data?.value?.trendsProducts![i].id.toString() ?? 'null', prefs.getString('token').toString());
                                 if (wishlist.success == true) {
-                                  EasyLoading.showSuccess(
-                                      wishlist.message.toString());
+                                  EasyLoading.showSuccess(wishlist.message.toString());
                                 } else {
                                   EasyLoading.showError('Already Added');
                                 }
@@ -503,8 +430,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ).onTap(
                             () {
                               ProductDetails(
-                                productId:
-                                    snapshot.data?.value?.trendsProducts![i].id,
+                                productId: snapshot.data?.value?.trendsProducts![i].id,
                               ).launch(context);
                             },
                             highlightColor: context.cardColor,
@@ -520,8 +446,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Text(
                               'Popular Products',
-                              style: kTextStyle.copyWith(
-                                  fontWeight: FontWeight.bold),
+                              style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
                             ),
                             const Spacer(),
                             GestureDetector(
@@ -530,8 +455,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                               child: Text(
                                 'See All',
-                                style:
-                                    kTextStyle.copyWith(color: kGreyTextColor),
+                                style: kTextStyle.copyWith(color: kGreyTextColor),
                               ),
                             ),
                           ],
@@ -542,60 +466,32 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: GridView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 0.7,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 0.65,
                             crossAxisCount: 2,
                             mainAxisSpacing: 5.0,
                           ),
-                          itemCount:
-                              snapshot.data?.value?.popularProducts?.length ??
-                                  10,
+                          itemCount: snapshot.data?.value?.popularProducts?.length ?? 10,
                           itemBuilder: (_, i) {
                             return ProductCard(
                               productData: ProductData(
-                                productTitle: snapshot
-                                        .data?.value?.popularProducts?[i].name
-                                        .toString() ??
-                                    'Null',
-                                productPrice: snapshot.data?.value
-                                        ?.popularProducts?[i].salePrice
-                                        .toString() ??
-                                    'Null',
-                                productDiscount: snapshot.data?.value
-                                        ?.popularProducts?[i].unitPrice
-                                        .toString() ??
-                                    'Null',
-                                productRating: snapshot
-                                        .data?.value?.popularProducts?[i].id
-                                        .toString() ??
-                                    'Null',
-                                productImage: snapshot.data?.value
-                                        ?.popularProducts?[i].images?[0].image
-                                        .toString() ??
-                                    'Null',
-                                productDescription: snapshot.data?.value
-                                        ?.popularProducts?[i].description
-                                        .toString() ??
-                                    'Null',
+                                productTitle: snapshot.data?.value?.popularProducts?[i].name.toString() ?? 'Null',
+                                productPrice: snapshot.data?.value?.popularProducts?[i].salePrice.toString() ?? 'Null',
+                                productDiscount: snapshot.data?.value?.popularProducts?[i].unitPrice.toString() ?? 'Null',
+                                productRating: snapshot.data?.value?.popularProducts?[i].id.toString() ?? 'Null',
+                                productImage: snapshot.data?.value?.popularProducts?[i].images?[0].image.toString() ?? 'Null',
+                                productDescription: snapshot.data?.value?.popularProducts?[i].description.toString() ?? 'Null',
                               ),
                               onBookMarkPressed: () async {
                                 try {
                                   EasyLoading.show(status: 'Adding...');
                                   final SharedPreferences prefs = await _prefs;
                                   final wishlist =
-                                      await _apiManager.addToWishList(
-                                          snapshot.data?.value
-                                                  ?.popularProducts?[i].id
-                                                  .toString() ??
-                                              'null',
-                                          prefs.getString('token').toString());
+                                      await _apiManager.addToWishList(snapshot.data?.value?.popularProducts?[i].id.toString() ?? 'null', prefs.getString('token').toString());
                                   if (wishlist.success == true) {
-                                    EasyLoading.showSuccess(
-                                        wishlist.message.toString());
+                                    EasyLoading.showSuccess(wishlist.message.toString());
                                   } else {
-                                    EasyLoading.showError(
-                                        wishlist.message.toString());
+                                    EasyLoading.showError(wishlist.message.toString());
                                   }
                                 } catch (e) {
                                   toast(e.toString());
@@ -604,8 +500,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ).onTap(
                               () {
                                 ProductDetails(
-                                  productId: snapshot
-                                      .data?.value?.popularProducts?[i].id,
+                                  productId: snapshot.data?.value?.popularProducts?[i].id,
                                 ).launch(context);
                               },
                               highlightColor: context.cardColor,
@@ -627,9 +522,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 // ignore: must_be_immutable
 class DiscountProductCard extends StatelessWidget {
-  DiscountProductCard(
-      {Key? key, required this.productData, required this.onBookMarkPressed})
-      : super(key: key);
+  DiscountProductCard({Key? key, required this.productData, required this.onBookMarkPressed}) : super(key: key);
   final ProductData productData;
 
   // ignore: prefer_typing_uninitialized_variables
@@ -643,8 +536,7 @@ class DiscountProductCard extends StatelessWidget {
         minWidth: 150.0,
       ),
       child: Container(
-        decoration: BoxDecoration(
-            color: kWhiteColor, borderRadius: BorderRadius.circular(10.0)),
+        decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.circular(10.0)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -667,8 +559,7 @@ class DiscountProductCard extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 2.0),
                   child: Text(
                     '-${productData.productDiscount.toInt() / 100}',
-                    style:
-                        kTextStyle.copyWith(color: kWhiteColor, fontSize: 10.0),
+                    style: kTextStyle.copyWith(color: kWhiteColor, fontSize: 10.0),
                   ),
                 )
               ],
@@ -686,18 +577,14 @@ class DiscountProductCard extends StatelessWidget {
                 children: [
                   Text(
                     currencyIcon + productData.productPrice,
-                    style:
-                        kTextStyle.copyWith(color: kMainColor, fontSize: 18.0),
+                    style: kTextStyle.copyWith(color: kMainColor, fontSize: 18.0),
                   ),
                   const SizedBox(
                     width: 5.0,
                   ),
                   Text(
                     currencyIcon + productData.productPrice,
-                    style: kTextStyle.copyWith(
-                        color: kGreyTextColor,
-                        fontSize: 12.0,
-                        decoration: TextDecoration.lineThrough),
+                    style: kTextStyle.copyWith(color: kGreyTextColor, fontSize: 12.0, decoration: TextDecoration.lineThrough),
                   ),
                 ],
               ),
@@ -711,9 +598,7 @@ class DiscountProductCard extends StatelessWidget {
 
 // ignore: must_be_immutable
 class ProductCard extends StatelessWidget {
-  ProductCard(
-      {Key? key, required this.productData, required this.onBookMarkPressed})
-      : super(key: key);
+  ProductCard({Key? key, required this.productData, required this.onBookMarkPressed}) : super(key: key);
   final ProductData productData;
 
   // ignore: prefer_typing_uninitialized_variables
@@ -781,8 +666,7 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
+                  padding: const EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
                   child: Row(
                     children: [
                       RatingBarWidget(
@@ -793,8 +677,7 @@ class ProductCard extends StatelessWidget {
                       ),
                       Text(
                         '(${productData.productRating})',
-                        style: kTextStyle.copyWith(
-                            color: kGreyTextColor, fontSize: 10.0),
+                        style: kTextStyle.copyWith(color: kGreyTextColor, fontSize: 10.0),
                       ),
                     ],
                   ),
@@ -805,18 +688,14 @@ class ProductCard extends StatelessWidget {
                     children: [
                       Text(
                         currencyIcon + productData.productPrice,
-                        style: kTextStyle.copyWith(
-                            color: kMainColor, fontSize: 18.0),
+                        style: kTextStyle.copyWith(color: kMainColor, fontSize: 18.0),
                       ),
                       const SizedBox(
                         width: 5.0,
                       ),
                       Text(
                         currencyIcon + productData.productDiscount,
-                        style: kTextStyle.copyWith(
-                            color: kGreyTextColor,
-                            fontSize: 12.0,
-                            decoration: TextDecoration.lineThrough),
+                        style: kTextStyle.copyWith(color: kGreyTextColor, fontSize: 12.0, decoration: TextDecoration.lineThrough),
                       ),
                     ],
                   ),

@@ -28,8 +28,7 @@ class DeliveryResponseModel {
 
   String toJson() => json.encode(toMap());
 
-  factory DeliveryResponseModel.fromJson(String source) =>
-      DeliveryResponseModel.fromMap(json.decode(source));
+  factory DeliveryResponseModel.fromJson(String source) => DeliveryResponseModel.fromMap(json.decode(source));
 }
 
 class FinalAmount {
@@ -53,13 +52,12 @@ class FinalAmount {
   factory FinalAmount.fromMap(Map<String, dynamic> map) {
     return FinalAmount(
       shippingCost: map['shippingCost']?.toDouble() ?? 0.0,
-      subtotal: map['subtotal']?.toDouble() ?? 0.0,
+      subtotal: map['subTotal']?.toDouble() ?? 0.0,
       grandTotal: map['grandTotal']?.toDouble() ?? 0.0,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory FinalAmount.fromJson(String source) =>
-      FinalAmount.fromMap(json.decode(source));
+  factory FinalAmount.fromJson(String source) => FinalAmount.fromMap(json.decode(source));
 }
