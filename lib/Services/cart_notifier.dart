@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
+
 import '../Models/order_create_model.dart';
 
 class CartNotifier extends ChangeNotifier {
@@ -14,13 +15,7 @@ class CartNotifier extends ChangeNotifier {
     final pref = await _pref;
     if (pref.containsKey('cart_items')) {
       final savedCart = pref.getStringList('cart_items') ?? [];
-      cartItems = savedCart
-          .map(
-            (e) => Cart.fromJson(
-              jsonDecode(e),
-            ),
-          )
-          .toList();
+      cartItems = savedCart.map((e) => Cart.fromJson(jsonDecode(e))).toList();
     }
   }
 
@@ -48,8 +43,7 @@ class CartNotifier extends ChangeNotifier {
         color: item.color.toString(),
         size: item.size.toString(),
         shippingCost: item.shippingCost.toString(),
-        productPriceTotal:
-            (item.productPriceTotal + item.shippingCost).toString(),
+        productPriceTotal: (item.productPriceTotal + item.shippingCost).toString(),
         estimatedShippingDays: item.estimatedShippingDays.toString(),
       );
       carts.add(items);
@@ -84,8 +78,7 @@ class CartNotifier extends ChangeNotifier {
   bool checkCart(int id, String size, String color) {
     bool isAdded = false;
     for (var item in cartItems) {
-      if (item.id == id && item.size == size ||
-          item.id == id && item.color == color) {
+      if (item.id == id && item.size == size || item.id == id && item.color == color) {
         isAdded = true;
         // notifyListeners();
       }
@@ -114,9 +107,7 @@ class CartNotifier extends ChangeNotifier {
   double getSubTotal() {
     double subTotal = 0.0;
     for (var item in cartItems) {
-      subTotal = (double.parse(item.price.toString()) *
-              double.parse(item.quantity.toString())) +
-          subTotal;
+      subTotal = (double.parse(item.price.toString()) * double.parse(item.quantity.toString())) + subTotal;
     }
     // notifyListeners();
     return subTotal;
