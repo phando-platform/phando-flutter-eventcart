@@ -51,9 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
         iconTheme: const IconThemeData(color: kBlackColor),
         /*leading: Image.asset('images/drawer.png'),*/
         title: Image.asset('images/logo.png', width: 115),
-        actions: [
-          Image.asset('images/notification.png'),
-        ],
+        // actions: [
+        //   Image.asset('images/notification.png'),
+        // ],
       ),
       body: FutureBuilder<HomeModel>(
           future: _apiManager.getHome(),

@@ -1,22 +1,23 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:dio/dio.dart';
-import 'package:event_app/Models/book_order/book_order_body_model.dart';
-import 'package:event_app/Models/book_order/book_order_reponse_model.dart';
 import 'package:event_app/Models/delivery/delivery_body_model.dart';
 import 'package:event_app/Models/delivery/delivery_reponse_model.dart';
 import 'package:event_app/Models/razorPay/razorpay_model.dart';
 import 'package:event_app/Models/tracking_order/tracking_order_response_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:nb_utils/nb_utils.dart' hide log;
+
 import '../Models/add_billing_model.dart';
 import '../Models/add_to_wishlist_model.dart';
 import '../Models/all_products_model.dart';
 import '../Models/banners_model.dart';
 import '../Models/billing_info_model.dart';
+import '../Models/category_model.dart';
+import '../Models/change_password_model.dart';
 import '../Models/coupon_apply_model.dart';
 import '../Models/home_model.dart';
+import '../Models/login_model.dart';
 import '../Models/order_create_model.dart';
 import '../Models/order_create_response.dart';
 import '../Models/order_list_model.dart';
@@ -24,14 +25,11 @@ import '../Models/order_timelines_model.dart';
 import '../Models/popular_products_model.dart';
 import '../Models/product_details_model.dart';
 import '../Models/profile_model.dart';
+import '../Models/profile_update_model.dart';
 import '../Models/send_reset_code_model.dart';
+import '../Models/signup_model.dart';
 import '../Models/trends_model.dart';
 import '../Models/wish_list_model.dart';
-import '../Models/category_model.dart';
-import '../Models/change_password_model.dart';
-import '../Models/login_model.dart';
-import '../Models/profile_update_model.dart';
-import '../Models/signup_model.dart';
 
 class ApiManager {
   // static const apiUrl = "https://my-bazar.maantheme.com/api/v1/";
@@ -102,13 +100,7 @@ class ApiManager {
     }
   }
 
-  Future<SignupModel> signUpWithEmail(
-      String firstName,
-      String lastName,
-      String userName,
-      String emailAddress,
-      String phoneNumber,
-      String passwordUser) async {
+  Future<SignupModel> signUpWithEmail(String firstName, String lastName, String userName, String emailAddress, String phoneNumber, String passwordUser) async {
     final response = await http.post(
       // Uri.parse(apiUrl + 'register'),
       Uri.parse(apiUrl + 'register_with_email_verification'),
@@ -173,8 +165,7 @@ class ApiManager {
     }
   }
 
-  Future<SendResetCodeModel> setNewPassword(
-      String emailAddress, String code, String password) async {
+  Future<SendResetCodeModel> setNewPassword(String emailAddress, String code, String password) async {
     final response = await http.post(
       Uri.parse(apiUrl + 'user_password_reset'),
       headers: <String, String>{
@@ -195,8 +186,7 @@ class ApiManager {
     }
   }
 
-  Future<ChangePasswordModel> changePassword(String currentPassword,
-      String newPassword, String confirmPassword, String token) async {
+  Future<ChangePasswordModel> changePassword(String currentPassword, String newPassword, String confirmPassword, String token) async {
     final response = await http.post(
       Uri.parse(apiUrl + 'change_password'),
       headers: <String, String>{
@@ -297,8 +287,7 @@ class ApiManager {
     print('DONE');
     print(id);
     print(page);
-    final response = await http.get(
-        Uri.parse(apiUrl + 'category/${id.toString()}/products?page=$page'));
+    final response = await http.get(Uri.parse(apiUrl + 'category/${id.toString()}/products?page=$page'));
     final data = jsonDecode(response.body);
     if (response.statusCode == 200) {
       return TrendsModel.fromJson(data);
@@ -519,35 +508,20 @@ class ApiManager {
 
     String? billingFirstName = _prefs.getString('firstName') ?? "Not Specified";
     String? billingLastName = _prefs.getString('lastName') ?? "Not Specified";
-    String? billingAddOne =
-        _prefs.getString('billing_add_one') ?? "Not Specified";
-    String? billingPhone = _prefs.getString('billing_phone') ??
-        _prefs.getString('phone') ??
-        '0000000000';
+    String? billingAddOne = _prefs.getString('billing_add_one') ?? "Not Specified";
+    String? billingPhone = _prefs.getString('billing_phone') ?? _prefs.getString('phone') ?? '0000000000';
     String? billingEmail = _prefs.getString('billing_email') ?? "Not Specified";
-    String? billingPostCode =
-        _prefs.getString('billing_postal_Code') ?? "Not Specified";
-    String? billingUserCity =
-        _prefs.getString('billing_user_city') ?? "Not Specified";
-    String? billingUserState =
-        _prefs.getString('billing_user_state') ?? "Not Specified";
-    String? shippingFirstName =
-        _prefs.getString('shipping_full_name') ?? "Not Specified";
-    String? shippingLastName =
-        _prefs.getString('shipping_full_name') ?? "Not Specified";
-    String? shippingAddOne =
-        _prefs.getString('shipping_add_one') ?? "Not Specified";
-    String? shippingPhone = _prefs.getString('shipping_phone') ??
-        _prefs.getString('phone') ??
-        '0000000000';
-    String? shippingEmail =
-        _prefs.getString('shipping_email') ?? "Not Specified";
-    String? shippingPostCode =
-        _prefs.getString('shipping_postal_Code') ?? "Not Specified";
-    String? shippingUserCity =
-        _prefs.getString('shipping_user_city') ?? "Not Specified";
-    String? shippingUserState =
-        _prefs.getString('shipping_user_state') ?? "Not Specified";
+    String? billingPostCode = _prefs.getString('billing_postal_Code') ?? "Not Specified";
+    String? billingUserCity = _prefs.getString('billing_user_city') ?? "Not Specified";
+    String? billingUserState = _prefs.getString('billing_user_state') ?? "Not Specified";
+    String? shippingFirstName = _prefs.getString('shipping_full_name') ?? "Not Specified";
+    String? shippingLastName = _prefs.getString('shipping_full_name') ?? "Not Specified";
+    String? shippingAddOne = _prefs.getString('shipping_add_one') ?? "Not Specified";
+    String? shippingPhone = _prefs.getString('shipping_phone') ?? _prefs.getString('phone') ?? '0000000000';
+    String? shippingEmail = _prefs.getString('shipping_email') ?? "Not Specified";
+    String? shippingPostCode = _prefs.getString('shipping_postal_Code') ?? "Not Specified";
+    String? shippingUserCity = _prefs.getString('shipping_user_city') ?? "Not Specified";
+    String? shippingUserState = _prefs.getString('shipping_user_state') ?? "Not Specified";
 
     final response = await http.post(
       Uri.parse(apiUrl + 'order'),
@@ -642,7 +616,7 @@ class ApiManager {
     if (response.statusCode == 200) {
       // final data = jsonDecode(response.body);
       try {
-        return OrderListModel.fromJson(response.body);
+        return OrderListModel.fromJson(jsonDecode(response.body));
       } catch (error, stackTrace) {
         log(error.toString());
         log(stackTrace.toString());
@@ -650,7 +624,7 @@ class ApiManager {
       }
     } else {
       final data = Map<String, dynamic>.from(jsonDecode(response.body));
-      return OrderListModel.fromJson(response.body);
+      return OrderListModel.fromJson(data);
     }
   }
 
@@ -687,14 +661,7 @@ class ApiManager {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',
         },
-        body: <String, String>{
-          'first_name': firstName,
-          'last_name': lastName,
-          'email': email,
-          'mobile': mobile,
-          'dob': '2011-11-11',
-          'gender': '1'
-        },
+        body: <String, String>{'first_name': firstName, 'last_name': lastName, 'email': email, 'mobile': mobile, 'dob': '2011-11-11', 'gender': '1'},
       );
       final data = jsonDecode(response.body);
       log(data.toString());
@@ -759,11 +726,11 @@ class ApiManager {
   }
 
   Future<SendResetCodeModel?> cancelOrder({
-    required String orderDetailsId,
+    // required String orderDetailsId,
     required String description,
     required String reason,
     required String token,
-    required String productId,
+    // required String productId,
     required String orderId,
   }) async {
     final response = await http.post(
@@ -773,10 +740,10 @@ class ApiManager {
         'Authorization': 'Bearer $token',
       },
       body: <String, String>{
-        'order_details_id': orderDetailsId,
+        // 'order_details_id': orderDetailsId,
         'order_stat_desc': description,
         'order_id': orderId,
-        'product_id': productId,
+        // 'product_id': productId,
         'reason': reason,
       },
     );
@@ -829,8 +796,7 @@ class ApiManager {
     log('Shipping Details RESPONSE: ' + data.toString());
     if (response.statusCode == 200) {
       if (data.containsKey('success') && data['success'] == true) {
-        DeliveryResponseModel deliveryData =
-            DeliveryResponseModel.fromMap(data);
+        DeliveryResponseModel deliveryData = DeliveryResponseModel.fromMap(data);
         return deliveryData;
       } else {
         return null;
@@ -860,8 +826,7 @@ class ApiManager {
     if (response.statusCode == 200) {
       if (data.containsKey('success') && data['success'] == true) {
         final dataList = Map<String, dynamic>.from(data['value']);
-        TrackingOrderResponseModel deliveryData =
-            TrackingOrderResponseModel.fromMap(dataList);
+        TrackingOrderResponseModel deliveryData = TrackingOrderResponseModel.fromMap(dataList);
         return deliveryData;
       } else {
         return null;

@@ -575,6 +575,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               }),
                             ],
                           ),
+                          const SizedBox(height: 12),
                           Text(
                             parse(
                               snapshot.data?.value?.description ?? '',

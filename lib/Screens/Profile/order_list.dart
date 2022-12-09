@@ -1,11 +1,8 @@
-import 'dart:developer';
-
+import 'package:event_app/Models/tracking_order/tracking_order_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
-
-import 'package:event_app/Models/tracking_order/tracking_order_response_model.dart';
 
 import '../../GlobalComponents/button_global.dart';
 import '../../Models/order_list_model.dart';
@@ -23,13 +20,7 @@ class OrderList extends StatefulWidget {
 }
 
 class _OrderListState extends State<OrderList> {
-  List<String> orderStatus = [
-    'All Order',
-    'Confirmed',
-    'Canceled',
-    'Shipped',
-    'Delivered'
-  ];
+  List<String> orderStatus = ['All Order', 'Confirmed', 'Canceled', 'Shipped', 'Delivered'];
   int selectedIndex = 0;
   final ApiManager _apiManager = ApiManager();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -79,112 +70,129 @@ class _OrderListState extends State<OrderList> {
                           ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount:
-                                  snapshot.data?.value?.data?.length ?? 1,
+                              itemCount: snapshot.data?.value?.data?.length ?? 1,
                               itemBuilder: (_, index) {
-                                log(snapshot
-                                        .data?.value?.data?[index].menifestId ??
-                                    "empty".toString());
+                                var order = snapshot.data?.value?.data?[index];
                                 return Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(10.0)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: ListTile(
-                                      leading: Image.network(
-                                        snapshot.data?.value?.data?[index]
-                                                .product?.images?[0].imageUrl ??
-                                            '',
-                                        cacheHeight: 200,
-                                        cacheWidth: 200,
-                                      ),
-                                      title: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            snapshot.data?.value?.data?[index]
-                                                    .product?.name ??
-                                                '',
-                                            style: kTextStyle.copyWith(
-                                                color: kTitleColor),
-                                          ),
-                                          Row(
+                                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "Order No.: ${order?.orderNo}",
+                                              style: const TextStyle(fontSize: 13),
+                                            ),
+                                            Text(
+                                              DateFormat.yMMMd().format(
+                                                order!.createdAt!,
+                                              ),
+                                              style: const TextStyle(fontSize: 13),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 12),
+                                        ...List.generate(order!.details!.length, (index) {
+                                          var detail = order.details![index];
+                                          return Padding(
+                                            padding: const EdgeInsets.only(bottom: 8),
+                                            child: ListTile(
+                                              leading: Image.network(
+                                                detail.product?.images?[0].image ?? '',
+                                                cacheHeight: 200,
+                                                cacheWidth: 200,
+                                              ),
+                                              title: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    detail.product?.name ?? '',
+                                                    style: kTextStyle.copyWith(color: kTitleColor),
+                                                  ),
+                                                  // Row(
+                                                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  //   children: [
+                                                  //     Text(
+                                                  //       '#${detail.orderId ?? 'order Id'}',
+                                                  //       style: kTextStyle.copyWith(color: kGreyTextColor),
+                                                  //     ),
+                                                  //     Text(
+                                                  //       DateFormat.yMMMd().format(
+                                                  //         detail.createdAt!,
+                                                  //       ),
+                                                  //       style: kTextStyle.copyWith(color: kGreyTextColor),
+                                                  //     ),
+                                                  //   ],
+                                                  // ),
+                                                ],
+                                              ),
+                                              subtitle: Padding(
+                                                padding: const EdgeInsets.only(top: 5),
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          padding: const EdgeInsets.all(
+                                                            4.0,
+                                                          ),
+                                                          decoration: BoxDecoration(
+                                                            color: kBgColor,
+                                                            borderRadius: BorderRadius.circular(4.0),
+                                                          ),
+                                                          child: Text(
+                                                            '$currencyIcon${detail.salePrice}x${detail.qty ?? 'quantity'}',
+                                                            style: kTextStyle.copyWith(
+                                                              color: kRedColor,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          '$currencyIcon ${detail.salePrice! * detail.qty!}',
+                                                          style: kTextStyle.copyWith(
+                                                            color: kMainColor,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.end,
                                             children: [
                                               Text(
-                                                '#${snapshot.data?.value?.data?[index].orderId ?? 'order Id'}',
-                                                style: kTextStyle.copyWith(
-                                                    color: kGreyTextColor),
+                                                "Subtotal: $currencyIcon${order.totalPrice}",
+                                                style: const TextStyle(color: Colors.black54),
                                               ),
-                                              const Spacer(),
+                                              const SizedBox(height: 8),
                                               Text(
-                                                '$currencyIcon ${snapshot.data?.value?.data?[index].grandTotal ?? 'Sale Price'}',
-                                                style: kTextStyle.copyWith(
-                                                  color: kMainColor,
-                                                ),
+                                                "Shipping Cost: $currencyIcon${order.shippingCost}",
+                                                style: const TextStyle(color: Colors.black54),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                "Order Total: $currencyIcon${order.totalPrice! + order.shippingCost!}",
+                                                style: const TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
                                               ),
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                      subtitle: Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 5,
                                         ),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  padding: const EdgeInsets.all(
-                                                    4.0,
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    color: kBgColor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4.0),
-                                                  ),
-                                                  child: Text(
-                                                    'x${snapshot.data?.value?.data?[index].qty ?? 'quantity'}',
-                                                    style: kTextStyle.copyWith(
-                                                      color: kRedColor,
-                                                    ),
-                                                  ),
-                                                ),
-                                                const Spacer(),
-                                                Text(
-                                                  DateFormat.yMMMd().format(
-                                                    DateTime.parse(
-                                                      snapshot
-                                                              .data
-                                                              ?.value
-                                                              ?.data?[index]
-                                                              .createdAt ??
-                                                          DateTime.now()
-                                                              .toIso8601String(),
-                                                    ),
-                                                  ),
-                                                  style: kTextStyle.copyWith(
-                                                      color: kGreyTextColor),
-                                                ),
-                                              ],
-                                            ),
-                                            if (snapshot.data?.value
-                                                    ?.data?[index].menifestId !=
-                                                null)
-                                              if ((snapshot
-                                                          .data
-                                                          ?.value
-                                                          ?.data?[index]
-                                                          .orderStat ??
-                                                      2) !=
-                                                  7)
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                        if (order.ratecardReplyCode != null)
+                                          (order.details![0].orderStat ?? 2) != 7
+                                              ? Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
                                                     TextButton(
                                                       onPressed: () {
@@ -192,26 +200,14 @@ class _OrderListState extends State<OrderList> {
                                                           context: context,
                                                           builder: (context) {
                                                             return Dialog(
-                                                              backgroundColor:
-                                                                  kBgColor,
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
+                                                              backgroundColor: kBgColor,
+                                                              shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(
                                                                   20,
                                                                 ),
                                                               ),
-                                                              child:
-                                                                  _TrackOrderDialog(
-                                                                manifestId: snapshot
-                                                                        .data
-                                                                        ?.value
-                                                                        ?.data?[
-                                                                            index]
-                                                                        .menifestId
-                                                                        .toString() ??
-                                                                    '',
+                                                              child: _TrackOrderDialog(
+                                                                manifestId: order.ratecardReplyCode.toString() ?? '',
                                                               ),
                                                             );
                                                           },
@@ -219,11 +215,8 @@ class _OrderListState extends State<OrderList> {
                                                       },
                                                       child: Text(
                                                         'Track Order',
-                                                        style:
-                                                            kTextStyle.copyWith(
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
+                                                        style: kTextStyle.copyWith(
+                                                          decoration: TextDecoration.underline,
                                                           color: Colors.blue,
                                                         ),
                                                       ),
@@ -234,59 +227,19 @@ class _OrderListState extends State<OrderList> {
                                                           context: context,
                                                           builder: (context) {
                                                             return Dialog(
-                                                              backgroundColor:
-                                                                  kBgColor,
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
+                                                              backgroundColor: kBgColor,
+                                                              shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(
                                                                   20,
                                                                 ),
                                                               ),
-                                                              child:
-                                                                  _CancelOrderDialog(
-                                                                menifestId: snapshot
-                                                                        .data
-                                                                        ?.value
-                                                                        ?.data?[
-                                                                            index]
-                                                                        .menifestId
-                                                                        .toString() ??
-                                                                    '',
+                                                              child: _CancelOrderDialog(
+                                                                // menifestId: order.ratecardReplyCode.toString() ?? '',
                                                                 token: token,
-                                                                orderDetailsId: snapshot
-                                                                        .data
-                                                                        ?.value
-                                                                        ?.data?[
-                                                                            index]
-                                                                        .id
-                                                                        .toString() ??
-                                                                    '',
-                                                                description: snapshot
-                                                                        .data
-                                                                        ?.value
-                                                                        ?.data?[
-                                                                            index]
-                                                                        .id
-                                                                        .toString() ??
-                                                                    '',
-                                                                orderId: snapshot
-                                                                        .data
-                                                                        ?.value
-                                                                        ?.data?[
-                                                                            index]
-                                                                        .orderId
-                                                                        .toString() ??
-                                                                    '',
-                                                                productId: snapshot
-                                                                        .data
-                                                                        ?.value
-                                                                        ?.data?[
-                                                                            index]
-                                                                        .productId
-                                                                        .toString() ??
-                                                                    '',
+                                                                // orderDetailsId: detail.id.toString() ?? '',
+                                                                description: order.id.toString() ?? '',
+                                                                orderId: order.id.toString() ?? '',
+                                                                // productId: detail.productId.toString() ?? '',
                                                               ),
                                                             );
                                                           },
@@ -294,44 +247,188 @@ class _OrderListState extends State<OrderList> {
                                                       },
                                                       child: Text(
                                                         'Cancel Order',
-                                                        style:
-                                                            kTextStyle.copyWith(
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
+                                                        style: kTextStyle.copyWith(
+                                                          decoration: TextDecoration.underline,
                                                           color: Colors.red,
                                                         ),
                                                       ),
                                                     )
                                                   ],
                                                 )
-                                              else
-                                                Container(
+                                              : Container(
                                                   decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
+                                                    borderRadius: BorderRadius.circular(20),
                                                     color: Colors.red,
                                                   ),
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
+                                                  padding: const EdgeInsets.symmetric(
                                                     vertical: 2,
                                                     horizontal: 5,
                                                   ),
+                                                  margin: const EdgeInsets.only(top: 8),
                                                   alignment: Alignment.center,
                                                   child: const Text(
                                                     'Order Cancelled',
                                                     style: TextStyle(
                                                       color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                      fontWeight: FontWeight.bold,
                                                     ),
                                                   ),
                                                 ),
-                                          ],
-                                        ),
-                                      ),
+                                      ],
                                     ),
+                                    // ListTile(
+                                    //   leading: Image.network(
+                                    //     snapshot.data?.value?.data?[index].product?.images?[0].imageUrl ?? '',
+                                    //     cacheHeight: 200,
+                                    //     cacheWidth: 200,
+                                    //   ),
+                                    //   title: Column(
+                                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                                    //     children: [
+                                    //       Text(
+                                    //         snapshot.data?.value?.data?[index].product?.name ?? '',
+                                    //         style: kTextStyle.copyWith(color: kTitleColor),
+                                    //       ),
+                                    //       Row(
+                                    //         children: [
+                                    //           Text(
+                                    //             '#${snapshot.data?.value?.data?[index].orderId ?? 'order Id'}',
+                                    //             style: kTextStyle.copyWith(color: kGreyTextColor),
+                                    //           ),
+                                    //           const Spacer(),
+                                    //           Text(
+                                    //             '$currencyIcon ${snapshot.data?.value?.data?[index].grandTotal ?? 'Sale Price'}',
+                                    //             style: kTextStyle.copyWith(
+                                    //               color: kMainColor,
+                                    //             ),
+                                    //           ),
+                                    //         ],
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    //   subtitle: Padding(
+                                    //     padding: const EdgeInsets.only(
+                                    //       top: 5,
+                                    //     ),
+                                    //     child: Column(
+                                    //       children: [
+                                    //         Row(
+                                    //           children: [
+                                    //             Container(
+                                    //               padding: const EdgeInsets.all(
+                                    //                 4.0,
+                                    //               ),
+                                    //               decoration: BoxDecoration(
+                                    //                 color: kBgColor,
+                                    //                 borderRadius: BorderRadius.circular(4.0),
+                                    //               ),
+                                    //               child: Text(
+                                    //                 'x${snapshot.data?.value?.data?[index].qty ?? 'quantity'}',
+                                    //                 style: kTextStyle.copyWith(
+                                    //                   color: kRedColor,
+                                    //                 ),
+                                    //               ),
+                                    //             ),
+                                    //             const Spacer(),
+                                    //             Text(
+                                    //               DateFormat.yMMMd().format(
+                                    //                 DateTime.parse(
+                                    //                   snapshot.data?.value?.data?[index].createdAt ?? DateTime.now().toIso8601String(),
+                                    //                 ),
+                                    //               ),
+                                    //               style: kTextStyle.copyWith(color: kGreyTextColor),
+                                    //             ),
+                                    //           ],
+                                    //         ),
+                                    //         if (snapshot.data?.value?.data?[index].menifestId != null)
+                                    //           if ((snapshot.data?.value?.data?[index].orderStat ?? 2) != 7)
+                                    //             Row(
+                                    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    //               children: [
+                                    //                 TextButton(
+                                    //                   onPressed: () {
+                                    //                     showDialog(
+                                    //                       context: context,
+                                    //                       builder: (context) {
+                                    //                         return Dialog(
+                                    //                           backgroundColor: kBgColor,
+                                    //                           shape: RoundedRectangleBorder(
+                                    //                             borderRadius: BorderRadius.circular(
+                                    //                               20,
+                                    //                             ),
+                                    //                           ),
+                                    //                           child: _TrackOrderDialog(
+                                    //                             manifestId: snapshot.data?.value?.data?[index].menifestId.toString() ?? '',
+                                    //                           ),
+                                    //                         );
+                                    //                       },
+                                    //                     );
+                                    //                   },
+                                    //                   child: Text(
+                                    //                     'Track Order',
+                                    //                     style: kTextStyle.copyWith(
+                                    //                       decoration: TextDecoration.underline,
+                                    //                       color: Colors.blue,
+                                    //                     ),
+                                    //                   ),
+                                    //                 ),
+                                    //                 TextButton(
+                                    //                   onPressed: () {
+                                    //                     showDialog(
+                                    //                       context: context,
+                                    //                       builder: (context) {
+                                    //                         return Dialog(
+                                    //                           backgroundColor: kBgColor,
+                                    //                           shape: RoundedRectangleBorder(
+                                    //                             borderRadius: BorderRadius.circular(
+                                    //                               20,
+                                    //                             ),
+                                    //                           ),
+                                    //                           child: _CancelOrderDialog(
+                                    //                             menifestId: snapshot.data?.value?.data?[index].menifestId.toString() ?? '',
+                                    //                             token: token,
+                                    //                             orderDetailsId: snapshot.data?.value?.data?[index].id.toString() ?? '',
+                                    //                             description: snapshot.data?.value?.data?[index].id.toString() ?? '',
+                                    //                             orderId: snapshot.data?.value?.data?[index].orderId.toString() ?? '',
+                                    //                             productId: snapshot.data?.value?.data?[index].productId.toString() ?? '',
+                                    //                           ),
+                                    //                         );
+                                    //                       },
+                                    //                     );
+                                    //                   },
+                                    //                   child: Text(
+                                    //                     'Cancel Order',
+                                    //                     style: kTextStyle.copyWith(
+                                    //                       decoration: TextDecoration.underline,
+                                    //                       color: Colors.red,
+                                    //                     ),
+                                    //                   ),
+                                    //                 )
+                                    //               ],
+                                    //             )
+                                    //           else
+                                    //             Container(
+                                    //               decoration: BoxDecoration(
+                                    //                 borderRadius: BorderRadius.circular(20),
+                                    //                 color: Colors.red,
+                                    //               ),
+                                    //               padding: const EdgeInsets.symmetric(
+                                    //                 vertical: 2,
+                                    //                 horizontal: 5,
+                                    //               ),
+                                    //               alignment: Alignment.center,
+                                    //               child: const Text(
+                                    //                 'Order Cancelled',
+                                    //                 style: TextStyle(
+                                    //                   color: Colors.white,
+                                    //                   fontWeight: FontWeight.bold,
+                                    //                 ),
+                                    //               ),
+                                    //             ),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    // ),
                                   ),
                                 );
                               }),
@@ -345,8 +442,7 @@ class _OrderListState extends State<OrderList> {
                                 padding: const EdgeInsets.all(10.0),
                                 child: Text(
                                   'See Previous Orders',
-                                  style:
-                                      kTextStyle.copyWith(color: kTitleColor),
+                                  style: kTextStyle.copyWith(color: kTitleColor),
                                 ).visible(
                                   snapshot.data!.value!.lastPage != widget.page,
                                 ),
@@ -369,19 +465,12 @@ class _OrderListState extends State<OrderList> {
                           ),
                           Text(
                             'You Haven\'t ordered any items yet',
-                            style: kTextStyle.copyWith(
-                                color: kTitleColor,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold),
+                            style: kTextStyle.copyWith(color: kTitleColor, fontSize: 20.0, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(
                             height: 20.0,
                           ),
-                          ButtonGlobal(
-                              buttontext: 'Shop Now',
-                              buttonDecoration:
-                                  kButtonDecoration.copyWith(color: kMainColor),
-                              onPressed: () => const Home().launch(context)),
+                          ButtonGlobal(buttontext: 'Shop Now', buttonDecoration: kButtonDecoration.copyWith(color: kMainColor), onPressed: () => const Home().launch(context)),
                         ],
                       );
                     }
@@ -514,8 +603,7 @@ class _TrackOrderDialogState extends State<_TrackOrderDialog> {
                         Expanded(
                           child: ElevatedButton(
                             style: const ButtonStyle(
-                              backgroundColor:
-                                  MaterialStatePropertyAll(kMainColor),
+                              backgroundColor: MaterialStatePropertyAll(kMainColor),
                             ),
                             onPressed: () {
                               Navigator.pop(context);
@@ -553,9 +641,7 @@ class _TrackOrderDialogState extends State<_TrackOrderDialog> {
                                   Expanded(
                                     child: ElevatedButton(
                                       style: const ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStatePropertyAll(
-                                                kMainColor),
+                                        backgroundColor: MaterialStatePropertyAll(kMainColor),
                                       ),
                                       onPressed: () {
                                         Navigator.pop(context);
@@ -603,19 +689,19 @@ class _TrackOrderDialogState extends State<_TrackOrderDialog> {
 class _CancelOrderDialog extends StatefulWidget {
   const _CancelOrderDialog({
     Key? key,
-    required this.menifestId,
+    // required this.menifestId,
     required this.token,
-    required this.orderDetailsId,
+    // required this.orderDetailsId,
     required this.description,
-    required this.productId,
+    // required this.productId,
     required this.orderId,
   }) : super(key: key);
 
-  final String menifestId;
+  // final String menifestId;
   final String token;
-  final String orderDetailsId;
+  // final String orderDetailsId;
   final String description;
-  final String productId;
+  // final String productId;
   final String orderId;
 
   @override
@@ -630,17 +716,16 @@ class _CancelOrderDialogState extends State<_CancelOrderDialog> {
     });
     final cancel = await _apiManager.cancelOrder(
       token: widget.token,
-      orderDetailsId: widget.orderDetailsId.toString(),
+      // orderDetailsId: widget.orderDetailsId.toString(),
       description: widget.description.toString(),
       reason: reasonController.text,
       orderId: widget.orderId,
-      productId: widget.productId,
+      // productId: widget.productId,
     );
 
     setState(() {
       _status = CancellationStatus.loaded;
-      cancellationMessage = cancel?.message.toString() ??
-          'Cannot cancel this order at the moment';
+      cancellationMessage = cancel?.message.toString() ?? 'Cannot cancel this order at the moment';
     });
   }
 
@@ -670,9 +755,7 @@ class _CancelOrderDialogState extends State<_CancelOrderDialog> {
                     ),
                   ),
                   Text(
-                    isCancelSelected
-                        ? 'Please provide a reason to cancel this order:'
-                        : 'Are you sure you want to cancel this order?',
+                    isCancelSelected ? 'Please provide a reason to cancel this order:' : 'Are you sure you want to cancel this order?',
                     style: kTextStyle.copyWith(
                       fontSize: 14,
                       color: isCancelSelected ? Colors.red : kMainColor,
@@ -717,8 +800,7 @@ class _CancelOrderDialogState extends State<_CancelOrderDialog> {
                       Expanded(
                         child: ElevatedButton(
                           style: const ButtonStyle(
-                            backgroundColor:
-                                MaterialStatePropertyAll(kMainColor),
+                            backgroundColor: MaterialStatePropertyAll(kMainColor),
                           ),
                           onPressed: () {
                             if (isCancelSelected) {
@@ -747,8 +829,7 @@ class _CancelOrderDialogState extends State<_CancelOrderDialog> {
                         Expanded(
                           child: ElevatedButton(
                             style: const ButtonStyle(
-                              backgroundColor:
-                                  MaterialStatePropertyAll(kMainColor),
+                              backgroundColor: MaterialStatePropertyAll(kMainColor),
                             ),
                             onPressed: () {
                               Navigator.pop(context);
@@ -793,8 +874,7 @@ class _CancelOrderDialogState extends State<_CancelOrderDialog> {
                                 Expanded(
                                   child: ElevatedButton(
                                     style: const ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStatePropertyAll(kMainColor),
+                                      backgroundColor: MaterialStatePropertyAll(kMainColor),
                                     ),
                                     onPressed: () {
                                       Navigator.pop(context);

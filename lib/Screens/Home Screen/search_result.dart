@@ -3,19 +3,18 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import './home.dart';
+import './home_screen.dart';
 import './product_details.dart';
 import '../../GlobalComponents/button_global.dart';
 import '../../GlobalComponents/product_data.dart';
 import '../../Models/trends_model.dart';
 import '../../Services/api_manager.dart';
 import '../../constant.dart';
-import './home.dart';
-import './home_screen.dart';
 
 // ignore: must_be_immutable
 class SearchResult extends StatefulWidget {
-  SearchResult({Key? key, required this.query, required this.page})
-      : super(key: key);
+  SearchResult({Key? key, required this.query, required this.page}) : super(key: key);
   // ignore: prefer_typing_uninitialized_variables
   var query, page;
 
@@ -89,19 +88,13 @@ class _SearchResultState extends State<SearchResult> {
                             ),
                             Text(
                               'No item found with this query',
-                              style: kTextStyle.copyWith(
-                                  color: kTitleColor,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold),
+                              style: kTextStyle.copyWith(color: kTitleColor, fontSize: 20.0, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(
                               height: 20.0,
                             ),
                             ButtonGlobal(
-                                buttontext: 'Search again',
-                                buttonDecoration: kButtonDecoration.copyWith(
-                                    color: kMainColor),
-                                onPressed: () => const Home().launch(context)),
+                                buttontext: 'Search again', buttonDecoration: kButtonDecoration.copyWith(color: kMainColor), onPressed: () => const Home().launch(context)),
                           ],
                         );
                       }
@@ -110,9 +103,8 @@ class _SearchResultState extends State<SearchResult> {
                           GridView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              childAspectRatio: 0.7,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              childAspectRatio: 0.65,
                               crossAxisCount: 2,
                               mainAxisSpacing: 5.0,
                             ),
@@ -120,50 +112,22 @@ class _SearchResultState extends State<SearchResult> {
                             itemBuilder: (_, i) {
                               return ProductCard(
                                 productData: ProductData(
-                                  productTitle: snapshot
-                                          .data?.value?.data![i].name
-                                          .toString() ??
-                                      'Null',
-                                  productPrice: snapshot
-                                          .data?.value?.data![i].salePrice
-                                          .toString() ??
-                                      'Null',
-                                  productDiscount: snapshot
-                                          .data?.value?.data![i].unitPrice
-                                          .toString() ??
-                                      'Null',
-                                  productRating: snapshot
-                                          .data?.value?.data![i].id
-                                          .toString() ??
-                                      'Null',
-                                  productImage: snapshot.data?.value?.data![i]
-                                          .images?[0].image
-                                          .toString() ??
-                                      'Null',
-                                  productDescription: snapshot
-                                          .data?.value?.data![i].description
-                                          .toString() ??
-                                      'Null',
+                                  productTitle: snapshot.data?.value?.data![i].name.toString() ?? 'Null',
+                                  productPrice: snapshot.data?.value?.data![i].salePrice.toString() ?? 'Null',
+                                  productDiscount: snapshot.data?.value?.data![i].unitPrice.toString() ?? 'Null',
+                                  productRating: snapshot.data?.value?.data![i].id.toString() ?? 'Null',
+                                  productImage: snapshot.data?.value?.data![i].images?[0].image.toString() ?? 'Null',
+                                  productDescription: snapshot.data?.value?.data![i].description.toString() ?? 'Null',
                                 ),
                                 onBookMarkPressed: () async {
                                   try {
                                     EasyLoading.show(status: 'Adding...');
-                                    final SharedPreferences prefs =
-                                        await _prefs;
-                                    final wishlist =
-                                        await _apiManager.addToWishList(
-                                            snapshot.data?.value?.data![i].id
-                                                    .toString() ??
-                                                'null',
-                                            prefs
-                                                .getString('token')
-                                                .toString());
+                                    final SharedPreferences prefs = await _prefs;
+                                    final wishlist = await _apiManager.addToWishList(snapshot.data?.value?.data![i].id.toString() ?? 'null', prefs.getString('token').toString());
                                     if (wishlist.success == true) {
-                                      EasyLoading.showSuccess(
-                                          wishlist.message.toString());
+                                      EasyLoading.showSuccess(wishlist.message.toString());
                                     } else {
-                                      EasyLoading.showError(
-                                          wishlist.message.toString());
+                                      EasyLoading.showError(wishlist.message.toString());
                                     }
                                   } catch (e) {
                                     toast(e.toString());
@@ -172,8 +136,7 @@ class _SearchResultState extends State<SearchResult> {
                               ).onTap(
                                 () {
                                   ProductDetails(
-                                    productId:
-                                        snapshot.data?.value?.data![i].id,
+                                    productId: snapshot.data?.value?.data![i].id,
                                   ).launch(context);
                                 },
                                 highlightColor: context.cardColor,
@@ -192,10 +155,8 @@ class _SearchResultState extends State<SearchResult> {
                                 padding: const EdgeInsets.all(10.0),
                                 child: Text(
                                   'Show More Products',
-                                  style:
-                                      kTextStyle.copyWith(color: kTitleColor),
-                                ).visible(snapshot.data!.value!.lastPage !=
-                                    widget.page),
+                                  style: kTextStyle.copyWith(color: kTitleColor),
+                                ).visible(snapshot.data!.value!.lastPage != widget.page),
                               )),
                         ],
                       );

@@ -3,15 +3,14 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
+import './manage_order.dart';
 import '../../Models/order_list_model.dart';
 import '../../Models/order_timelines_model.dart';
 import '../../Services/api_manager.dart';
 import '../../constant.dart';
-import './manage_order.dart';
 
 class DeliveryStatus extends StatefulWidget {
-  const DeliveryStatus({Key? key, required this.details, required this.orderId})
-      : super(key: key);
+  const DeliveryStatus({Key? key, required this.details, required this.orderId}) : super(key: key);
   final Details details;
   final String orderId;
 
@@ -56,9 +55,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
             if (snapshot.hasData) {
               List<Valuet> values = snapshot.data!.value!.reversed.toList();
               int last = values.length;
-              String lastUpdate = values.length == last
-                  ? values[last - 1].status!.name.toString()
-                  : '';
+              String lastUpdate = values.length == last ? values[last - 1].status!.name.toString() : '';
               return Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -90,8 +87,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                                 children: [
                                   Text(
                                     values[0].status?.name ?? 'Confirmed',
-                                    style: kTextStyle.copyWith(
-                                        color: kGreyTextColor),
+                                    style: kTextStyle.copyWith(color: kGreyTextColor),
                                   ),
                                 ],
                               ),
@@ -105,9 +101,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                               lineXY: 0.3,
                               indicatorStyle: IndicatorStyle(
                                   indicator: Icon(
-                                    values.length > 1
-                                        ? Icons.check_circle
-                                        : FeatherIcons.xCircle,
+                                    values.length > 1 ? Icons.check_circle : FeatherIcons.xCircle,
                                     color: Colors.green,
                                   ),
                                   color: Colors.green,
@@ -116,11 +110,8 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    values.length > 1
-                                        ? values[1].status!.name.toString()
-                                        : 'Processing',
-                                    style: kTextStyle.copyWith(
-                                        color: kGreyTextColor),
+                                    values.length > 1 ? values[1].status!.name.toString() : 'Processing',
+                                    style: kTextStyle.copyWith(color: kGreyTextColor),
                                   ),
                                 ],
                               ),
@@ -134,9 +125,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                               lineXY: 0.3,
                               indicatorStyle: IndicatorStyle(
                                   indicator: Icon(
-                                    values.length > 2
-                                        ? Icons.check_circle
-                                        : FeatherIcons.xCircle,
+                                    values.length > 2 ? Icons.check_circle : FeatherIcons.xCircle,
                                     color: Colors.green,
                                   ),
                                   color: Colors.green,
@@ -145,11 +134,8 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    values.length > 2
-                                        ? values[2].status!.name.toString()
-                                        : 'Picked',
-                                    style: kTextStyle.copyWith(
-                                        color: kGreyTextColor),
+                                    values.length > 2 ? values[2].status!.name.toString() : 'Picked',
+                                    style: kTextStyle.copyWith(color: kGreyTextColor),
                                   ),
                                 ],
                               ),
@@ -163,9 +149,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                               lineXY: 0.3,
                               indicatorStyle: IndicatorStyle(
                                   indicator: Icon(
-                                    values.length > 3
-                                        ? Icons.check_circle
-                                        : FeatherIcons.xCircle,
+                                    values.length > 3 ? Icons.check_circle : FeatherIcons.xCircle,
                                     color: Colors.green,
                                   ),
                                   color: Colors.green,
@@ -174,11 +158,8 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    values.length > 3
-                                        ? values[3].status!.name.toString()
-                                        : 'Shipped',
-                                    style: kTextStyle.copyWith(
-                                        color: kGreyTextColor),
+                                    values.length > 3 ? values[3].status!.name.toString() : 'Shipped',
+                                    style: kTextStyle.copyWith(color: kGreyTextColor),
                                   ),
                                 ],
                               ),
@@ -193,9 +174,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                               isLast: true,
                               indicatorStyle: IndicatorStyle(
                                   indicator: Icon(
-                                    values.length == last && values.length > 4
-                                        ? Icons.check_circle
-                                        : FeatherIcons.xCircle,
+                                    values.length == last && values.length > 4 ? Icons.check_circle : FeatherIcons.xCircle,
                                     color: Colors.green,
                                   ),
                                   color: Colors.green,
@@ -204,14 +183,8 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    values.length == last && values.length > 4
-                                        ? values[last - 1]
-                                            .status!
-                                            .name
-                                            .toString()
-                                        : 'Delivered',
-                                    style: kTextStyle.copyWith(
-                                        color: kGreyTextColor),
+                                    values.length == last && values.length > 4 ? values[last - 1].status!.name.toString() : 'Delivered',
+                                    style: kTextStyle.copyWith(color: kGreyTextColor),
                                   ),
                                 ],
                               ),
@@ -230,9 +203,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                       child: Container(
                         width: context.width(),
                         decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30.0),
-                              topRight: Radius.circular(30.0)),
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
                         ),
                         child: Column(
                           children: [
@@ -251,45 +222,33 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                                   color: kMainColor,
                                   padding: EdgeInsets.only(bottom: 4.0)),
                               startChild: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 20.0, left: 10.0),
+                                padding: const EdgeInsets.only(top: 20.0, left: 10.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      values[0]
-                                              .orderStatDatetime
-                                              ?.substring(0, 10) ??
-                                          ' ',
+                                      values[0].orderStatDatetime?.substring(0, 10) ?? ' ',
                                       style: kTextStyle,
                                     ),
                                     Text(
-                                      values[0]
-                                              .orderStatDatetime
-                                              ?.substring(12, 16) ??
-                                          ' ',
-                                      style: kTextStyle.copyWith(
-                                          color: kGreyTextColor,
-                                          fontSize: 14.0),
+                                      values[0].orderStatDatetime?.substring(12, 16) ?? ' ',
+                                      style: kTextStyle.copyWith(color: kGreyTextColor, fontSize: 14.0),
                                     ),
                                   ],
                                 ),
                               ),
                               endChild: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 20.0, left: 10.0),
+                                padding: const EdgeInsets.only(top: 20.0, left: 10.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       values[0].status?.name ?? 'Confirmed',
-                                      style: kTextStyle.copyWith(
-                                          color: kTitleColor),
+                                      style: kTextStyle.copyWith(color: kTitleColor),
                                     ),
                                     Text(
                                       values[0].orderStatDesc ?? ' ',
-                                      style: kTextStyle.copyWith(
-                                          color: kGreyTextColor),
+                                      style: kTextStyle.copyWith(color: kGreyTextColor),
                                     ),
                                     const SizedBox(
                                       height: 20.0,
@@ -306,59 +265,39 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                               lineXY: 0.3,
                               indicatorStyle: IndicatorStyle(
                                   indicator: Icon(
-                                    values.length > 1
-                                        ? Icons.check_circle
-                                        : FeatherIcons.xCircle,
+                                    values.length > 1 ? Icons.check_circle : FeatherIcons.xCircle,
                                     color: kMainColor,
                                   ),
                                   color: kMainColor,
                                   padding: const EdgeInsets.only(bottom: 4.0)),
                               startChild: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 20.0, left: 10.0),
+                                padding: const EdgeInsets.only(top: 20.0, left: 10.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      values.length > 1
-                                          ? values[1]
-                                              .orderStatDatetime!
-                                              .substring(0, 10)
-                                          : ' ',
+                                      values.length > 1 ? values[1].orderStatDatetime!.substring(0, 10) : ' ',
                                       style: kTextStyle,
                                     ),
                                     Text(
-                                      values.length > 1
-                                          ? values[1]
-                                              .orderStatDatetime!
-                                              .substring(12, 16)
-                                          : ' ',
-                                      style: kTextStyle.copyWith(
-                                          color: kGreyTextColor,
-                                          fontSize: 14.0),
+                                      values.length > 1 ? values[1].orderStatDatetime!.substring(12, 16) : ' ',
+                                      style: kTextStyle.copyWith(color: kGreyTextColor, fontSize: 14.0),
                                     ),
                                   ],
                                 ),
                               ),
                               endChild: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 20.0, left: 10.0),
+                                padding: const EdgeInsets.only(top: 20.0, left: 10.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      values.length > 1
-                                          ? values[1].status!.name.toString()
-                                          : 'Processing',
-                                      style: kTextStyle.copyWith(
-                                          color: kTitleColor),
+                                      values.length > 1 ? values[1].status!.name.toString() : 'Processing',
+                                      style: kTextStyle.copyWith(color: kTitleColor),
                                     ),
                                     Text(
-                                      values.length > 1
-                                          ? values[1].orderStatDesc.toString()
-                                          : ' ',
-                                      style: kTextStyle.copyWith(
-                                          color: kGreyTextColor),
+                                      values.length > 1 ? values[1].orderStatDesc.toString() : ' ',
+                                      style: kTextStyle.copyWith(color: kGreyTextColor),
                                     ),
                                     const SizedBox(
                                       height: 20.0,
@@ -375,59 +314,39 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                               lineXY: 0.3,
                               indicatorStyle: IndicatorStyle(
                                   indicator: Icon(
-                                    values.length > 2
-                                        ? Icons.check_circle
-                                        : FeatherIcons.xCircle,
+                                    values.length > 2 ? Icons.check_circle : FeatherIcons.xCircle,
                                     color: kMainColor,
                                   ),
                                   color: kMainColor,
                                   padding: const EdgeInsets.only(bottom: 4.0)),
                               startChild: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 20.0, left: 10.0),
+                                padding: const EdgeInsets.only(top: 20.0, left: 10.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      values.length > 2
-                                          ? values[2]
-                                              .orderStatDatetime!
-                                              .substring(0, 10)
-                                          : ' ',
+                                      values.length > 2 ? values[2].orderStatDatetime!.substring(0, 10) : ' ',
                                       style: kTextStyle,
                                     ),
                                     Text(
-                                      values.length > 2
-                                          ? values[2]
-                                              .orderStatDatetime!
-                                              .substring(12, 16)
-                                          : ' ',
-                                      style: kTextStyle.copyWith(
-                                          color: kGreyTextColor,
-                                          fontSize: 14.0),
+                                      values.length > 2 ? values[2].orderStatDatetime!.substring(12, 16) : ' ',
+                                      style: kTextStyle.copyWith(color: kGreyTextColor, fontSize: 14.0),
                                     ),
                                   ],
                                 ),
                               ),
                               endChild: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 20.0, left: 10.0),
+                                padding: const EdgeInsets.only(top: 20.0, left: 10.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      values.length > 2
-                                          ? values[2].status!.name.toString()
-                                          : 'Picked',
-                                      style: kTextStyle.copyWith(
-                                          color: kTitleColor),
+                                      values.length > 2 ? values[2].status!.name.toString() : 'Picked',
+                                      style: kTextStyle.copyWith(color: kTitleColor),
                                     ),
                                     Text(
-                                      values.length > 2
-                                          ? values[2].orderStatDesc.toString()
-                                          : ' ',
-                                      style: kTextStyle.copyWith(
-                                          color: kGreyTextColor),
+                                      values.length > 2 ? values[2].orderStatDesc.toString() : ' ',
+                                      style: kTextStyle.copyWith(color: kGreyTextColor),
                                     ),
                                     const SizedBox(
                                       height: 20.0,
@@ -444,59 +363,39 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                               lineXY: 0.3,
                               indicatorStyle: IndicatorStyle(
                                   indicator: Icon(
-                                    values.length > 3
-                                        ? Icons.check_circle
-                                        : FeatherIcons.xCircle,
+                                    values.length > 3 ? Icons.check_circle : FeatherIcons.xCircle,
                                     color: kMainColor,
                                   ),
                                   color: kMainColor,
                                   padding: const EdgeInsets.only(bottom: 4.0)),
                               startChild: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 20.0, left: 10.0),
+                                padding: const EdgeInsets.only(top: 20.0, left: 10.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      values.length > 3
-                                          ? values[3]
-                                              .orderStatDatetime!
-                                              .substring(0, 10)
-                                          : ' ',
+                                      values.length > 3 ? values[3].orderStatDatetime!.substring(0, 10) : ' ',
                                       style: kTextStyle,
                                     ),
                                     Text(
-                                      values.length > 3
-                                          ? values[3]
-                                              .orderStatDatetime!
-                                              .substring(12, 16)
-                                          : ' ',
-                                      style: kTextStyle.copyWith(
-                                          color: kGreyTextColor,
-                                          fontSize: 14.0),
+                                      values.length > 3 ? values[3].orderStatDatetime!.substring(12, 16) : ' ',
+                                      style: kTextStyle.copyWith(color: kGreyTextColor, fontSize: 14.0),
                                     ),
                                   ],
                                 ),
                               ),
                               endChild: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 20.0, left: 10.0),
+                                padding: const EdgeInsets.only(top: 20.0, left: 10.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      values.length > 3
-                                          ? values[3].status!.name.toString()
-                                          : 'Shipped',
-                                      style: kTextStyle.copyWith(
-                                          color: kTitleColor),
+                                      values.length > 3 ? values[3].status!.name.toString() : 'Shipped',
+                                      style: kTextStyle.copyWith(color: kTitleColor),
                                     ),
                                     Text(
-                                      values.length > 3
-                                          ? values[3].orderStatDesc.toString()
-                                          : ' ',
-                                      style: kTextStyle.copyWith(
-                                          color: kGreyTextColor),
+                                      values.length > 3 ? values[3].orderStatDesc.toString() : ' ',
+                                      style: kTextStyle.copyWith(color: kGreyTextColor),
                                     ),
                                     const SizedBox(
                                       height: 20.0,
@@ -514,64 +413,39 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                               isLast: true,
                               indicatorStyle: IndicatorStyle(
                                   indicator: Icon(
-                                    values.length == last && values.length > 4
-                                        ? Icons.check_circle
-                                        : FeatherIcons.xCircle,
+                                    values.length == last && values.length > 4 ? Icons.check_circle : FeatherIcons.xCircle,
                                     color: kMainColor,
                                   ),
                                   color: kMainColor,
                                   padding: const EdgeInsets.only(bottom: 4.0)),
                               startChild: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 20.0, left: 10.0),
+                                padding: const EdgeInsets.only(top: 20.0, left: 10.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      values.length == last && values.length > 4
-                                          ? values[last - 1]
-                                              .orderStatDatetime!
-                                              .substring(0, 10)
-                                          : ' ',
+                                      values.length == last && values.length > 4 ? values[last - 1].orderStatDatetime!.substring(0, 10) : ' ',
                                       style: kTextStyle,
                                     ),
                                     Text(
-                                      values.length == last && values.length > 4
-                                          ? values[last - 1]
-                                              .orderStatDatetime!
-                                              .substring(12, 16)
-                                          : ' ',
-                                      style: kTextStyle.copyWith(
-                                          color: kGreyTextColor,
-                                          fontSize: 14.0),
+                                      values.length == last && values.length > 4 ? values[last - 1].orderStatDatetime!.substring(12, 16) : ' ',
+                                      style: kTextStyle.copyWith(color: kGreyTextColor, fontSize: 14.0),
                                     ),
                                   ],
                                 ),
                               ),
                               endChild: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 20.0, left: 10.0),
+                                padding: const EdgeInsets.only(top: 20.0, left: 10.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      values.length == last && values.length > 4
-                                          ? values[last - 1]
-                                              .status!
-                                              .name
-                                              .toString()
-                                          : 'Delivered',
-                                      style: kTextStyle.copyWith(
-                                          color: kTitleColor),
+                                      values.length == last && values.length > 4 ? values[last - 1].status!.name.toString() : 'Delivered',
+                                      style: kTextStyle.copyWith(color: kTitleColor),
                                     ),
                                     Text(
-                                      values.length == last && values.length > 4
-                                          ? values[last - 1]
-                                              .orderStatDesc
-                                              .toString()
-                                          : ' ',
-                                      style: kTextStyle.copyWith(
-                                          color: kGreyTextColor),
+                                      values.length == last && values.length > 4 ? values[last - 1].orderStatDesc.toString() : ' ',
+                                      style: kTextStyle.copyWith(color: kGreyTextColor),
                                     ),
                                     const SizedBox(
                                       height: 20.0,
@@ -587,7 +461,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                               height: 20.0,
                             ),
                             ListTile(
-                             /* leading: Image.network(
+                              /* leading: Image.network(
                                 widget.details.product?.images?[0].image ?? '',
                                 height: 60.0,
                                 width: 60.0,
@@ -601,23 +475,19 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      currencyIcon +
-                                          widget.details.salePrice.toString(),
-                                      style: kTextStyle.copyWith(
-                                          color: kMainColor),
+                                      currencyIcon + widget.details.salePrice.toString(),
+                                      style: kTextStyle.copyWith(color: kMainColor),
                                     ),
                                     const Spacer(),
                                     Container(
                                       padding: const EdgeInsets.all(4.0),
                                       decoration: BoxDecoration(
                                         color: const Color(0xFFDFF5E8),
-                                        borderRadius:
-                                            BorderRadius.circular(4.0),
+                                        borderRadius: BorderRadius.circular(4.0),
                                       ),
                                       child: Text(
                                         'Manage Order',
-                                        style: kTextStyle.copyWith(
-                                            color: const Color(0xFF13B249)),
+                                        style: kTextStyle.copyWith(color: const Color(0xFF13B249)),
                                       ).onTap(() {
                                         ManageOrder(
                                           details: widget.details,
@@ -629,13 +499,11 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                                       padding: const EdgeInsets.all(4.0),
                                       decoration: BoxDecoration(
                                         color: Colors.red.withOpacity(0.1),
-                                        borderRadius:
-                                            BorderRadius.circular(4.0),
+                                        borderRadius: BorderRadius.circular(4.0),
                                       ),
                                       child: Text(
                                         'Cancelled',
-                                        style: kTextStyle.copyWith(
-                                            color: Colors.red),
+                                        style: kTextStyle.copyWith(color: Colors.red),
                                       ),
                                     ).visible(lastUpdate == 'CANCELLED'),
                                   ],
