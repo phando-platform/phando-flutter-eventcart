@@ -37,7 +37,8 @@ class _ProductDetailsState extends State<ProductDetails> {
     try {
       EasyLoading.show(status: 'Adding...');
       final SharedPreferences prefs = await _prefs;
-      final wishlist = await _apiManager.addToWishList(id, prefs.getString('token').toString());
+      final wishlist = await _apiManager.addToWishList(
+          id, prefs.getString('token').toString());
       if (wishlist.success == true) {
         EasyLoading.showSuccess(wishlist.message.toString());
       } else {
@@ -100,7 +101,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                 backgroundColor: kTransparent,
                 actions: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
                     child: const CircleAvatar(
                       backgroundColor: kWhiteColor,
                       radius: 15.0,
@@ -109,7 +111,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                         Icons.favorite_border_outlined,
                         color: kMainColor,
                       )),
-                    ).onTap(() => addBookmark(snapshot.data?.value?.id?.toString() ?? '')),
+                    ).onTap(() => addBookmark(
+                        snapshot.data?.value?.id?.toString() ?? '')),
                   ),
                 ],
               ),
@@ -128,56 +131,136 @@ class _ProductDetailsState extends State<ProductDetails> {
                     builder: (BuildContext context, ref, watch) {
                       bool isAdded = ref.read(cartProvider.notifier).checkCart(
                           snapshot.data?.value?.id ?? 10,
-                          snapshot.data!.value!.sizes!.isEmpty ? 'Null' : snapshot.data?.value?.sizes?[selectedSizeIndex].name ?? 'Null',
-                          snapshot.data!.value!.colors!.isEmpty ? 'Null' : snapshot.data?.value?.colors?[selectedColorIndex].name ?? 'Null');
+                          snapshot.data!.value!.sizes!.isEmpty
+                              ? 'Null'
+                              : snapshot.data?.value?.sizes?[selectedSizeIndex]
+                                      .name ??
+                                  'Null',
+                          snapshot.data!.value!.colors!.isEmpty
+                              ? 'Null'
+                              : snapshot.data?.value
+                                      ?.colors?[selectedColorIndex].name ??
+                                  'Null');
                       return Row(
                         children: [
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 if (token != 'Guest' && token != 'Not Found') {
                                   if (ref.read(cartProvider.notifier).checkCart(
                                           snapshot.data?.value?.id ?? 10,
-                                          snapshot.data!.value!.sizes!.isEmpty ? 'Null' : snapshot.data?.value?.sizes?[selectedSizeIndex].name ?? 'Null',
-                                          snapshot.data!.value!.colors!.isEmpty ? 'Null' : snapshot.data?.value?.colors?[selectedColorIndex].name ?? 'Null') ==
+                                          snapshot.data!.value!.sizes!.isEmpty
+                                              ? 'Null'
+                                              : snapshot
+                                                      .data
+                                                      ?.value
+                                                      ?.sizes?[
+                                                          selectedSizeIndex]
+                                                      .name ??
+                                                  'Null',
+                                          snapshot.data!.value!.colors!.isEmpty
+                                              ? 'Null'
+                                              : snapshot
+                                                      .data
+                                                      ?.value
+                                                      ?.colors?[
+                                                          selectedColorIndex]
+                                                      .name ??
+                                                  'Null') ==
                                       false) {
                                     EasyLoading.show(
                                       status: 'Adding To The Cart',
                                     );
                                     Cart cartItem = Cart(
-                                      id: snapshot.data?.value?.id ?? 'Null',
-                                      price: snapshot.data?.value?.salePrice ?? 0.0,
-                                      quantity: snapshot.data?.value?.minimumQty ?? productQuantity,
-                                      size: snapshot.data!.value!.sizes!.isEmpty ? 'Null' : snapshot.data?.value?.sizes?[selectedSizeIndex].name,
-                                      color: snapshot.data!.value!.colors!.isEmpty ? 'Null' : snapshot.data?.value?.colors?[selectedColorIndex].hex,
-                                      shippingCost: snapshot.data?.value?.shippingCost ?? 'Null',
-                                      estimatedShippingDays: snapshot.data?.value?.details?.estimatedShippingDays.toString() ?? 'Null',
-                                      productPriceTotal: snapshot.data?.value?.salePrice * productQuantity ?? 'Null',
-                                      minQuantity: snapshot.data?.value?.minimumQty ?? 'Null',
-                                    );
+                                        id: snapshot.data?.value?.id ?? 0,
+                                        price: snapshot
+                                                .data?.value?.salePrice ??
+                                            0,
+                                        quantity: productQuantity,
+                                        size:
+                                            snapshot.data!.value!.sizes!.isEmpty
+                                                ? 'Null'
+                                                : snapshot
+                                                    .data
+                                                    ?.value
+                                                    ?.sizes?[selectedSizeIndex]
+                                                    .name,
+                                        color: snapshot
+                                                .data!.value!.colors!.isEmpty
+                                            ? 'Null'
+                                            : snapshot
+                                                .data
+                                                ?.value
+                                                ?.colors?[selectedColorIndex]
+                                                .hex,
+                                        shippingCost: snapshot
+                                                .data?.value?.shippingCost ??
+                                            'Null',
+                                        estimatedShippingDays: snapshot
+                                                .data
+                                                ?.value
+                                                ?.details
+                                                ?.estimatedShippingDays ??
+                                            'Null',
+                                        productPriceTotal:
+                                            snapshot.data?.value?.salePrice *
+                                                    productQuantity ??
+                                                'Null');
                                     CartItemUi cartUi = CartItemUi(
                                         id: snapshot.data?.value?.id ?? 0,
                                         productName: snapshot.data?.value?.name,
-                                        productImage: snapshot.data?.value?.images?[0].image,
+                                        productImage: snapshot
+                                            .data?.value?.images?[0].image,
                                         productQuantity: productQuantity,
-                                        productPrice: snapshot.data?.value?.salePrice ?? 0.00,
-                                        productColor: snapshot.data!.value!.colors!.isEmpty ? 'Null' : snapshot.data?.value?.colors?[selectedColorIndex].hex,
-                                        productSize: snapshot.data!.value!.sizes!.isEmpty ? 'Null' : snapshot.data?.value?.sizes?[selectedSizeIndex].name,
-                                        minimumQtd: snapshot.data!.value!.minimumQty.toString());
-                                    ref.read(cartProvider.notifier).addItem(cartItem);
-                                    ref.read(cartItemUiProvider.notifier).addUiItem(cartUi);
-                                    // List<CartItemUi> cartItemUiList = ref
-                                    //     .watch(cartItemUiProvider)
-                                    //     .cartItemUis;
-                                    // List<Cart> cartItemsList =
-                                    //     ref.watch(cartProvider).cartItems;
-                                    ref.read(cartItemUiProvider.notifier).updateQuantity(
+                                        productPrice:
+                                            snapshot.data?.value?.salePrice ??
+                                                0.00,
+                                        productColor: snapshot
+                                                .data!.value!.colors!.isEmpty
+                                            ? 'Null'
+                                            : snapshot
+                                                .data
+                                                ?.value
+                                                ?.colors?[selectedColorIndex]
+                                                .hex,
+                                        productSize:
+                                            snapshot.data!.value!.sizes!.isEmpty
+                                                ? 'Null'
+                                                : snapshot
+                                                    .data
+                                                    ?.value
+                                                    ?.sizes?[selectedSizeIndex]
+                                                    .name,
+                                        minimumQtd: snapshot
+                                            .data!.value!.minimumQty
+                                            .toString());
+                                    await ref
+                                        .read(cartProvider)
+                                        .addItem(cartItem);
+                                    await ref
+                                        .read(cartItemUiProvider)
+                                        .addUiItem(cartUi);
+                                    ref.read(cartItemUiProvider).updateQuantity(
                                           cartUi.id ?? 0,
-                                          minimumQuantity: ref.read(cartItemUiProvider).cartItemUis[ref.read(cartItemUiProvider).cartItemUis.indexOf(cartUi)].minimumQtd.toInt(),
+                                          minimumQuantity: ref
+                                              .read(cartItemUiProvider)
+                                              .cartItemUis[ref
+                                                  .read(cartItemUiProvider)
+                                                  .cartItemUis
+                                                  .indexOf(cartUi)]
+                                              .minimumQtd
+                                              .toInt(),
                                         );
-                                    ref.read(cartProvider.notifier).updatePrice(
-                                          cartUi.id ?? 0,
-                                          ref.read(cartItemUiProvider).cartItemUis[ref.read(cartItemUiProvider).cartItemUis.indexOf(cartUi)].productQuantity!.toInt(),
+                                    ref.read(cartProvider).updatePrice(
+                                          cartItem.id ?? 'Null',
+                                          ref
+                                              .read(cartItemUiProvider)
+                                              .cartItemUis[ref
+                                                  .read(cartItemUiProvider)
+                                                  .cartItemUis
+                                                  .indexOf(cartUi)]
+                                              .minimumQtd!
+                                              .toInt(),
                                         );
                                     EasyLoading.showSuccess('Added To Cart');
                                     setState(() {});
@@ -204,7 +287,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     children: [
                                       Text(
                                         !isAdded ? 'Add To Cart' : 'Go To Cart',
-                                        style: kTextStyle.copyWith(color: kMainColor, fontWeight: FontWeight.bold),
+                                        style: kTextStyle.copyWith(
+                                            color: kMainColor,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
@@ -218,36 +303,115 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 if (token != 'Guest' && token != 'Not Found') {
                                   if (ref.read(cartProvider.notifier).checkCart(
                                           snapshot.data?.value?.id ?? 10,
-                                          snapshot.data!.value!.sizes!.isEmpty ? 'Null' : snapshot.data?.value?.sizes?[selectedSizeIndex].name ?? 'Null',
-                                          snapshot.data!.value!.colors!.isEmpty ? 'Null' : snapshot.data?.value?.colors?[selectedColorIndex].hex ?? 'Null') ==
+                                          snapshot.data!.value!.sizes!.isEmpty
+                                              ? 'Null'
+                                              : snapshot
+                                                      .data
+                                                      ?.value
+                                                      ?.sizes?[
+                                                          selectedSizeIndex]
+                                                      .name ??
+                                                  'Null',
+                                          snapshot.data!.value!.colors!.isEmpty
+                                              ? 'Null'
+                                              : snapshot
+                                                      .data
+                                                      ?.value
+                                                      ?.colors?[
+                                                          selectedColorIndex]
+                                                      .hex ??
+                                                  'Null') ==
                                       false) {
                                     Cart cartItem = Cart(
                                         id: snapshot.data?.value?.id ?? 0,
-                                        price: snapshot.data?.value?.salePrice ?? 0,
+                                        price: snapshot
+                                                .data?.value?.salePrice ??
+                                            0,
                                         quantity: productQuantity,
-                                        size: snapshot.data!.value!.sizes!.isEmpty ? 'Null' : snapshot.data?.value?.sizes?[selectedSizeIndex].name,
-                                        color: snapshot.data!.value!.colors!.isEmpty ? 'Null' : snapshot.data?.value?.colors?[selectedColorIndex].hex,
-                                        shippingCost: snapshot.data?.value?.shippingCost ?? 'Null',
-                                        estimatedShippingDays: snapshot.data?.value?.details?.estimatedShippingDays ?? 'Null',
-                                        productPriceTotal: snapshot.data?.value?.salePrice * productQuantity ?? 'Null');
+                                        size:
+                                            snapshot.data!.value!.sizes!.isEmpty
+                                                ? 'Null'
+                                                : snapshot
+                                                    .data
+                                                    ?.value
+                                                    ?.sizes?[selectedSizeIndex]
+                                                    .name,
+                                        color: snapshot
+                                                .data!.value!.colors!.isEmpty
+                                            ? 'Null'
+                                            : snapshot
+                                                .data
+                                                ?.value
+                                                ?.colors?[selectedColorIndex]
+                                                .hex,
+                                        shippingCost: snapshot
+                                                .data?.value?.shippingCost ??
+                                            'Null',
+                                        estimatedShippingDays: snapshot
+                                                .data
+                                                ?.value
+                                                ?.details
+                                                ?.estimatedShippingDays ??
+                                            'Null',
+                                        productPriceTotal:
+                                            snapshot.data?.value?.salePrice *
+                                                    productQuantity ??
+                                                'Null');
                                     CartItemUi cartUi = CartItemUi(
                                         id: snapshot.data?.value?.id ?? 0,
                                         productName: snapshot.data?.value?.name,
-                                        productImage: snapshot.data?.value?.images?[0].image,
+                                        productImage: snapshot
+                                            .data?.value?.images?[0].image,
                                         productQuantity: productQuantity,
-                                        productPrice: snapshot.data?.value?.salePrice ?? 0.00,
-                                        productColor: snapshot.data!.value!.colors!.isEmpty ? 'Null' : snapshot.data?.value?.colors?[selectedColorIndex].hex,
-                                        productSize: snapshot.data!.value!.sizes!.isEmpty ? 'Null' : snapshot.data?.value?.sizes?[selectedSizeIndex].name,
-                                        minimumQtd: snapshot.data!.value!.minimumQty.toString());
-                                    await ref.read(cartProvider).addItem(cartItem);
-                                    await ref.read(cartItemUiProvider).addUiItem(cartUi);
+                                        productPrice:
+                                            snapshot.data?.value?.salePrice ??
+                                                0.00,
+                                        productColor: snapshot
+                                                .data!.value!.colors!.isEmpty
+                                            ? 'Null'
+                                            : snapshot
+                                                .data
+                                                ?.value
+                                                ?.colors?[selectedColorIndex]
+                                                .hex,
+                                        productSize:
+                                            snapshot.data!.value!.sizes!.isEmpty
+                                                ? 'Null'
+                                                : snapshot
+                                                    .data
+                                                    ?.value
+                                                    ?.sizes?[selectedSizeIndex]
+                                                    .name,
+                                        minimumQtd: snapshot
+                                            .data!.value!.minimumQty
+                                            .toString());
+                                    await ref
+                                        .read(cartProvider)
+                                        .addItem(cartItem);
+                                    await ref
+                                        .read(cartItemUiProvider)
+                                        .addUiItem(cartUi);
                                     ref.read(cartItemUiProvider).updateQuantity(
                                           cartUi.id ?? 0,
-                                          minimumQuantity: ref.read(cartItemUiProvider).cartItemUis[ref.read(cartItemUiProvider).cartItemUis.indexOf(cartUi)].minimumQtd.toInt(),
+                                          minimumQuantity: ref
+                                              .read(cartItemUiProvider)
+                                              .cartItemUis[ref
+                                                  .read(cartItemUiProvider)
+                                                  .cartItemUis
+                                                  .indexOf(cartUi)]
+                                              .minimumQtd
+                                              .toInt(),
                                         );
                                     ref.read(cartProvider).updatePrice(
                                           cartItem.id ?? 'Null',
-                                          ref.read(cartItemUiProvider).cartItemUis[ref.read(cartItemUiProvider).cartItemUis.indexOf(cartUi)].minimumQtd!.toInt(),
+                                          ref
+                                              .read(cartItemUiProvider)
+                                              .cartItemUis[ref
+                                                  .read(cartItemUiProvider)
+                                                  .cartItemUis
+                                                  .indexOf(cartUi)]
+                                              .minimumQtd!
+                                              .toInt(),
                                         );
                                     const CartScreen().launch(context);
                                   } else {
@@ -261,7 +425,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 }
                               },
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                                padding: const EdgeInsets.only(
+                                    left: 10.0, right: 10.0),
                                 child: Container(
                                   height: 55.0,
                                   decoration: BoxDecoration(
@@ -273,11 +438,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     children: [
                                       Text(
                                         'Buy Now',
-                                        style: kTextStyle.copyWith(color: kWhiteColor, fontWeight: FontWeight.bold),
+                                        style: kTextStyle.copyWith(
+                                            color: kWhiteColor,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        currencyIcon + (snapshot.data?.value?.salePrice.toString() ?? '${currencyIcon}9.99'),
-                                        style: kTextStyle.copyWith(color: kWhiteColor, fontSize: 14.0),
+                                        currencyIcon +
+                                            (snapshot.data?.value?.salePrice
+                                                    .toString() ??
+                                                '${currencyIcon}9.99'),
+                                        style: kTextStyle.copyWith(
+                                            color: kWhiteColor, fontSize: 14.0),
                                       ),
                                     ],
                                   ),
@@ -297,7 +468,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                     Center(
                       child: CarouselSlider.builder(
                         itemCount: snapshot.data?.value?.images?.length ?? 10,
-                        itemBuilder: (BuildContext context, int index, int pageViewIndex) {
+                        itemBuilder: (BuildContext context, int index,
+                            int pageViewIndex) {
                           return SizedBox(
                             height: 380,
                             child: PhotoView(
@@ -305,7 +477,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 color: Color(0xFFFFFFFF),
                               ),
                               imageProvider: NetworkImage(
-                                snapshot.data?.value?.images![index].image.toString() ?? '',
+                                snapshot.data?.value?.images![index].image
+                                        .toString() ??
+                                    '',
                               ),
                             ),
                           );
@@ -319,7 +493,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                           reverse: false,
                           autoPlay: true,
                           autoPlayInterval: const Duration(seconds: 3),
-                          autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                          autoPlayAnimationDuration:
+                              const Duration(milliseconds: 800),
                           autoPlayCurve: Curves.fastOutSlowIn,
                           // enlargeCenterPage: true,
                           scrollDirection: Axis.horizontal,
@@ -337,21 +512,34 @@ class _ProductDetailsState extends State<ProductDetails> {
                           Row(
                             children: [
                               Text(
-                                currencyIcon + (snapshot.data?.value?.salePrice.toString() ?? '9.99'),
-                                style: kTextStyle.copyWith(color: kMainColor, fontSize: 18.0),
+                                currencyIcon +
+                                    (snapshot.data?.value?.salePrice
+                                            .toString() ??
+                                        '9.99'),
+                                style: kTextStyle.copyWith(
+                                    color: kMainColor, fontSize: 18.0),
                               ),
                               const SizedBox(
                                 width: 5.0,
                               ),
                               Text(
-                                currencyIcon + (snapshot.data?.value?.unitPrice.toString() ?? '9.99'),
-                                style: kTextStyle.copyWith(color: kGreyTextColor, fontSize: 12.0, decoration: TextDecoration.lineThrough),
+                                currencyIcon +
+                                    (snapshot.data?.value?.unitPrice
+                                            .toString() ??
+                                        '9.99'),
+                                style: kTextStyle.copyWith(
+                                    color: kGreyTextColor,
+                                    fontSize: 12.0,
+                                    decoration: TextDecoration.lineThrough),
                               ),
                               const Spacer(),
                               IconButton(
                                 icon: const Icon(Icons.share),
                                 color: kGreyTextColor,
-                                onPressed: () => shareProductLink("Event Cart", "https://eventcart.co.in/p/" + (snapshot.data?.value?.slug ?? '')),
+                                onPressed: () => shareProductLink(
+                                    "Event Cart",
+                                    "https://eventcart.co.in/p/" +
+                                        (snapshot.data?.value?.slug ?? '')),
                               ),
                               const SizedBox(
                                 width: 5.0,
@@ -362,7 +550,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                             height: 10.0,
                           ),
                           Text(
-                            (snapshot.data?.value?.name.toString() ?? 'T-Shirt'),
+                            (snapshot.data?.value?.name.toString() ??
+                                'T-Shirt'),
                             style: kTextStyle.copyWith(fontSize: 18.0),
                             maxLines: 2,
                           ),
@@ -498,21 +687,31 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   ),
                                   HorizontalList(
                                     spacing: 0,
-                                    itemCount: snapshot.data?.value?.sizes?.length ?? 10,
+                                    itemCount:
+                                        snapshot.data?.value?.sizes?.length ??
+                                            10,
                                     itemBuilder: (_, i) {
                                       return Padding(
-                                        padding: const EdgeInsets.only(right: 4.0),
+                                        padding:
+                                            const EdgeInsets.only(right: 4.0),
                                         child: Container(
                                           padding: const EdgeInsets.all(10.0),
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10.0),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
                                             border: Border.all(color: kBgColor),
-                                            color: selectedSizeIndex == i ? kMainColor : kWhiteColor,
+                                            color: selectedSizeIndex == i
+                                                ? kMainColor
+                                                : kWhiteColor,
                                           ),
                                           child: Text(
-                                            snapshot.data?.value?.sizes![i].name ?? '',
+                                            snapshot.data?.value?.sizes![i]
+                                                    .name ??
+                                                '',
                                             style: kTextStyle.copyWith(
-                                              color: selectedSizeIndex == i ? kWhiteColor : kTitleColor,
+                                              color: selectedSizeIndex == i
+                                                  ? kWhiteColor
+                                                  : kTitleColor,
                                             ),
                                           ),
                                         ).onTap(
@@ -539,13 +738,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 decoration: BoxDecoration(
                                   border: Border(
                                     bottom: BorderSide(
-                                      color: description ? kMainColor : kWhiteColor,
+                                      color: description
+                                          ? kMainColor
+                                          : kWhiteColor,
                                     ),
                                   ),
                                 ),
                                 child: Text(
                                   'Description',
-                                  style: kTextStyle.copyWith(color: description ? kTitleColor : kGreyTextColor),
+                                  style: kTextStyle.copyWith(
+                                      color: description
+                                          ? kTitleColor
+                                          : kGreyTextColor),
                                 ),
                               ).onTap(() {
                                 setState(() {
@@ -560,13 +764,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 decoration: BoxDecoration(
                                   border: Border(
                                     bottom: BorderSide(
-                                      color: !description ? kMainColor : kWhiteColor,
+                                      color: !description
+                                          ? kMainColor
+                                          : kWhiteColor,
                                     ),
                                   ),
                                 ),
                                 child: Text(
                                   'Reviews',
-                                  style: kTextStyle.copyWith(color: !description ? kTitleColor : kGreyTextColor),
+                                  style: kTextStyle.copyWith(
+                                      color: !description
+                                          ? kTitleColor
+                                          : kGreyTextColor),
                                 ),
                               ).visible(false).onTap(() {
                                 setState(() {

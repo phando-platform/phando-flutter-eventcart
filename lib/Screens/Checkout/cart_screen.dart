@@ -82,12 +82,19 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   Text(
                     'No Items in the cart',
-                    style: kTextStyle.copyWith(color: kTitleColor, fontSize: 20.0, fontWeight: FontWeight.bold),
+                    style: kTextStyle.copyWith(
+                        color: kTitleColor,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
                     height: 20.0,
                   ),
-                  ButtonGlobal(buttontext: 'Shop Now', buttonDecoration: kButtonDecoration.copyWith(color: kMainColor), onPressed: () => const Home().launch(context)),
+                  ButtonGlobal(
+                      buttontext: 'Shop Now',
+                      buttonDecoration:
+                          kButtonDecoration.copyWith(color: kMainColor),
+                      onPressed: () => const Home().launch(context)),
                 ],
               ));
         } else {
@@ -130,9 +137,12 @@ class _CartScreenState extends State<CartScreen> {
                                       height: 120.0,
                                       width: 100.0,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                         image: DecorationImage(
-                                          image: NetworkImage(cartItemUi[index].productImage ?? ''),
+                                          image: NetworkImage(
+                                              cartItemUi[index].productImage ??
+                                                  ''),
                                         ),
                                       ),
                                     )),
@@ -143,7 +153,8 @@ class _CartScreenState extends State<CartScreen> {
                                   flex: 3,
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         cartItemUi[index].productName ?? 'Null',
@@ -152,7 +163,8 @@ class _CartScreenState extends State<CartScreen> {
                                       ),
                                       Text(
                                         'Price: $currencyIcon${(cartItemUi[index].productPrice * cartItemUi[index].productQuantity).toString()}',
-                                        style: kTextStyle.copyWith(color: kMainColor, fontSize: 12.0),
+                                        style: kTextStyle.copyWith(
+                                            color: kMainColor, fontSize: 12.0),
                                       ),
                                       // RichText(
                                       //   text: TextSpan(
@@ -194,15 +206,35 @@ class _CartScreenState extends State<CartScreen> {
                                             Icons.remove,
                                             color: kTitleColor,
                                           ).onTap(() {
-                                            if (ref.read(cartItemUiProvider).cartItemUis[index].minimumQtd.toInt() <
-                                                ref.read(cartItemUiProvider).cartItemUis[index].productQuantity!) {
-                                              ref.read(cartItemUiProvider.notifier).decreaseQuantity(cartItemUi[index].id ?? 0);
+                                            if (ref
+                                                    .read(cartItemUiProvider)
+                                                    .cartItemUis[index]
+                                                    .minimumQtd
+                                                    .toInt() <
+                                                ref
+                                                    .read(cartItemUiProvider)
+                                                    .cartItemUis[index]
+                                                    .productQuantity!) {
+                                              ref
+                                                  .read(cartItemUiProvider
+                                                      .notifier)
+                                                  .decreaseQuantity(
+                                                      cartItemUi[index].id ??
+                                                          0);
                                               ref
                                                   .read(cartProvider.notifier)
-                                                  .updatePrice(cartItemUi[index].id ?? 0, ref.read(cartItemUiProvider.notifier).cartItemUis[index].productQuantity!.toInt());
+                                                  .updatePrice(
+                                                      cartItemUi[index].id ?? 0,
+                                                      ref
+                                                          .read(
+                                                              cartItemUiProvider
+                                                                  .notifier)
+                                                          .cartItemUis[index]
+                                                          .productQuantity!
+                                                          .toInt());
                                             } else {
                                               toast(
-                                                'Minimum purchase quantity for product is ${ref.read(cartProvider).cartItems[index].minQuantity}',
+                                                'Minimum purchase quantity for product is ${ref.read(cartItemUiProvider).cartItemUis[index].productQuantity}',
                                                 bgColor: Colors.red,
                                               );
                                             }
@@ -211,14 +243,18 @@ class _CartScreenState extends State<CartScreen> {
                                             width: 10.0,
                                           ),
                                           Text(
-                                            cartItemUi[index].productQuantity.toString(),
+                                            cartItemUi[index]
+                                                .productQuantity
+                                                .toString(),
                                             // ref
                                             //     .read(
                                             //         cartItemUiProvider.notifier)
                                             //     .cartItemUis[index]
                                             //     .productQuantity
                                             //     .toString(),
-                                            style: kTextStyle.copyWith(color: kMainColor, fontSize: 18.0),
+                                            style: kTextStyle.copyWith(
+                                                color: kMainColor,
+                                                fontSize: 18.0),
                                           ),
                                           const SizedBox(
                                             width: 10.0,
@@ -227,12 +263,22 @@ class _CartScreenState extends State<CartScreen> {
                                             Icons.add,
                                             color: kTitleColor,
                                           ).onTap(() {
-                                            ref.read(cartItemUiProvider.notifier).updateQuantity(
+                                            ref
+                                                .read(
+                                                    cartItemUiProvider.notifier)
+                                                .updateQuantity(
                                                   cartItemUi[index].id ?? 0,
                                                 );
-                                            ref.read(cartProvider.notifier).updatePrice(
+                                            ref
+                                                .read(cartProvider.notifier)
+                                                .updatePrice(
                                                   cartItemUi[index].id ?? 0,
-                                                  ref.read(cartItemUiProvider.notifier).cartItemUis[index].productQuantity!.toInt(),
+                                                  ref
+                                                      .read(cartItemUiProvider
+                                                          .notifier)
+                                                      .cartItemUis[index]
+                                                      .productQuantity!
+                                                      .toInt(),
                                                 );
                                             /*if (productQuantity == 10) {
                                               toast(
@@ -257,8 +303,12 @@ class _CartScreenState extends State<CartScreen> {
                                     ),
                                   ),
                                 ).onTap(() {
-                                  ref.read(cartProvider.notifier).removeItem(cartItemUi[index].id ?? 0);
-                                  ref.read(cartItemUiProvider.notifier).removeUiItem(cartItemUi[index].id ?? 0);
+                                  ref
+                                      .read(cartProvider.notifier)
+                                      .removeItem(cartItemUi[index].id ?? 0);
+                                  ref
+                                      .read(cartItemUiProvider.notifier)
+                                      .removeUiItem(cartItemUi[index].id ?? 0);
                                 }),
                               ],
                             ),
@@ -291,9 +341,11 @@ class _CartScreenState extends State<CartScreen> {
                                   fillColor: const Color(0xFFFFEAEA),
                                   focusColor: const Color(0xFFFFEAEA),
                                   filled: true,
-                                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.never,
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.white),
+                                    borderSide:
+                                        const BorderSide(color: Colors.white),
                                     borderRadius: BorderRadius.circular(30.0),
                                   ),
                                   hintText: 'Enter Promo Code',
@@ -319,39 +371,86 @@ class _CartScreenState extends State<CartScreen> {
                                 child: Center(
                                   child: Text(
                                     'Apply',
-                                    style: kTextStyle.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
+                                    style: kTextStyle.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.0),
                                   ),
                                 ),
                               ).onTap(() async {
                                 try {
-                                  int total = ref.read(cartProvider.notifier).getTotalCharge().toInt();
+                                  int total = ref
+                                      .read(cartProvider.notifier)
+                                      .getTotalCharge()
+                                      .toInt();
                                   EasyLoading.show(status: 'Applying Coupon');
-                                  final coupon = await _apiManager.addCoupon(couponController.text, token);
+                                  final coupon = await _apiManager.addCoupon(
+                                      couponController.text, token);
                                   if (coupon.success == true) {
-                                    if (coupon.coupon?.type == 'product' && coupon.coupon!.details!.productId!.contains(cartItems[0].id)) {
-                                      ref.read(cartProvider.notifier).couponForProduct(coupon.coupon!.details!.productId!, coupon.coupon!.discount!, coupon.coupon!.discountType!);
-                                      ref.read(fetDiscountInfoProvider).getCouponCode(coupon.coupon!.code!);
-                                      ref.read(fetDiscountInfoProvider).getCouponId(coupon.coupon!.id!);
-                                      ref.read(fetDiscountInfoProvider).getDiscountAmount(discount);
+                                    if (coupon.coupon?.type == 'product' &&
+                                        coupon.coupon!.details!.productId!
+                                            .contains(cartItems[0].id)) {
+                                      ref
+                                          .read(cartProvider.notifier)
+                                          .couponForProduct(
+                                              coupon
+                                                  .coupon!.details!.productId!,
+                                              coupon.coupon!.discount!,
+                                              coupon.coupon!.discountType!);
+                                      ref
+                                          .read(fetDiscountInfoProvider)
+                                          .getCouponCode(coupon.coupon!.code!);
+                                      ref
+                                          .read(fetDiscountInfoProvider)
+                                          .getCouponId(coupon.coupon!.id!);
+                                      ref
+                                          .read(fetDiscountInfoProvider)
+                                          .getDiscountAmount(discount);
                                       EasyLoading.showSuccess('Coupon Applied');
-                                    } else if (coupon.coupon?.type == 'product' && !coupon.coupon!.details!.productId!.contains(cartItems[0].id)) {
+                                    } else if (coupon.coupon?.type ==
+                                            'product' &&
+                                        !coupon.coupon!.details!.productId!
+                                            .contains(cartItems[0].id)) {
                                       EasyLoading.showError(
                                         'Your Cart is not Eligible For the Coupon',
                                       );
-                                    } else if (coupon.coupon?.type == 'cart' && total > coupon.coupon!.details!.minBuy!.toInt()) {
+                                    } else if (coupon.coupon?.type == 'cart' &&
+                                        total >
+                                            coupon.coupon!.details!.minBuy!
+                                                .toInt()) {
                                       EasyLoading.showSuccess('Coupon Applied');
                                       setState(() {
-                                        discount = ref.read(cartProvider).couponForCart(total, coupon.coupon!.details!.minBuy!.toInt(),
-                                            coupon.coupon!.details!.maxDiscount!.toInt(), coupon.coupon!.discount!, coupon.coupon!.discountType!);
+                                        discount = ref
+                                            .read(cartProvider)
+                                            .couponForCart(
+                                                total,
+                                                coupon.coupon!.details!.minBuy!
+                                                    .toInt(),
+                                                coupon.coupon!.details!
+                                                    .maxDiscount!
+                                                    .toInt(),
+                                                coupon.coupon!.discount!,
+                                                coupon.coupon!.discountType!);
                                       });
-                                      ref.read(fetDiscountInfoProvider).getCouponCode(coupon.coupon!.code!);
-                                      ref.read(fetDiscountInfoProvider).getCouponId(coupon.coupon!.id!);
-                                      ref.read(fetDiscountInfoProvider).getDiscountAmount(discount);
-                                    } else if (coupon.coupon?.type == 'cart' && total < coupon.coupon!.details!.minBuy!.toInt()) {
-                                      EasyLoading.showError('Please shop $currencyIcon ${coupon.coupon!.details!.minBuy!.toInt() - total} more to use this coupon');
+                                      ref
+                                          .read(fetDiscountInfoProvider)
+                                          .getCouponCode(coupon.coupon!.code!);
+                                      ref
+                                          .read(fetDiscountInfoProvider)
+                                          .getCouponId(coupon.coupon!.id!);
+                                      ref
+                                          .read(fetDiscountInfoProvider)
+                                          .getDiscountAmount(discount);
+                                    } else if (coupon.coupon?.type == 'cart' &&
+                                        total <
+                                            coupon.coupon!.details!.minBuy!
+                                                .toInt()) {
+                                      EasyLoading.showError(
+                                          'Please shop $currencyIcon ${coupon.coupon!.details!.minBuy!.toInt() - total} more to use this coupon');
                                     }
                                   } else {
-                                    EasyLoading.showError(coupon.message.toString());
+                                    EasyLoading.showError(
+                                        coupon.message.toString());
                                   }
                                 } catch (e) {
                                   EasyLoading.showError(e.toString());
@@ -366,11 +465,16 @@ class _CartScreenState extends State<CartScreen> {
                             children: [
                               Text(
                                 'SubTotal: ',
-                                style: kTextStyle.copyWith(color: kGreyTextColor),
+                                style:
+                                    kTextStyle.copyWith(color: kGreyTextColor),
                               ),
                               const Spacer(),
                               Text(
-                                currencyIcon + ref.read(cartProvider.notifier).getSubTotal().toString(),
+                                currencyIcon +
+                                    ref
+                                        .read(cartProvider.notifier)
+                                        .getSubTotal()
+                                        .toString(),
                                 style: kTextStyle,
                               ),
                             ],
@@ -445,12 +549,16 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                           ButtonGlobal(
                             buttontext: 'Checkout',
-                            buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
+                            buttonDecoration:
+                                kButtonDecoration.copyWith(color: kMainColor),
                             onPressed: () {
                               if (token != 'Guest') {
                                 double weight = 0;
                                 OrderReview(
-                                  subTotalAmount: (ref.read(cartProvider.notifier).getTotalCharge() - discount),
+                                  subTotalAmount: (ref
+                                          .read(cartProvider.notifier)
+                                          .getTotalCharge() -
+                                      discount),
                                   cart: ref.watch(cartProvider).getItems(),
                                   reference: ref,
                                 ).launch(context);

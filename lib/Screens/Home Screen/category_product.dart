@@ -77,22 +77,23 @@ class _CategoryProductState extends State<CategoryProduct> {
           children: [
             if (subCatListSize != 0)
               Visibility(
+                // visible: false,
                 child: Column(
                   children: [
                     SizedBox(
                       height: 10.0,
                     ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 30, bottom: 10),
-                        child: Text(
-                          "Sub Category",
-                          style:
-                              kTextStyle.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
+                    // Align(
+                    //   alignment: Alignment.topLeft,
+                    //   child: Padding(
+                    //     padding: EdgeInsets.only(left: 30, bottom: 10),
+                    //     child: Text(
+                    //       "Sub Category",
+                    //       style:
+                    //           kTextStyle.copyWith(fontWeight: FontWeight.bold),
+                    //     ),
+                    //   ),
+                    // ),
 
                     /*Sub Cat work*/
                     GridView.builder(
