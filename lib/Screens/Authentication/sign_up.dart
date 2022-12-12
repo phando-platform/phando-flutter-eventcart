@@ -315,7 +315,7 @@ class _SignUpState extends State<SignUp> {
       toast("Please add a valid Mobile no.");
     } else if (!isPasswordValid(passwordController.text)) {
       toast("Password must have at least 8 characters.");
-    } else if (confirmPasswordController.text == passwordController.text) {
+    } else if (confirmPasswordController.text != passwordController.text) {
       toast("Password and confirm password do not match.");
     } else if (mobileController.text.length == 10) {
       if (countryCode != "IN") {

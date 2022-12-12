@@ -167,61 +167,24 @@ class _HomeScreenState extends State<HomeScreen> {
                               int pageViewIndex) {
                             return Container(
                               width: context.width(),
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    snapshot.data?.value?.banners![itemIndex]
-                                            .image
-                                            .toString() ??
-                                        '',
+                              // decoration: const BoxDecoration(
+                              //   color: Colors.black,
+                              // ),
+                              padding: const EdgeInsets.all(2),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Image.network(
+                                      snapshot.data?.value?.banners![itemIndex]
+                                              .image
+                                              .toString() ??
+                                          '',
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                        width: context.width() / 2,
-                                        child: Text(
-                                          snapshot
-                                                  .data
-                                                  ?.value
-                                                  ?.banners![itemIndex]
-                                                  .subTitle ??
-                                              '',
-                                          style: kTextStyle.copyWith(
-                                              color: kWhiteColor,
-                                              fontWeight: FontWeight.bold),
-                                          maxLines: 2,
-                                        )),
-                                    const SizedBox(
-                                      height: 4.0,
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(10.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        /* color: kMainColor.withOpacity(0.5),*/
-                                      ),
-                                      child: Text(
-                                        snapshot
-                                                .data
-                                                ?.value
-                                                ?.banners![itemIndex]
-                                                .offerTitle ??
-                                            '',
-                                        style: kTextStyle.copyWith(
-                                            color: kWhiteColor,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                ],
                               ),
                             ).onTap(
                               () {
@@ -547,9 +510,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           shrinkWrap: true,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 0.65,
                             crossAxisCount: 2,
                             mainAxisSpacing: 5.0,
+                            mainAxisExtent: 270,
                           ),
                           itemCount:
                               snapshot.data?.value?.popularProducts?.length ??
@@ -736,6 +699,7 @@ class ProductCard extends StatelessWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Stack(
                   alignment: Alignment.topRight,
@@ -778,7 +742,7 @@ class ProductCard extends StatelessWidget {
                       productData.productTitle,
                       style: kTextStyle,
                       textAlign: TextAlign.center,
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
