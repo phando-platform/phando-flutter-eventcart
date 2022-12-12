@@ -42,7 +42,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       if (wishlist.success == true) {
         EasyLoading.showSuccess(wishlist.message.toString());
       } else {
-        EasyLoading.showError(wishlist.message.toString());
+        EasyLoading.showError('Already Added');
       }
     } catch (e) {
       toast(e.toString());

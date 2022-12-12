@@ -327,6 +327,7 @@ class ApiManager {
       },
     );
     final data = jsonDecode(response.body);
+    log(data.toString());
     if (response.statusCode == 200) {
       return AddToWishlistModel.fromJson(data);
     } else {
