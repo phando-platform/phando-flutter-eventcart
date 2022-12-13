@@ -86,7 +86,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 elevation: 0.0,
                 iconTheme: const IconThemeData(color: kBlackColor),
                 leading: Padding(
-                  padding: EdgeInsets.only(left: 16),
+                  padding: const EdgeInsets.only(left: 16),
                   child: GestureDetector(
                     child: CircleAvatar(
                       child: const Icon(
@@ -240,7 +240,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     await ref
                                         .read(cartItemUiProvider)
                                         .addUiItem(cartUi);
-                                    ref.read(cartItemUiProvider).updateQuantity(
+                                    await ref
+                                        .read(cartItemUiProvider)
+                                        .updateQuantity(
                                           cartUi.id ?? 0,
                                           minimumQuantity: ref
                                               .read(cartItemUiProvider)
@@ -251,7 +253,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                               .minimumQtd
                                               .toInt(),
                                         );
-                                    ref.read(cartProvider).updatePrice(
+                                    await ref.read(cartProvider).updatePrice(
                                           cartItem.id ?? 'Null',
                                           ref
                                               .read(cartItemUiProvider)
@@ -391,7 +393,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     await ref
                                         .read(cartItemUiProvider)
                                         .addUiItem(cartUi);
-                                    ref.read(cartItemUiProvider).updateQuantity(
+                                    await ref
+                                        .read(cartItemUiProvider)
+                                        .updateQuantity(
                                           cartUi.id ?? 0,
                                           minimumQuantity: ref
                                               .read(cartItemUiProvider)
@@ -402,7 +406,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                               .minimumQtd
                                               .toInt(),
                                         );
-                                    ref.read(cartProvider).updatePrice(
+                                    await ref.read(cartProvider).updatePrice(
                                           cartItem.id ?? 'Null',
                                           ref
                                               .read(cartItemUiProvider)

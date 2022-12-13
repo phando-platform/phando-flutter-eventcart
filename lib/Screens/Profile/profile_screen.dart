@@ -232,6 +232,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ListTile(
                     onTap: () {
                       PersonalSettings(
+                        userName:
+                            snapshot.data?.value?.customer?.username ?? '',
                         firstName:
                             snapshot.data?.value?.customer?.firstName ?? '',
                         lastName:

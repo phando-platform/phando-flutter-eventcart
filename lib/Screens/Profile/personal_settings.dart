@@ -23,8 +23,9 @@ class PersonalSettings extends StatefulWidget {
     required this.firstName,
     required this.email,
     required this.imageUrl,
+    required this.userName,
   }) : super(key: key);
-  final String firstName, lastName, mobile, email, imageUrl;
+  final String firstName, lastName, mobile, email, imageUrl, userName;
 
   @override
   _PersonalSettingsState createState() => _PersonalSettingsState();
@@ -183,169 +184,176 @@ class _PersonalSettingsState extends State<PersonalSettings> {
           //     ),
           //   ),
           // ),
-
-          GestureDetector(
-            onTap: () => showModalBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      topRight: Radius.circular(30.0)),
-                ),
-                builder: (BuildContext contextModel) {
-                  return Padding(
-                    padding: MediaQuery.of(context).viewInsets,
-                    child: Container(
-                      height: 400.0,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(20.0),
-                          topLeft: Radius.circular(20.0),
+          if (widget.userName.isNotEmpty)
+            GestureDetector(
+              onTap: () => showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0)),
+                  ),
+                  builder: (BuildContext contextModel) {
+                    return Padding(
+                      padding: MediaQuery.of(context).viewInsets,
+                      child: Container(
+                        height: 400.0,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(20.0),
+                            topLeft: Radius.circular(20.0),
+                          ),
+                          color: Colors.white,
                         ),
-                        color: Colors.white,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                'Change Password',
-                                style: kTextStyle.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0),
-                              ),
-                            ),
-                            const Divider(
-                              color: kBgColor,
-                              thickness: 1.0,
-                            ),
-                            AppTextField(
-                              textFieldType: TextFieldType.PASSWORD,
-                              controller: currentPasswordController,
-                              decoration: InputDecoration(
-                                labelText: 'Current Password',
-                                labelStyle: kTextStyle,
-                                focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(color: kMainColor),
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(left: 10.0, right: 10.0),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  'Change Password',
+                                  style: kTextStyle.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0),
                                 ),
-                                hintText: 'Enter your current password',
-                                enabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Color(0xFFE8E7E5),
+                              ),
+                              const Divider(
+                                color: kBgColor,
+                                thickness: 1.0,
+                              ),
+                              AppTextField(
+                                textFieldType: TextFieldType.PASSWORD,
+                                controller: currentPasswordController,
+                                decoration: InputDecoration(
+                                  labelText: 'Current Password',
+                                  labelStyle: kTextStyle,
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: kMainColor),
+                                  ),
+                                  hintText: 'Enter your current password',
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFE8E7E5),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            AppTextField(
-                              textFieldType: TextFieldType.PASSWORD,
-                              controller: newPasswordController,
-                              decoration: InputDecoration(
-                                labelText: 'New Password',
-                                labelStyle: kTextStyle,
-                                focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(color: kMainColor),
-                                ),
-                                hintText: 'Enter your new password',
-                                enabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Color(0xFFE8E7E5),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              AppTextField(
+                                textFieldType: TextFieldType.PASSWORD,
+                                controller: newPasswordController,
+                                decoration: InputDecoration(
+                                  labelText: 'New Password',
+                                  labelStyle: kTextStyle,
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: kMainColor),
+                                  ),
+                                  hintText: 'Enter your new password',
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFE8E7E5),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            AppTextField(
-                              textFieldType: TextFieldType.PASSWORD,
-                              controller: confirmPasswordController,
-                              decoration: InputDecoration(
-                                labelText: 'Confirm Password',
-                                labelStyle: kTextStyle,
-                                focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(color: kMainColor),
-                                ),
-                                hintText: 'Confirm your new password',
-                                enabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Color(0xFFE8E7E5),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              AppTextField(
+                                textFieldType: TextFieldType.PASSWORD,
+                                controller: confirmPasswordController,
+                                decoration: InputDecoration(
+                                  labelText: 'Confirm Password',
+                                  labelStyle: kTextStyle,
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: kMainColor),
+                                  ),
+                                  hintText: 'Confirm your new password',
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFE8E7E5),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            ButtonGlobal(
-                                buttontext: 'Update',
-                                buttonDecoration: kButtonDecoration.copyWith(
-                                    color: kMainColor),
-                                onPressed: () async {
-                                  if (currentPasswordController.text.isEmpty) {
-                                    toast('Please enter your current password');
-                                  } else if (newPasswordController
-                                      .text.isEmpty) {
-                                    toast('Please enter your new password');
-                                  } else if (confirmPasswordController
-                                      .text.isEmpty) {
-                                    toast('Please confirm your new password');
-                                  } else if (newPasswordController.text !=
-                                      confirmPasswordController.text) {
-                                    toast(
-                                        'Your new password doesn\'t match with confirm password');
-                                  } else {
-                                    try {
-                                      EasyLoading.show(
-                                          status: 'Changing password');
-                                      final status =
-                                          await _apiManager.changePassword(
-                                              currentPasswordController.text,
-                                              newPasswordController.text,
-                                              confirmPasswordController.text,
-                                              token);
-                                      if (status.success == true) {
-                                        EasyLoading.showSuccess(
-                                            status.message.toString());
-                                        const SignIn()
-                                            .launch(context, isNewTask: true);
-                                      } else {
-                                        status.error == ''
-                                            ? toast(status.message.toString())
-                                            : toast(status.error.toString());
+                              ButtonGlobal(
+                                  buttontext: 'Update',
+                                  buttonDecoration: kButtonDecoration.copyWith(
+                                      color: kMainColor),
+                                  onPressed: () async {
+                                    if (currentPasswordController
+                                        .text.isEmpty) {
+                                      toast(
+                                          'Please enter your current password');
+                                    } else if (newPasswordController
+                                        .text.isEmpty) {
+                                      toast('Please enter your new password');
+                                    } else if (confirmPasswordController
+                                        .text.isEmpty) {
+                                      toast('Please confirm your new password');
+                                    } else if (newPasswordController.text !=
+                                        confirmPasswordController.text) {
+                                      toast(
+                                          'Your new password doesn\'t match with confirm password');
+                                    } else {
+                                      try {
+                                        EasyLoading.show(
+                                            status: 'Changing password');
+                                        final status =
+                                            await _apiManager.changePassword(
+                                                currentPasswordController.text,
+                                                newPasswordController.text,
+                                                confirmPasswordController.text,
+                                                token);
+                                        if (status.success == true) {
+                                          EasyLoading.showSuccess(
+                                              status.message.toString());
+                                          const SignIn()
+                                              .launch(context, isNewTask: true);
+                                        } else {
+                                          status.error == ''
+                                              ? EasyLoading.showError(
+                                                  status.message.toString(),
+                                                )
+                                              : EasyLoading.showError(
+                                                  status.error.toString(),
+                                                );
+                                        }
+                                      } catch (e) {
+                                        EasyLoading.showError(e.toString());
                                       }
-                                    } catch (e) {
-                                      toast(e.toString());
                                     }
-                                  }
-                                }),
-                          ],
+                                  }),
+                            ],
+                          ),
                         ),
                       ),
+                    );
+                  }),
+              child: Container(
+                padding: const EdgeInsets.all(20.0),
+                width: context.width(),
+                height: 60.0,
+                child: Row(
+                  children: [
+                    Text(
+                      'Change Password',
+                      style: kTextStyle,
                     ),
-                  );
-                }),
-            child: Container(
-              padding: const EdgeInsets.all(20.0),
-              width: context.width(),
-              height: 60.0,
-              child: Row(
-                children: [
-                  Text(
-                    'Change Password',
-                    style: kTextStyle,
-                  ),
-                  const Spacer(),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    color: kGreyTextColor,
-                  ),
-                ],
+                    const Spacer(),
+                    const Icon(
+                      Icons.arrow_forward_ios,
+                      color: kGreyTextColor,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

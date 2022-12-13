@@ -55,8 +55,15 @@ class _SplashScreenState extends State<SplashScreen> {
             SizedBox(
               height: MediaQuery.of(context).size.height / 3,
             ),
-            const Image(
-              image: AssetImage('images/round_logo.png'),
+            CircleAvatar(
+              radius: 100,
+              backgroundColor: Colors.black,
+              child: Transform.scale(
+                scale: 0.8,
+                child: const Image(
+                  image: AssetImage('images/round_logo.png'),
+                ),
+              ),
             ),
             const Spacer(),
             Center(

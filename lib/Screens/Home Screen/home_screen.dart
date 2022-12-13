@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
         /*leading: Image.asset('images/drawer.png'),*/
         title: Image.asset(
           'images/logo.png',
-          height: 100,
+          height: 60,
         ),
         // actions: [
         //   Image.asset('images/notification.png'),

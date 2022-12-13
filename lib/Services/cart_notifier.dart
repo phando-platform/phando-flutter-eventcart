@@ -43,7 +43,8 @@ class CartNotifier extends ChangeNotifier {
         color: item.color.toString(),
         size: item.size.toString(),
         shippingCost: item.shippingCost.toString(),
-        productPriceTotal: (item.productPriceTotal + item.shippingCost).toString(),
+        productPriceTotal:
+            (item.productPriceTotal + item.shippingCost).toString(),
         estimatedShippingDays: item.estimatedShippingDays.toString(),
       );
       carts.add(items);
@@ -78,7 +79,8 @@ class CartNotifier extends ChangeNotifier {
   bool checkCart(int id, String size, String color) {
     bool isAdded = false;
     for (var item in cartItems) {
-      if (item.id == id && item.size == size || item.id == id && item.color == color) {
+      if (item.id == id && item.size == size ||
+          item.id == id && item.color == color) {
         isAdded = true;
         // notifyListeners();
       }
@@ -107,13 +109,15 @@ class CartNotifier extends ChangeNotifier {
   double getSubTotal() {
     double subTotal = 0.0;
     for (var item in cartItems) {
-      subTotal = (double.parse(item.price.toString()) * double.parse(item.quantity.toString())) + subTotal;
+      subTotal = (double.parse(item.price.toString()) *
+              double.parse(item.quantity.toString())) +
+          subTotal;
     }
     // notifyListeners();
     return subTotal;
   }
 
-  void updatePrice(int itemId, int quantity) {
+  Future<void> updatePrice(int itemId, int quantity) async {
     log('updated price called');
     log(cartItems.toString());
     for (final item in cartItems) {
@@ -127,6 +131,11 @@ class CartNotifier extends ChangeNotifier {
         notifyListeners();
       }
     }
+    final pref = await _pref;
+    await pref.setStringList(
+      'cart_items',
+      cartItems.map((e) => jsonEncode(e.toJson())).toList(),
+    );
   }
 
   void couponForProduct(List<String> productId, int discount, String type) {

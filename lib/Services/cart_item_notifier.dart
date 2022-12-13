@@ -114,7 +114,7 @@ class CartItemNotifier extends ChangeNotifier {
     }
   }
 
-  void updateQuantity(int itemId, {int? minimumQuantity}) {
+  Future<void> updateQuantity(int itemId, {int? minimumQuantity}) async {
     if (minimumQuantity != null) {
       for (final item in cartItemUis) {
         if (item.id == itemId) {
@@ -124,6 +124,11 @@ class CartItemNotifier extends ChangeNotifier {
           }
         }
       }
+      pref = await SharedPreferences.getInstance();
+      await pref.setStringList(
+        'cart_ui_items',
+        cartItemUis.map((e) => jsonEncode(e)).toList(),
+      );
       return;
     }
     for (final item in cartItemUis) {
@@ -136,6 +141,11 @@ class CartItemNotifier extends ChangeNotifier {
             ;
         notifyListeners();
       }
+      pref = await SharedPreferences.getInstance();
+      await pref.setStringList(
+        'cart_ui_items',
+        cartItemUis.map((e) => jsonEncode(e)).toList(),
+      );
     }
   }
 
