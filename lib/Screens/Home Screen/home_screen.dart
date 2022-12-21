@@ -560,8 +560,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     EasyLoading.showSuccess(
                                         wishlist.message.toString());
                                   } else {
-                                    EasyLoading.showError(
-                                        wishlist.message.toString());
+                                    EasyLoading.showError('Already Added');
                                   }
                                 } catch (e) {
                                   toast(e.toString());

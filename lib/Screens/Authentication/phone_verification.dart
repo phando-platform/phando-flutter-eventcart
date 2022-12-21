@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../GlobalComponents/button_global.dart';
@@ -72,7 +71,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text(
-          isVerified ? 'Enter New Password' : 'Enter OTP',
+          'Reset Password',
           style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
@@ -82,7 +81,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Text(
-              isVerified ? 'Enter New Password' : 'Enter OTP',
+              'Reset Password',
               style: kTextStyle.copyWith(
                   fontWeight: FontWeight.bold, fontSize: 25),
             ),
@@ -90,9 +89,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
           Padding(
             padding: const EdgeInsets.only(left: 20.0, right: 40.0),
             child: Text(
-              isVerified
-                  ? 'Please enter your new password'
-                  : 'Please enter your one time code below to receive your new password.',
+              'Please enter your one time code below to receive on your mail, along with your new password.',
               style: kTextStyle.copyWith(
                 color: kGreyTextColor,
               ),
@@ -190,30 +187,44 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                 ),
               ),
             ],
-          ).visible(!isVerified),
+          ),
+          const SizedBox(
+            height: 50.0,
+          ),
           Padding(
-            padding:
-                const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+            padding: const EdgeInsets.only(left: 20.0, right: 40.0),
+            child: Text(
+              'Please enter your new password.',
+              style: kTextStyle.copyWith(
+                color: kGreyTextColor,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20),
             child: AppTextField(
               textFieldType: TextFieldType.PASSWORD,
               controller: passwordEditingController,
               decoration: InputDecoration(
                 labelText: 'Enter password',
                 labelStyle: kTextStyle,
-                focusedBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.zero),
-                  borderSide: BorderSide(color: kMainColor),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: kMainColor),
                 ),
                 hintText: 'Enter new password',
-                enabledBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.zero),
-                  borderSide: BorderSide(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
                     color: kBorderColorTextField,
                   ),
                 ),
               ),
             ),
-          ).visible(isVerified),
+          ),
           /*Padding(
             padding: const EdgeInsets.all(20.0),
             child: ArgonTimerButton(
@@ -253,36 +264,6 @@ class _PhoneVerificationState extends State<PhoneVerification> {
               },
             ),
           ).visible(!isVerified),*/
-          const CircularProgressIndicator().visible(isLoading),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-            child: ButtonGlobal(
-                buttontext: 'Verify',
-                buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
-                onPressed: () async {
-                  EasyLoading.show(status: 'Verifying Otp...');
-                  try {
-                    String code = pin1Controller.text +
-                        pin2Controller.text +
-                        pin3Controller.text +
-                        pin4Controller.text +
-                        pin5Controller.text +
-                        pin6Controller.text;
-                    final sendOtp =
-                        await _apiManager.verifyOtp(widget.email, code);
-                    if (sendOtp.success == true) {
-                      EasyLoading.showSuccess(sendOtp.message.toString());
-                      setState(() {
-                        isVerified = true;
-                      });
-                    } else {
-                      EasyLoading.showError(sendOtp.message.toString());
-                    }
-                  } catch (e) {
-                    EasyLoading.showError(e.toString());
-                  }
-                }),
-          ).visible(!isVerified),
           Padding(
             padding: const EdgeInsets.only(left: 10.0, right: 10.0),
             child: ButtonGlobal(
@@ -291,25 +272,40 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                 onPressed: () async {
                   EasyLoading.show(status: 'Setting New Password...');
                   try {
-                    String code = pin1Controller.text +
-                        pin2Controller.text +
-                        pin3Controller.text +
-                        pin4Controller.text +
-                        pin5Controller.text +
-                        pin6Controller.text;
-                    final resetPass = await _apiManager.setNewPassword(
-                        widget.email, code, passwordEditingController.text);
-                    if (resetPass.success == true) {
-                      EasyLoading.showSuccess(resetPass.message.toString());
-                      const SignIn().launch(context, isNewTask: true);
+                    if (pin1Controller.text.isNotEmpty &&
+                        pin2Controller.text.isNotEmpty &&
+                        pin3Controller.text.isNotEmpty &&
+                        pin4Controller.text.isNotEmpty &&
+                        pin5Controller.text.isNotEmpty &&
+                        pin6Controller.text.isNotEmpty &&
+                        passwordEditingController.text.isNotEmpty) {
+                      String code = pin1Controller.text +
+                          pin2Controller.text +
+                          pin3Controller.text +
+                          pin4Controller.text +
+                          pin5Controller.text +
+                          pin6Controller.text;
+                      final resetPass = await _apiManager.setNewPassword(
+                        widget.email,
+                        code,
+                        passwordEditingController.text,
+                      );
+                      if (resetPass.success == true) {
+                        EasyLoading.showSuccess(resetPass.message.toString());
+                        const SignIn().launch(context, isNewTask: true);
+                      } else {
+                        EasyLoading.showError(resetPass.message.toString());
+                      }
                     } else {
-                      EasyLoading.showError(resetPass.message.toString());
+                      EasyLoading.showError('All fields are required!');
                     }
-                  } catch (e) {
+                  } catch (e, stackTrace) {
+                    log(e.toString());
+                    log(stackTrace.toString());
                     EasyLoading.showError(e.toString());
                   }
                 }),
-          ).visible(isVerified),
+          ),
           const SizedBox(
             height: 20.0,
           ),

@@ -174,11 +174,11 @@ class ApiManager {
   Future<SendResetCodeModel> setNewPassword(
       String emailAddress, String code, String password) async {
     final response = await http.post(
-      Uri.parse(apiUrl + 'user_password_reset'),
+      Uri.parse(apiUrl + 'password_reset'),
       headers: <String, String>{
         'Accept': 'application/json',
       },
-      body: <String, String>{
+      body: {
         'email': emailAddress,
         'code': code,
         'password': password,
@@ -186,6 +186,7 @@ class ApiManager {
       },
     );
     final data = jsonDecode(response.body);
+    log(data.toString());
     if (response.statusCode == 200) {
       return SendResetCodeModel.fromJson(data);
     } else {

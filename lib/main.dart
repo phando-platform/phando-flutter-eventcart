@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
         }),
       ),
-      title: 'Event App',
+      title: 'Event Cart',
       home: Consumer(builder: (BuildContext context, ref, watch) {
         ref.read(cartProvider).getSavedCart();
         ref.read(cartItemUiProvider).getSavedUiItem();
