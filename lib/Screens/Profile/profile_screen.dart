@@ -1,5 +1,7 @@
 import 'package:event_app/Screens/Home%20Screen/wish_list.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -461,6 +463,161 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     title: Text(
                       'Logout',
+                      style: kTextStyle,
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      color: kGreyTextColor,
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                20,
+                              ),
+                            ),
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          Icons.warning,
+                                          color: kMainColor,
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          'Warning',
+                                          style: TextStyle(
+                                            color: kMainColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Text(
+                                            'Are you sure you want to proceed with your account deletion?',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(color: Colors.red),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                kMainColor,
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'Cancle',
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () async {
+                                              try {
+                                                final result = await _apiManager
+                                                    .deleteProfile(
+                                                  token: token,
+                                                  mobileNumber: int.parse(
+                                                      snapshot
+                                                              .data
+                                                              ?.value
+                                                              ?.customer
+                                                              ?.mobile ??
+                                                          '0000000000'),
+                                                  email: snapshot.data?.value
+                                                      ?.customer?.email,
+                                                  uid: (snapshot.data?.value
+                                                          ?.customer?.id ??
+                                                      0000000000),
+                                                  reason: null,
+                                                );
+                                                if (result) {
+                                                  await logout();
+                                                } else {
+                                                  Navigator.pop(context);
+                                                  EasyLoading.showError(
+                                                    'Failed to delete your account!\nPlease try again later.',
+                                                  );
+                                                }
+                                              } catch (error, stackTrace) {
+                                                log(stackTrace.toString());
+                                                log(error.toString());
+                                                Navigator.pop(context);
+                                                EasyLoading.showError(
+                                                  error.toString(),
+                                                );
+                                              }
+                                            },
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                kMainColor,
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'Delete Account',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    leading: Container(
+                      padding: const EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF6ED),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: const Icon(
+                        Icons.delete,
+                        color: kMainColor,
+                      ),
+                    ),
+                    title: Text(
+                      'Delete Account',
                       style: kTextStyle,
                     ),
                     trailing: const Icon(

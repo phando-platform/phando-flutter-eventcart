@@ -506,6 +506,51 @@ class ApiManager {
     }
   }
 
+  Future<bool> deleteProfile({
+    required String token,
+    required int mobileNumber,
+    required String? email,
+    required int uid,
+    required String? reason,
+  }) async {
+    final response = await http.post(
+      Uri.parse(apiUrl + 'saveDeleteAccount'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(
+        {
+          'mobile': mobileNumber,
+          'email': email,
+          'user_id': uid,
+          'reason': reason ?? 'Delete Account - No reason mentioned',
+        },
+      ),
+    );
+    log("Delete Profile" + " " + token);
+    log("Delete Profile" + " " + response.body);
+    log(
+      jsonEncode(
+        {
+          'mobile': mobileNumber,
+          'email': email,
+          'user_id': uid,
+          'reason': reason ?? 'Delete Account - No reason mentioned',
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      final data = Map<String, dynamic>.from(jsonDecode(response.body));
+      log(data.toString());
+      if (data.containsKey('success') && data['success'] == true) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
   Future<OrderCreateResponse> createOrder({
     required OrderCreateModel model,
     required String token,
