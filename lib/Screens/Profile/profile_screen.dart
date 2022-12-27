@@ -550,6 +550,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           child: ElevatedButton(
                                             onPressed: () async {
                                               try {
+                                                Navigator.pop(context);
+                                                EasyLoading.show();
                                                 final result = await _apiManager
                                                     .deleteProfile(
                                                   token: token,
@@ -568,9 +570,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   reason: null,
                                                 );
                                                 if (result) {
-                                                  await logout();
+                                                  // Navigator.pop(context);
+                                                  EasyLoading.showInfo(
+                                                    'Our Support team will analyse your request and will delete your account',
+                                                  );
                                                 } else {
-                                                  Navigator.pop(context);
+                                                  // Navigator.pop(context);
                                                   EasyLoading.showError(
                                                     'Failed to delete your account!\nPlease try again later.',
                                                   );

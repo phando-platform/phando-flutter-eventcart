@@ -517,9 +517,10 @@ class ApiManager {
       Uri.parse(apiUrl + 'saveDeleteAccount'),
       headers: {
         'Accept': 'application/json',
+        'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
-      body: jsonEncode(
+      body: json.encode(
         {
           'mobile': mobileNumber,
           'email': email,
