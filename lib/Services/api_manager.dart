@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:event_app/Models/available_states_model.dart';
 import 'package:event_app/Models/delivery/delivery_body_model.dart';
 import 'package:event_app/Models/delivery/delivery_reponse_model.dart';
 import 'package:event_app/Models/razorPay/razorpay_model.dart';
@@ -522,10 +523,10 @@ class ApiManager {
       },
       body: json.encode(
         {
-          'mobile': mobileNumber,
-          'email': email,
+          // 'mobile': mobileNumber,
+          // 'email': email,
           'user_id': uid,
-          'reason': reason ?? 'Delete Account - No reason mentioned',
+          // 'reason': reason ?? 'Delete Account - No reason mentioned',
         },
       ),
     );
@@ -534,10 +535,10 @@ class ApiManager {
     log(
       jsonEncode(
         {
-          'mobile': mobileNumber,
-          'email': email,
+          // 'mobile': mobileNumber,
+          // 'email': email,
           'user_id': uid,
-          'reason': reason ?? 'Delete Account - No reason mentioned',
+          // 'reason': reason ?? 'Delete Account - No reason mentioned',
         },
       ),
     );
@@ -697,6 +698,31 @@ class ApiManager {
     } else {
       final data = Map<String, dynamic>.from(jsonDecode(response.body));
       return OrderListModel.fromJson(data);
+    }
+  }
+
+  Future<AvailableStatesApiResponse> getAvailableStatesList(
+      {required String token}) async {
+    final response = await http.get(
+      Uri.parse(apiUrl + 'state'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+    log(response.statusCode.toString());
+    log(response.body.toString());
+    if (response.statusCode == 200) {
+      final data = Map<String, dynamic>.from(jsonDecode(response.body));
+      if (data.containsKey('success') && data['success'] == true) {
+        final states = AvailableStatesApiResponse.fromMap(data);
+        return states;
+      } else {
+        throw (Exception('Unauthorised access!'));
+      }
+    } else {
+      throw (Exception('Failed to fetch states!\nPlease try again later.'));
     }
   }
 

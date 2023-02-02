@@ -571,9 +571,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 );
                                                 if (result) {
                                                   // Navigator.pop(context);
-                                                  EasyLoading.showInfo(
-                                                    'Our Support team will analyse your request and will delete your account',
-                                                  );
+                                                  await logout();
                                                 } else {
                                                   // Navigator.pop(context);
                                                   EasyLoading.showError(

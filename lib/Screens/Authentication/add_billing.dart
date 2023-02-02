@@ -37,6 +37,7 @@ class _AddBillingState extends State<AddBilling> {
   TextEditingController stateController = TextEditingController();
   final ApiManager _apiManager = ApiManager();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  List<String> states = [];
 
   Future<void> getPrefilledData() async {
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
@@ -47,10 +48,29 @@ class _AddBillingState extends State<AddBilling> {
     fullNameOneController.text = firstName + ' ' + lastName;
   }
 
+  Future<void> getStates() async {
+    try {
+      final SharedPreferences prefs = await _prefs;
+      String token = prefs.getString('token') ?? '';
+      if (token == '') {
+        EasyLoading.showError('Token Not Found');
+      } else {
+        final list = await _apiManager.getAvailableStatesList(token: token);
+        states = list.value.map((e) => e.name).toList();
+        if (states.isNotEmpty) stateController.text = states.first;
+        setState(() {});
+      }
+    } catch (error) {
+      log(error.toString());
+      EasyLoading.showError(error.toString());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getPrefilledData();
+    getStates();
   }
 
   @override
@@ -172,19 +192,90 @@ class _AddBillingState extends State<AddBilling> {
                 const SizedBox(
                   height: 20.0,
                 ),
-                AppTextField(
-                  textFieldType: TextFieldType.NAME,
-                  controller: stateController,
-                  decoration: InputDecoration(
-                    labelText: 'State',
-                    labelStyle: kTextStyle,
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: kMainColor),
-                    ),
-                    hintText: 'Enter Your State',
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFE8E7E5),
+                InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              10,
+                            ),
+                          ),
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.2,
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              child: Column(
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    child: Text(
+                                      'Servicable States',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        // color: kMainColor,
+                                      ),
+                                    ),
+                                  ),
+                                  if (states.isEmpty)
+                                    const Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'No States Available\nPlease try again later!',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    )
+                                  else
+                                    ...states
+                                        .map(
+                                          (e) => ListTile(
+                                            title: Text(e.toUpperCase()),
+                                            trailing: Radio(
+                                              value: e,
+                                              groupValue: stateController.text,
+                                              onChanged: (_) {
+                                                stateController.text = e;
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: AppTextField(
+                    enabled: false,
+                    textFieldType: TextFieldType.NAME,
+                    controller: stateController,
+                    decoration: InputDecoration(
+                      labelText: 'State',
+                      labelStyle: kTextStyle,
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: kMainColor),
+                      ),
+                      hintText: 'Enter Your State',
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFE8E7E5),
+                        ),
+                      ),
+                      disabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFE8E7E5),
+                        ),
                       ),
                     ),
                   ),

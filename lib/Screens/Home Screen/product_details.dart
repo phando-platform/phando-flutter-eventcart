@@ -6,6 +6,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:html/parser.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:photo_view/photo_view.dart';
@@ -789,47 +790,50 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ],
                           ),
                           const SizedBox(height: 12),
-                          Text(
-                            parse(
-                              snapshot.data?.value?.description ?? '',
-                            ).body!.text,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                          HtmlWidget(
+                            snapshot.data?.value?.description ?? '',
+                            onLoadingBuilder:
+                                (context, element, loadingProgress) {
+                              return const CircularProgressIndicator();
+                            },
+                            // textStyle: TextStyles.body2.copyWith(
+                            //   color: Colors.black,
+                            // ),
                           ),
-                          Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text.rich(
-                                TextSpan(
-                                  children: [
-                                    // TextSpan(
-                                    //   text:
-                                    //       // snapshot.data?.value?.description
-                                    //       //         .toString() ??
-                                    //       //     '',
-                                    //       parse(
-                                    //     snapshot.data?.value?.description ?? '',
-                                    //   ).body!.text,
-                                    //   style: const TextStyle(
-                                    //     fontWeight: FontWeight.bold,
-                                    //   ),
-                                    // ),
-                                  ],
-                                ),
-                              )
+                          // Padding(
+                          //     padding: const EdgeInsets.all(8.0),
+                          //     child: Text.rich(
+                          //       TextSpan(
+                          //         children: [
+                          //           // TextSpan(
+                          //           //   text:
+                          //           //       // snapshot.data?.value?.description
+                          //           //       //         .toString() ??
+                          //           //       //     '',
+                          //           //       parse(
+                          //           //     snapshot.data?.value?.description ?? '',
+                          //           //   ).body!.text,
+                          //           //   style: const TextStyle(
+                          //           //     fontWeight: FontWeight.bold,
+                          //           //   ),
+                          //           // ),
+                          //         ],
+                          //       ),
+                          //     )
 
-                              /*Container(
-                              child: Flexible(
-                                child: Text(
-                                  snapshot.data?.value?.description.toString() ??'',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                  maxLines: 20,
-                                ).visible(description),
-                              )),*/
+                          //     /*Container(
+                          //     child: Flexible(
+                          //       child: Text(
+                          //         snapshot.data?.value?.description.toString() ??'',
+                          //         style: TextStyle(
+                          //           fontSize: 14,
+                          //         ),
+                          //         maxLines: 20,
+                          //       ).visible(description),
+                          //     )),*/
 
-                              ),
+                          //     ),
+
                           // Card(
                           //   elevation: 1.0,
                           //   shape: RoundedRectangleBorder(
