@@ -15,6 +15,7 @@ import '../Models/banners_model.dart';
 import '../Models/billing_info_model.dart';
 import '../Models/category_model.dart';
 import '../Models/change_password_model.dart';
+import '../Models/check_razor_enable_model.dart';
 import '../Models/coupon_apply_model.dart';
 import '../Models/home_model.dart';
 import '../Models/login_model.dart';
@@ -951,6 +952,17 @@ class ApiManager {
       return data['ReplyMsg'];
     } else {
       return 'Unable to reach server.\nPlease check your internet connection & try again.';
+    }
+  }
+
+  Future<CheckRazorEnable> checkRazorStatus(String userToken) async {
+    final response = await http.get(Uri.parse(apiUrl + 'razorpay'),
+        headers: {"Authorization": "Bearer $userToken"});
+    final data = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return CheckRazorEnable.fromJson(data);
+    } else {
+      return CheckRazorEnable.fromJson(data);
     }
   }
 }
