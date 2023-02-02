@@ -11,6 +11,7 @@ import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../GlobalComponents/button_global.dart';
+import '../../Models/check_razor_enable_model.dart';
 import '../../Models/order_create_model.dart';
 import '../../Models/profile_model.dart';
 import '../../Services/api_manager.dart';
@@ -36,6 +37,8 @@ class OrderReview extends StatefulWidget {
   final List<Carts> cart;
   final WidgetRef reference;
 }
+
+CheckRazorEnable? checkRazorEnable;
 
 class _OrderReviewState extends State<OrderReview> {
   final ApiManager _apiManager = ApiManager();
@@ -66,6 +69,9 @@ class _OrderReviewState extends State<OrderReview> {
       ),
       token: token,
     );
+
+    checkRazorEnable = await _apiManager.checkRazorStatus(token);
+    print("RAZOR VALUE ${checkRazorEnable!.value!.payment!.status}");
 
     if (finalAmount?.success ?? false) {
       updatedAmount = finalAmount;
@@ -237,10 +243,13 @@ class _OrderReviewState extends State<OrderReview> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(right: 60.0, bottom: 10.0),
+                              padding: const EdgeInsets.only(
+                                  right: 60.0, bottom: 10.0),
                               child: Text(
                                 'Please confirm and submit Your order',
-                                style: kTextStyle.copyWith(fontSize: 16.0, fontWeight: FontWeight.w400),
+                                style: kTextStyle.copyWith(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w400),
                                 maxLines: 2,
                               ),
                             ),
@@ -251,7 +260,8 @@ class _OrderReviewState extends State<OrderReview> {
                                   children: [
                                     TextSpan(
                                       text: 'Billing Address',
-                                      style: kTextStyle.copyWith(fontSize: 18.0),
+                                      style:
+                                          kTextStyle.copyWith(fontSize: 18.0),
                                     ),
                                     const WidgetSpan(
                                       child: Icon(
@@ -267,21 +277,30 @@ class _OrderReviewState extends State<OrderReview> {
                                 snapshot.data!.value!.billing!.id != null
                                     ? '${snapshot.data?.value?.billing?.firstName ?? ''} ${snapshot.data?.value?.billing?.lastName ?? ''} - ${snapshot.data?.value?.billing?.address1 ?? ''} , ${snapshot.data?.value?.billing?.userCity ?? ''}  ,${snapshot.data?.value?.billing?.country?.name ?? ''} , ${snapshot.data?.value?.billing?.postCode ?? ''}'
                                     : 'No billing Address Found',
-                                style: kTextStyle.copyWith(color: kGreyTextColor),
+                                style:
+                                    kTextStyle.copyWith(color: kGreyTextColor),
                                 maxLines: 5,
                               ),
                               trailing: Text(
-                                snapshot.data!.value!.billing!.id != null ? 'Change' : 'Add',
+                                snapshot.data!.value!.billing!.id != null
+                                    ? 'Change'
+                                    : 'Add',
                                 style: kTextStyle.copyWith(color: kRedColor),
                               ),
                               onTap: () {
                                 ShippingUpdate shipUpdate = ShippingUpdate(
-                                  fullName: '${snapshot.data?.value?.billing?.firstName} ${snapshot.data?.value?.billing?.lastName}',
-                                  addressOne: snapshot.data?.value?.billing?.address1,
-                                  addressTwo: snapshot.data?.value?.billing?.userCity,
+                                  fullName:
+                                      '${snapshot.data?.value?.billing?.firstName} ${snapshot.data?.value?.billing?.lastName}',
+                                  addressOne:
+                                      snapshot.data?.value?.billing?.address1,
+                                  addressTwo:
+                                      snapshot.data?.value?.billing?.userCity,
                                   town: snapshot.data?.value?.billing?.userCity,
-                                  countryId: snapshot.data?.value?.billing?.country?.id.toString(),
-                                  postCode: snapshot.data?.value?.billing?.postCode,
+                                  countryId: snapshot
+                                      .data?.value?.billing?.country?.id
+                                      .toString(),
+                                  postCode:
+                                      snapshot.data?.value?.billing?.postCode,
                                   mobile: snapshot.data?.value?.billing?.mobile,
                                   email: snapshot.data?.value?.billing?.email,
                                   state: snapshot.data?.value?.billing?.state,
@@ -306,7 +325,8 @@ class _OrderReviewState extends State<OrderReview> {
                                   children: [
                                     TextSpan(
                                       text: 'Shipping Address',
-                                      style: kTextStyle.copyWith(fontSize: 18.0),
+                                      style:
+                                          kTextStyle.copyWith(fontSize: 18.0),
                                     ),
                                     const WidgetSpan(
                                       child: Icon(
@@ -320,7 +340,8 @@ class _OrderReviewState extends State<OrderReview> {
                               ),
                               subtitle: Text(
                                 '${snapshot.data?.value?.shipping?.shippingName ?? ''} - ${snapshot.data?.value?.shipping?.addressLineOne ?? ''} ,${snapshot.data?.value?.shipping?.addressLineTwo ?? ''} , ${snapshot.data?.value?.shipping?.shippingTown ?? ''}  ,${snapshot.data?.value?.shipping?.country?.name ?? ''} , ${snapshot.data?.value?.shipping?.shippingPost ?? ''} - ${snapshot.data?.value?.shipping?.shippingMobile ?? ''} ',
-                                style: kTextStyle.copyWith(color: kGreyTextColor),
+                                style:
+                                    kTextStyle.copyWith(color: kGreyTextColor),
                                 maxLines: 5,
                               ),
                               trailing: Text(
@@ -329,28 +350,42 @@ class _OrderReviewState extends State<OrderReview> {
                               ),
                               onTap: () {
                                 ShippingUpdate shipUpdate = ShippingUpdate(
-                                  fullName: snapshot.data?.value?.shipping?.shippingName,
-                                  addressOne: snapshot.data?.value?.shipping?.addressLineOne,
-                                  addressTwo: snapshot.data?.value?.shipping?.addressLineTwo,
-                                  town: snapshot.data?.value?.shipping?.shippingTown,
-                                  countryId: snapshot.data?.value?.shipping?.country?.id.toString(),
-                                  postCode: snapshot.data?.value?.shipping?.shippingPost,
-                                  mobile: snapshot.data?.value?.shipping?.shippingMobile,
-                                  email: snapshot.data?.value?.shipping?.shippingEmail,
-                                  state: snapshot.data?.value?.shipping?.shippingState,
+                                  fullName: snapshot
+                                      .data?.value?.shipping?.shippingName,
+                                  addressOne: snapshot
+                                      .data?.value?.shipping?.addressLineOne,
+                                  addressTwo: snapshot
+                                      .data?.value?.shipping?.addressLineTwo,
+                                  town: snapshot
+                                      .data?.value?.shipping?.shippingTown,
+                                  countryId: snapshot
+                                      .data?.value?.shipping?.country?.id
+                                      .toString(),
+                                  postCode: snapshot
+                                      .data?.value?.shipping?.shippingPost,
+                                  mobile: snapshot
+                                      .data?.value?.shipping?.shippingMobile,
+                                  email: snapshot
+                                      .data?.value?.shipping?.shippingEmail,
+                                  state: snapshot
+                                      .data?.value?.shipping?.shippingState,
                                 );
-                                Navigator.of(context).push<ShippingUpdate>(MaterialPageRoute(
+                                Navigator.of(context)
+                                    .push<ShippingUpdate>(MaterialPageRoute(
                                   builder: (context) => UpdateShipping(
                                     shipping: shipUpdate,
                                     isShipping: true,
                                     callback: (value) async {
-                                      final finalAmount = await _apiManager.getShippingCharges(
+                                      final finalAmount =
+                                          await _apiManager.getShippingCharges(
                                         details: DeliveryBodyModel(
-                                          addressLineOne: value.addressOne ?? '',
+                                          addressLineOne:
+                                              value.addressOne ?? '',
                                           shippingPost: value.postCode ?? '',
                                           shippingTown: value.town ?? '',
                                           shippingState: value.state ?? '',
-                                          subTotal: widget.subTotalAmount.toString(),
+                                          subTotal:
+                                              widget.subTotalAmount.toString(),
                                           cart: widget.cart,
                                         ),
                                         token: token,
@@ -409,19 +444,25 @@ class _OrderReviewState extends State<OrderReview> {
                             ),
                             Container(
                               padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.white),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: Colors.white),
                               child: ListTile(
-                                contentPadding: const EdgeInsets.only(left: 0.0),
+                                contentPadding:
+                                    const EdgeInsets.only(left: 0.0),
                                 leading: Image.asset(
                                   'images/cod.png',
                                   height: 60.0,
                                   width: 80.0,
                                   fit: BoxFit.cover,
                                 ),
-                                title: Text('Cash On Delivery', style: kTextStyle.copyWith(color: kTitleColor)),
+                                title: Text('Cash On Delivery',
+                                    style: kTextStyle.copyWith(
+                                        color: kTitleColor)),
                                 subtitle: Text(
                                   'Pay On Cash',
-                                  style: kTextStyle.copyWith(color: kGreyTextColor),
+                                  style: kTextStyle.copyWith(
+                                      color: kGreyTextColor),
                                   maxLines: 2,
                                 ),
                                 trailing: Checkbox(
@@ -481,36 +522,47 @@ class _OrderReviewState extends State<OrderReview> {
                             // const SizedBox(
                             //   height: 10.0,
                             // ),
-                            Container(
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.white),
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.only(left: 0.0),
-                                leading: Image.asset(
-                                  'images/razorpay.png',
-                                  height: 60.0,
-                                  width: 80.0,
-                                  fit: BoxFit.cover,
+                            Visibility(
+                              visible:
+                                  checkRazorEnable!.value!.payment!.status == 1
+                                      ? true
+                                      : false,
+                              child: Container(
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    color: Colors.white),
+                                child: ListTile(
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0.0),
+                                  leading: Image.asset(
+                                    'images/razorpay.png',
+                                    height: 60.0,
+                                    width: 80.0,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  title: Text(
+                                    'Razorpay',
+                                    style:
+                                        kTextStyle.copyWith(color: kTitleColor),
+                                  ),
+                                  subtitle: Text(
+                                    'Pay With Razorpay',
+                                    style: kTextStyle.copyWith(
+                                        color: kGreyTextColor),
+                                    maxLines: 2,
+                                  ),
+                                  trailing: Checkbox(
+                                      value: !isCod,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          isCod = !isCod;
+                                          log(isCod.toString());
+                                        });
+                                      }),
                                 ),
-                                title: Text(
-                                  'Razorpay',
-                                  style: kTextStyle.copyWith(color: kTitleColor),
-                                ),
-                                subtitle: Text(
-                                  'Pay With Razorpay',
-                                  style: kTextStyle.copyWith(color: kGreyTextColor),
-                                  maxLines: 2,
-                                ),
-                                trailing: Checkbox(
-                                    value: !isCod,
-                                    onChanged: (val) {
-                                      setState(() {
-                                        isCod = !isCod;
-                                        log(isCod.toString());
-                                      });
-                                    }),
                               ),
-                            ),
+                            )
                           ],
                         ),
                       ),
@@ -523,8 +575,10 @@ class _OrderReviewState extends State<OrderReview> {
                           ),
                         ),
                         child: Consumer(builder: (_, ref, watch) {
-                          List<Carts> cartItems = ref.watch(cartProvider).getItems();
-                          Discount info = ref.watch(fetDiscountInfoProvider).getInfo();
+                          List<Carts> cartItems =
+                              ref.watch(cartProvider).getItems();
+                          Discount info =
+                              ref.watch(fetDiscountInfoProvider).getInfo();
                           double discount = info.discountAmount ?? 0.0;
                           int cartSize = cartItems.length;
                           return Padding(
@@ -534,13 +588,17 @@ class _OrderReviewState extends State<OrderReview> {
                                 Row(
                                   children: [
                                     Text(
-                                      cartSize < 2 ? 'Sub Total (${cartSize.toString()} Item)' : 'Sub Total (${cartSize.toString()} Items)',
-                                      style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+                                      cartSize < 2
+                                          ? 'Sub Total (${cartSize.toString()} Item)'
+                                          : 'Sub Total (${cartSize.toString()} Items)',
+                                      style: kTextStyle.copyWith(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     const Spacer(),
                                     Text(
                                       '$currencyIcon ${updatedAmount?.value.subtotal ?? 0}',
-                                      style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+                                      style: kTextStyle.copyWith(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -551,12 +609,14 @@ class _OrderReviewState extends State<OrderReview> {
                                   children: [
                                     Text(
                                       'Shipping Cost',
-                                      style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+                                      style: kTextStyle.copyWith(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     const Spacer(),
                                     Text(
                                       '$currencyIcon ${updatedAmount?.value.shippingCost ?? 0}',
-                                      style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+                                      style: kTextStyle.copyWith(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -567,12 +627,14 @@ class _OrderReviewState extends State<OrderReview> {
                                   children: [
                                     Text(
                                       'Discount',
-                                      style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+                                      style: kTextStyle.copyWith(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     const Spacer(),
                                     Text(
                                       '$currencyIcon $discount',
-                                      style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+                                      style: kTextStyle.copyWith(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -582,13 +644,17 @@ class _OrderReviewState extends State<OrderReview> {
                                 Row(
                                   children: [
                                     Text(
-                                      cartSize < 2 ? 'Order Total (${cartSize.toString()} Item)' : 'Order Total (${cartSize.toString()} Items)',
-                                      style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+                                      cartSize < 2
+                                          ? 'Order Total (${cartSize.toString()} Item)'
+                                          : 'Order Total (${cartSize.toString()} Items)',
+                                      style: kTextStyle.copyWith(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     const Spacer(),
                                     Text(
                                       '$currencyIcon ${updatedAmount?.value.grandTotal ?? 0 - discount}',
-                                      style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+                                      style: kTextStyle.copyWith(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -596,29 +662,44 @@ class _OrderReviewState extends State<OrderReview> {
                                   height: 20.0,
                                 ),
                                 ButtonGlobal(
-                                  buttontext: isCod ? 'Submit Order' : 'Proceed to Pay',
-                                  buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
+                                  buttontext:
+                                      isCod ? 'Submit Order' : 'Proceed to Pay',
+                                  buttonDecoration: kButtonDecoration.copyWith(
+                                      color: kMainColor),
                                   onPressed: () async {
                                     try {
                                       EasyLoading.show(
                                         status: 'Processing Order',
                                       );
-                                      Currency currency = Currency(exchangeRate: '1', id: '63');
+                                      Currency currency =
+                                          Currency(exchangeRate: '1', id: '63');
                                       OrderCreateModel model = OrderCreateModel(
                                         couponId: info.couponId ?? "1",
-                                        couponDiscount: info.discountAmount == null ? "0.0" : discount.toString(),
-                                        subTotal: updatedAmount?.value.subtotal.toString(),
-                                        totalShipping: updatedAmount?.value.shippingCost.toString(),
-                                        total: updatedAmount?.value.grandTotal.toString(),
-                                        shippingAddressId: snapshot.data?.value?.shipping?.id.toString(),
-                                        billingAddressId: snapshot.data?.value?.billing?.id.toString(),
+                                        couponDiscount:
+                                            info.discountAmount == null
+                                                ? "0.0"
+                                                : discount.toString(),
+                                        subTotal: updatedAmount?.value.subtotal
+                                            .toString(),
+                                        totalShipping: updatedAmount
+                                            ?.value.shippingCost
+                                            .toString(),
+                                        total: updatedAmount?.value.grandTotal
+                                            .toString(),
+                                        shippingAddressId: snapshot
+                                            .data?.value?.shipping?.id
+                                            .toString(),
+                                        billingAddressId: snapshot
+                                            .data?.value?.billing?.id
+                                            .toString(),
                                         cart: cartItems,
                                         currency: currency,
                                         paymentBy: 'cod',
                                       );
                                       // If the order is COD
                                       if (isCod) {
-                                        final result = await CreateOrderHelper.placeOrder(
+                                        final result =
+                                            await CreateOrderHelper.placeOrder(
                                           token: token,
                                           apiManager: _apiManager,
                                           paymentBy: 'cod',
@@ -631,12 +712,15 @@ class _OrderReviewState extends State<OrderReview> {
                                             'Order Placed Successfully',
                                           );
                                           ref.read(cartProvider).deleteCart();
-                                          ref.read(cartItemUiProvider).deleteUICart();
+                                          ref
+                                              .read(cartItemUiProvider)
+                                              .deleteUICart();
                                           setState(() {
                                             Navigator.pushAndRemoveUntil(
                                                 context,
                                                 MaterialPageRoute(
-                                                  builder: (context) => const Home(),
+                                                  builder: (context) =>
+                                                      const Home(),
                                                 ),
                                                 ModalRoute.withName("/Home"));
                                           });
@@ -647,13 +731,25 @@ class _OrderReviewState extends State<OrderReview> {
                                         }
                                       } else {
                                         final prefs = await _prefs;
-                                        String? billingPhone = prefs.getString('billing_phone') ?? prefs.getString('phone') ?? '0000000000';
-                                        String? billingEmail = prefs.getString('billing_email') ?? "Not Specified";
-                                        String? billingFirstName = prefs.getString('firstName') ?? "Not Specified";
-                                        String? billingLastName = prefs.getString('lastName') ?? "Not Specified";
+                                        String? billingPhone =
+                                            prefs.getString('billing_phone') ??
+                                                prefs.getString('phone') ??
+                                                '0000000000';
+                                        String? billingEmail =
+                                            prefs.getString('billing_email') ??
+                                                "Not Specified";
+                                        String? billingFirstName =
+                                            prefs.getString('firstName') ??
+                                                "Not Specified";
+                                        String? billingLastName =
+                                            prefs.getString('lastName') ??
+                                                "Not Specified";
 
-                                        final razorPayDetails = await _apiManager.getRazorPayId(
-                                          amount: updatedAmount?.value.grandTotal ?? 0,
+                                        final razorPayDetails =
+                                            await _apiManager.getRazorPayId(
+                                          amount:
+                                              updatedAmount?.value.grandTotal ??
+                                                  0,
                                           token: token,
                                         );
                                         if (razorPayDetails != null) {
@@ -661,10 +757,14 @@ class _OrderReviewState extends State<OrderReview> {
                                             razorpay: _razorpay,
                                             orderId: razorPayDetails.orderId,
                                             key: razorPayDetails.razorpayKey,
-                                            amount: (updatedAmount?.value.grandTotal ?? 0).toString(),
+                                            amount: (updatedAmount
+                                                        ?.value.grandTotal ??
+                                                    0)
+                                                .toString(),
                                             contact: billingPhone,
                                             email: billingEmail,
-                                            name: '$billingFirstName $billingLastName',
+                                            name:
+                                                '$billingFirstName $billingLastName',
                                           );
                                         } else {
                                           EasyLoading.showError(
@@ -714,11 +814,13 @@ class _OrderReviewState extends State<OrderReview> {
                     children: [
                       TextSpan(
                         text: 'Order id: ',
-                        style: kTextStyle.copyWith(fontSize: 14.0, color: kGreyTextColor),
+                        style: kTextStyle.copyWith(
+                            fontSize: 14.0, color: kGreyTextColor),
                       ),
                       TextSpan(
                         text: '',
-                        style: kTextStyle.copyWith(fontSize: 14.0, color: kMainColor),
+                        style: kTextStyle.copyWith(
+                            fontSize: 14.0, color: kMainColor),
                       ),
                     ],
                   ),
@@ -728,7 +830,8 @@ class _OrderReviewState extends State<OrderReview> {
                 ),
                 ButtonGlobal(
                   buttontext: 'View Order',
-                  buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
+                  buttonDecoration:
+                      kButtonDecoration.copyWith(color: kMainColor),
                   onPressed: () {
                     OrderList(
                       page: 1,
