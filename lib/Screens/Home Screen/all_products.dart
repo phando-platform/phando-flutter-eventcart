@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -28,7 +28,8 @@ class _AllProductsState extends State<AllProducts> {
         backgroundColor: kWhiteColor,
         elevation: 0.0,
         centerTitle: true,
-        leading: const Icon(Icons.arrow_back).onTap(() => const Home().launch(context)),
+        leading: const Icon(Icons.arrow_back)
+            .onTap(() => const Home().launch(context)),
         iconTheme: const IconThemeData(color: kBlackColor),
         title: Text(
           'All Products',
@@ -74,7 +75,8 @@ class _AllProductsState extends State<AllProducts> {
                           GridView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               childAspectRatio: 0.65,
                               crossAxisCount: 2,
                               mainAxisSpacing: 5.0,
@@ -83,22 +85,50 @@ class _AllProductsState extends State<AllProducts> {
                             itemBuilder: (_, i) {
                               return ProductCard(
                                 productData: ProductData(
-                                  productTitle: snapshot.data?.value?.data![i].name.toString() ?? 'Null',
-                                  productPrice: snapshot.data?.value?.data![i].salePrice.toString() ?? 'Null',
-                                  productDiscount: snapshot.data?.value?.data![i].unitPrice.toString() ?? 'Null',
-                                  productRating: snapshot.data?.value?.data![i].id.toString() ?? 'Null',
-                                  productImage: snapshot.data?.value?.data![i].images?[0].image.toString() ?? 'Null',
-                                  productDescription: snapshot.data?.value?.data![i].description.toString() ?? 'Null',
+                                  productTitle: snapshot
+                                          .data?.value?.data![i].name
+                                          .toString() ??
+                                      'Null',
+                                  productPrice: snapshot
+                                          .data?.value?.data![i].salePrice
+                                          .toString() ??
+                                      'Null',
+                                  productDiscount: snapshot
+                                          .data?.value?.data![i].unitPrice
+                                          .toString() ??
+                                      'Null',
+                                  productRating: snapshot
+                                          .data?.value?.data![i].id
+                                          .toString() ??
+                                      'Null',
+                                  productImage: snapshot.data?.value?.data![i]
+                                          .images?[0].image
+                                          .toString() ??
+                                      'Null',
+                                  productDescription: snapshot
+                                          .data?.value?.data![i].description
+                                          .toString() ??
+                                      'Null',
                                 ),
                                 onBookMarkPressed: () async {
                                   try {
                                     EasyLoading.show(status: 'Adding...');
-                                    final SharedPreferences prefs = await _prefs;
-                                    final wishlist = await _apiManager.addToWishList(snapshot.data?.value?.data![i].id.toString() ?? 'null', prefs.getString('token').toString());
+                                    final SharedPreferences prefs =
+                                        await _prefs;
+                                    final wishlist =
+                                        await _apiManager.addToWishList(
+                                            snapshot.data?.value?.data![i].id
+                                                    .toString() ??
+                                                'null',
+                                            prefs
+                                                .getString('token')
+                                                .toString());
                                     if (wishlist.success == true) {
-                                      EasyLoading.showSuccess(wishlist.message.toString());
+                                      EasyLoading.showSuccess(
+                                          wishlist.message.toString());
                                     } else {
-                                      EasyLoading.showError(wishlist.message.toString());
+                                      EasyLoading.showError(
+                                          wishlist.message.toString());
                                     }
                                   } catch (e) {
                                     toast(e.toString());
@@ -107,7 +137,8 @@ class _AllProductsState extends State<AllProducts> {
                               ).onTap(
                                 () {
                                   ProductDetails(
-                                    productId: snapshot.data?.value?.data![i].id,
+                                    productId:
+                                        snapshot.data?.value?.data![i].id,
                                   ).launch(context);
                                 },
                                 highlightColor: context.cardColor,
@@ -123,8 +154,10 @@ class _AllProductsState extends State<AllProducts> {
                                 padding: const EdgeInsets.all(10.0),
                                 child: Text(
                                   'Show More Products',
-                                  style: kTextStyle.copyWith(color: kTitleColor),
-                                ).visible(snapshot.data!.value!.lastPage != widget.page),
+                                  style:
+                                      kTextStyle.copyWith(color: kTitleColor),
+                                ).visible(snapshot.data!.value!.lastPage !=
+                                    widget.page),
                               )),
                         ],
                       );

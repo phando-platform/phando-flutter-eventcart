@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-OrderListModel orderListModelFromJson(String str) => OrderListModel.fromJson(json.decode(str));
+OrderListModel orderListModelFromJson(String str) =>
+    OrderListModel.fromJson(json.decode(str));
 
 String orderListModelToJson(OrderListModel data) => json.encode(data.toJson());
 
@@ -65,13 +66,20 @@ class Value {
 
   factory Value.fromJson(Map<String, dynamic> json) => Value(
         currentPage: json["current_page"] == null ? null : json["current_page"],
-        data: json["data"] == null ? null : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-        firstPageUrl: json["first_page_url"] == null ? null : json["first_page_url"],
+        data: json["data"] == null
+            ? null
+            : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        firstPageUrl:
+            json["first_page_url"] == null ? null : json["first_page_url"],
         from: json["from"] == null ? null : json["from"],
         lastPage: json["last_page"] == null ? null : json["last_page"],
-        lastPageUrl: json["last_page_url"] == null ? null : json["last_page_url"],
-        links: json["links"] == null ? null : List<Link>.from(json["links"].map((x) => Link.fromJson(x))),
-        nextPageUrl: json["next_page_url"] == null ? null : json["next_page_url"],
+        lastPageUrl:
+            json["last_page_url"] == null ? null : json["last_page_url"],
+        links: json["links"] == null
+            ? null
+            : List<Link>.from(json["links"].map((x) => Link.fromJson(x))),
+        nextPageUrl:
+            json["next_page_url"] == null ? null : json["next_page_url"],
         path: json["path"] == null ? null : json["path"],
         perPage: json["per_page"] == null ? null : json["per_page"],
         prevPageUrl: json["prev_page_url"],
@@ -81,12 +89,16 @@ class Value {
 
   Map<String, dynamic> toJson() => {
         "current_page": currentPage == null ? null : currentPage,
-        "data": data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null
+            ? null
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
         "first_page_url": firstPageUrl == null ? null : firstPageUrl,
         "from": from == null ? null : from,
         "last_page": lastPage == null ? null : lastPage,
         "last_page_url": lastPageUrl == null ? null : lastPageUrl,
-        "links": links == null ? null : List<dynamic>.from(links!.map((x) => x.toJson())),
+        "links": links == null
+            ? null
+            : List<dynamic>.from(links!.map((x) => x.toJson())),
         "next_page_url": nextPageUrl == null ? null : nextPageUrl,
         "path": path == null ? null : path,
         "per_page": perPage == null ? null : perPage,
@@ -201,48 +213,94 @@ class Datum {
         discount: json["discount"],
         couponDiscount: json["coupon_discount"],
         tax: json["tax"],
-        shippingCost: json["shipping_cost"] == null ? null : json["shipping_cost"],
+        shippingCost:
+            json["shipping_cost"] == null ? null : json["shipping_cost"],
         totalPrice: json["total_price"] == null ? null : json["total_price"],
         couponId: json["coupon_id"],
         currencyId: json["currency_id"] == null ? null : json["currency_id"],
-        exchangeRate: json["exchange_rate"] == null ? null : json["exchange_rate"],
-        shippingName: json["shipping_name"] == null ? null : json["shipping_name"],
-        shippingAddress1: json["shipping_address_1"] == null ? null : json["shipping_address_1"],
-        shippingAddress2: json["shipping_address_2"] == null ? null : json["shipping_address_2"],
-        shippingMobile: json["shipping_mobile"] == null ? null : json["shipping_mobile"],
-        shippingEmail: json["shipping_email"] == null ? null : json["shipping_email"],
-        shippingPost: json["shipping_post"] == null ? null : json["shipping_post"],
-        shippingTown: json["shipping_town"] == null ? null : json["shipping_town"],
-        shippingState: json["shipping_state"] == null ? null : json["shipping_state"],
-        shippingCountryId: json["shipping_country_id"] == null ? null : json["shipping_country_id"],
-        shippingNote: json["shipping_note"] == null ? null : json["shipping_note"],
+        exchangeRate:
+            json["exchange_rate"] == null ? null : json["exchange_rate"],
+        shippingName:
+            json["shipping_name"] == null ? null : json["shipping_name"],
+        shippingAddress1: json["shipping_address_1"] == null
+            ? null
+            : json["shipping_address_1"],
+        shippingAddress2: json["shipping_address_2"] == null
+            ? null
+            : json["shipping_address_2"],
+        shippingMobile:
+            json["shipping_mobile"] == null ? null : json["shipping_mobile"],
+        shippingEmail:
+            json["shipping_email"] == null ? null : json["shipping_email"],
+        shippingPost:
+            json["shipping_post"] == null ? null : json["shipping_post"],
+        shippingTown:
+            json["shipping_town"] == null ? null : json["shipping_town"],
+        shippingState:
+            json["shipping_state"] == null ? null : json["shipping_state"],
+        shippingCountryId: json["shipping_country_id"] == null
+            ? null
+            : json["shipping_country_id"],
+        shippingNote:
+            json["shipping_note"] == null ? null : json["shipping_note"],
         paymentBy: json["payment_by"] == null ? null : json["payment_by"],
         userId: json["user_id"] == null ? null : json["user_id"],
-        userFirstName: json["user_first_name"] == null ? null : json["user_first_name"],
-        userLastName: json["user_last_name"] == null ? null : json["user_last_name"],
-        userAddress1: json["user_address_1"] == null ? null : json["user_address_1"],
-        userPostCode: json["user_post_code"] == null ? null : json["user_post_code"],
+        userFirstName:
+            json["user_first_name"] == null ? null : json["user_first_name"],
+        userLastName:
+            json["user_last_name"] == null ? null : json["user_last_name"],
+        userAddress1:
+            json["user_address_1"] == null ? null : json["user_address_1"],
+        userPostCode:
+            json["user_post_code"] == null ? null : json["user_post_code"],
         userCity: json["user_city"] == null ? null : json["user_city"],
-        userCountryId: json["user_country_id"] == null ? null : json["user_country_id"],
+        userCountryId:
+            json["user_country_id"] == null ? null : json["user_country_id"],
         userMobile: json["user_mobile"] == null ? null : json["user_mobile"],
         userEmail: json["user_email"] == null ? null : json["user_email"],
-        ratecardRateid: json["ratecard_rateid"] == null ? null : json["ratecard_rateid"],
-        ratecardProviderId: json["ratecard_provider_id"] == null ? null : json["ratecard_provider_id"],
-        ratecardCtop: json["ratecard_ctop"] == null ? null : json["ratecard_ctop"],
-        ratecardPrice: json["ratecard_price"] == null ? null : json["ratecard_price"],
+        ratecardRateid:
+            json["ratecard_rateid"] == null ? null : json["ratecard_rateid"],
+        ratecardProviderId: json["ratecard_provider_id"] == null
+            ? null
+            : json["ratecard_provider_id"],
+        ratecardCtop:
+            json["ratecard_ctop"] == null ? null : json["ratecard_ctop"],
+        ratecardPrice:
+            json["ratecard_price"] == null ? null : json["ratecard_price"],
         ratecardBp: json["ratecard_bp"] == null ? null : json["ratecard_bp"],
-        ratecardTax: json["ratecard_tax"] == null ? null : json["ratecard_tax"].toDouble(),
-        ratecardPLatlng: json["ratecard_p_latlng"] == null ? null : json["ratecard_p_latlng"],
-        ratecardDLatlng: json["ratecard_d_latlng"] == null ? null : json["ratecard_d_latlng"],
-        ratecardDistance: json["ratecard_distance"] == null ? null : json["ratecard_distance"].toDouble(),
-        ratecardBillwt: json["ratecard_billwt"] == null ? null : json["ratecard_billwt"],
-        ratecardReplyCode: json["ratecard_reply_code"] == null ? null : json["ratecard_reply_code"],
-        ratecardReplyMsg: json["ratecard_reply_msg"] == null ? null : json["ratecard_reply_msg"],
-        ratecardAwbNo: json["ratecard_awb_no"] == null ? null : json["ratecard_awb_no"],
-        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-        paymentTxnId: json["payment_txn_id"] == null ? null : json["payment_txn_id"],
-        details: json["details"] == null ? null : List<Detail>.from(json["details"].map((x) => Detail.fromJson(x))),
+        ratecardTax: json["ratecard_tax"] == null
+            ? null
+            : json["ratecard_tax"].toDouble(),
+        ratecardPLatlng: json["ratecard_p_latlng"] == null
+            ? null
+            : json["ratecard_p_latlng"],
+        ratecardDLatlng: json["ratecard_d_latlng"] == null
+            ? null
+            : json["ratecard_d_latlng"],
+        ratecardDistance: json["ratecard_distance"] == null
+            ? null
+            : json["ratecard_distance"].toDouble(),
+        ratecardBillwt:
+            json["ratecard_billwt"] == null ? null : json["ratecard_billwt"],
+        ratecardReplyCode: json["ratecard_reply_code"] == null
+            ? null
+            : json["ratecard_reply_code"],
+        ratecardReplyMsg: json["ratecard_reply_msg"] == null
+            ? null
+            : json["ratecard_reply_msg"],
+        ratecardAwbNo:
+            json["ratecard_awb_no"] == null ? null : json["ratecard_awb_no"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        paymentTxnId:
+            json["payment_txn_id"] == null ? null : json["payment_txn_id"],
+        details: json["details"] == null
+            ? null
+            : List<Detail>.from(json["details"].map((x) => Detail.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -257,14 +315,17 @@ class Datum {
         "currency_id": currencyId == null ? null : currencyId,
         "exchange_rate": exchangeRate == null ? null : exchangeRate,
         "shipping_name": shippingName == null ? null : shippingName,
-        "shipping_address_1": shippingAddress1 == null ? null : shippingAddress1,
-        "shipping_address_2": shippingAddress2 == null ? null : shippingAddress2,
+        "shipping_address_1":
+            shippingAddress1 == null ? null : shippingAddress1,
+        "shipping_address_2":
+            shippingAddress2 == null ? null : shippingAddress2,
         "shipping_mobile": shippingMobile == null ? null : shippingMobile,
         "shipping_email": shippingEmail == null ? null : shippingEmail,
         "shipping_post": shippingPost == null ? null : shippingPost,
         "shipping_town": shippingTown == null ? null : shippingTown,
         "shipping_state": shippingState == null ? null : shippingState,
-        "shipping_country_id": shippingCountryId == null ? null : shippingCountryId,
+        "shipping_country_id":
+            shippingCountryId == null ? null : shippingCountryId,
         "shipping_note": shippingNote == null ? null : shippingNote,
         "payment_by": paymentBy == null ? null : paymentBy,
         "user_id": userId == null ? null : userId,
@@ -277,7 +338,8 @@ class Datum {
         "user_mobile": userMobile == null ? null : userMobile,
         "user_email": userEmail == null ? null : userEmail,
         "ratecard_rateid": ratecardRateid == null ? null : ratecardRateid,
-        "ratecard_provider_id": ratecardProviderId == null ? null : ratecardProviderId,
+        "ratecard_provider_id":
+            ratecardProviderId == null ? null : ratecardProviderId,
         "ratecard_ctop": ratecardCtop == null ? null : ratecardCtop,
         "ratecard_price": ratecardPrice == null ? null : ratecardPrice,
         "ratecard_bp": ratecardBp == null ? null : ratecardBp,
@@ -286,13 +348,17 @@ class Datum {
         "ratecard_d_latlng": ratecardDLatlng == null ? null : ratecardDLatlng,
         "ratecard_distance": ratecardDistance == null ? null : ratecardDistance,
         "ratecard_billwt": ratecardBillwt == null ? null : ratecardBillwt,
-        "ratecard_reply_code": ratecardReplyCode == null ? null : ratecardReplyCode,
-        "ratecard_reply_msg": ratecardReplyMsg == null ? null : ratecardReplyMsg,
+        "ratecard_reply_code":
+            ratecardReplyCode == null ? null : ratecardReplyCode,
+        "ratecard_reply_msg":
+            ratecardReplyMsg == null ? null : ratecardReplyMsg,
         "ratecard_awb_no": ratecardAwbNo == null ? null : ratecardAwbNo,
         "created_at": createdAt == null ? null : createdAt!.toIso8601String(),
         "updated_at": updatedAt == null ? null : updatedAt!.toIso8601String(),
         "payment_txn_id": paymentTxnId == null ? null : paymentTxnId,
-        "details": details == null ? null : List<dynamic>.from(details!.map((x) => x.toJson())),
+        "details": details == null
+            ? null
+            : List<dynamic>.from(details!.map((x) => x.toJson())),
       };
 }
 
@@ -358,16 +424,25 @@ class Detail {
         size: json["size"] == null ? null : json["size"],
         discount: json["discount"] == null ? null : json["discount"],
         tax: json["tax"] == null ? null : json["tax"],
-        shippingCost: json["shipping_cost"] == null ? null : json["shipping_cost"],
-        totalShippingCost: json["total_shipping_cost"] == null ? null : json["total_shipping_cost"],
+        shippingCost:
+            json["shipping_cost"] == null ? null : json["shipping_cost"],
+        totalShippingCost: json["total_shipping_cost"] == null
+            ? null
+            : json["total_shipping_cost"],
         totalPrice: json["total_price"] == null ? null : json["total_price"],
         grandTotal: json["grand_total"] == null ? null : json["grand_total"],
         currencyId: json["currency_id"] == null ? null : json["currency_id"],
-        exchangeRate: json["exchange_rate"] == null ? null : json["exchange_rate"],
+        exchangeRate:
+            json["exchange_rate"] == null ? null : json["exchange_rate"],
         estimatedShippingDays: json["estimated_shipping_days"],
-        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-        product: json["product"] == null ? null : Product.fromJson(json["product"]),
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        product:
+            json["product"] == null ? null : Product.fromJson(json["product"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -384,7 +459,8 @@ class Detail {
         "discount": discount == null ? null : discount,
         "tax": tax == null ? null : tax,
         "shipping_cost": shippingCost == null ? null : shippingCost,
-        "total_shipping_cost": totalShippingCost == null ? null : totalShippingCost,
+        "total_shipping_cost":
+            totalShippingCost == null ? null : totalShippingCost,
         "total_price": totalPrice == null ? null : totalPrice,
         "grand_total": grandTotal == null ? null : grandTotal,
         "currency_id": currencyId == null ? null : currencyId,
@@ -449,10 +525,11 @@ class Product {
   int? weight;
   int? isRefundable;
   String? attributes;
-  int? unitPrice;
+  //KK
+  double? unitPrice;
   int? purchasePrice;
   int? salePrice;
-  int? discount;
+  double? discount;
   int? quantity;
   int? shippingCost;
   String? description;
@@ -482,25 +559,35 @@ class Product {
         width: json["width"] == null ? null : json["width"],
         height: json["height"] == null ? null : json["height"],
         weight: json["weight"] == null ? null : json["weight"],
-        isRefundable: json["is_refundable"] == null ? null : json["is_refundable"],
+        isRefundable:
+            json["is_refundable"] == null ? null : json["is_refundable"],
         attributes: json["attributes"] == null ? null : json["attributes"],
         unitPrice: json["unit_price"] == null ? null : json["unit_price"],
-        purchasePrice: json["purchase_price"] == null ? null : json["purchase_price"],
+        purchasePrice:
+            json["purchase_price"] == null ? null : json["purchase_price"],
         salePrice: json["sale_price"] == null ? null : json["sale_price"],
         discount: json["discount"] == null ? null : json["discount"],
         quantity: json["quantity"] == null ? null : json["quantity"],
-        shippingCost: json["shipping_cost"] == null ? null : json["shipping_cost"],
+        shippingCost:
+            json["shipping_cost"] == null ? null : json["shipping_cost"],
         description: json["description"] == null ? null : json["description"],
-        pdfSpecification: json["pdf_specification"] == null ? null : json["pdf_specification"],
+        pdfSpecification: json["pdf_specification"] == null
+            ? null
+            : json["pdf_specification"],
         metaTitle: json["meta_title"] == null ? null : json["meta_title"],
-        metaDescription: json["meta_description"] == null ? null : json["meta_description"],
+        metaDescription:
+            json["meta_description"] == null ? null : json["meta_description"],
         metaImage: json["meta_image"] == null ? null : json["meta_image"],
         slug: json["slug"] == null ? null : json["slug"],
         totalViewed: json["total_viewed"] == null ? null : json["total_viewed"],
         isActive: json["is_active"] == null ? null : json["is_active"],
         publishStat: json["publish_stat"] == null ? null : json["publish_stat"],
-        isWishlisted: json["is_wishlisted"] == null ? null : json["is_wishlisted"],
-        images: json["images"] == null ? null : List<ImageModel>.from(json["images"].map((x) => ImageModel.fromJson(x))),
+        isWishlisted:
+            json["is_wishlisted"] == null ? null : json["is_wishlisted"],
+        images: json["images"] == null
+            ? null
+            : List<ImageModel>.from(
+                json["images"].map((x) => ImageModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -536,7 +623,9 @@ class Product {
         "is_active": isActive == null ? null : isActive,
         "publish_stat": publishStat == null ? null : publishStat,
         "is_wishlisted": isWishlisted == null ? null : isWishlisted,
-        "images": images == null ? null : List<dynamic>.from(images!.map((x) => x.toJson())),
+        "images": images == null
+            ? null
+            : List<dynamic>.from(images!.map((x) => x.toJson())),
       };
 }
 

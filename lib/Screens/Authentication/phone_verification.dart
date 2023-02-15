@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../GlobalComponents/button_global.dart';
 import './signin.dart';

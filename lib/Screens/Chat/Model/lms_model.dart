@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 
 class LMSModel {
   String? title;
@@ -8,7 +8,13 @@ class LMSModel {
   bool? isCheckList;
   Color? color;
 
-  LMSModel({this.title, this.subTitle, this.image, this.color, this.isCheckList = false, this.icon});
+  LMSModel(
+      {this.title,
+      this.subTitle,
+      this.image,
+      this.color,
+      this.isCheckList = false,
+      this.icon});
 }
 
 class LMSInboxData {

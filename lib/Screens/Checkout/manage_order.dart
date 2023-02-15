@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -10,7 +10,8 @@ import '../../constant.dart';
 import '../Home Screen/home.dart';
 
 class ManageOrder extends StatefulWidget {
-  const ManageOrder({Key? key, required this.details, required this.orderId}) : super(key: key);
+  const ManageOrder({Key? key, required this.details, required this.orderId})
+      : super(key: key);
   final Details details;
   final String orderId;
 
@@ -69,7 +70,8 @@ class _ManageOrderState extends State<ManageOrder> {
                   ),
                   ButtonGlobal(
                       buttontext: 'Cancel Order',
-                      buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
+                      buttonDecoration:
+                          kButtonDecoration.copyWith(color: kMainColor),
                       onPressed: () async {
                         try {
                           EasyLoading.show(status: 'Cancelling');
@@ -139,7 +141,8 @@ class _ManageOrderState extends State<ManageOrder> {
                     height: 20.0,
                   ),
                   Card(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: ListTile(
@@ -156,7 +159,8 @@ class _ManageOrderState extends State<ManageOrder> {
                               children: [
                                 Text(
                                   '#INV${widget.orderId} ${widget.details.id.toString()}',
-                                  style: kTextStyle.copyWith(color: kGreyTextColor),
+                                  style: kTextStyle.copyWith(
+                                      color: kGreyTextColor),
                                 ),
                                 const Spacer(),
                                 Text(
@@ -184,8 +188,10 @@ class _ManageOrderState extends State<ManageOrder> {
                               ),
                               const Spacer(),
                               Text(
-                                widget.details.createdAt?.substring(0, 10) ?? '',
-                                style: kTextStyle.copyWith(color: kGreyTextColor),
+                                widget.details.createdAt?.substring(0, 10) ??
+                                    '',
+                                style:
+                                    kTextStyle.copyWith(color: kGreyTextColor),
                               ),
                             ],
                           ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:nb_utils/nb_utils.dart';
 import '../../GlobalComponents/button_global.dart';
 import '../../Screens/Home%20Screen/home.dart';
@@ -24,15 +24,23 @@ class _OrderSuccessfulState extends State<OrderSuccessful> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset('images/check.png'),
-            const SizedBox(height: 10.0,),
-            Text('Order Placed Successfully',style: kTextStyle,),
-            const SizedBox(height: 10.0,),
+            const SizedBox(
+              height: 10.0,
+            ),
+            Text(
+              'Order Placed Successfully',
+              style: kTextStyle,
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
             RichText(
               text: TextSpan(
                 children: [
                   TextSpan(
                     text: 'Order id: ',
-                    style: kTextStyle.copyWith(fontSize: 14.0,color: kGreyTextColor),
+                    style: kTextStyle.copyWith(
+                        fontSize: 14.0, color: kGreyTextColor),
                   ),
                   TextSpan(
                     text: widget.orderNumber,
@@ -49,7 +57,9 @@ class _OrderSuccessfulState extends State<OrderSuccessful> {
               buttontext: 'View Order',
               buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
               onPressed: () {
-                OrderList(page: 1,).launch(context);
+                OrderList(
+                  page: 1,
+                ).launch(context);
               },
             ),
             const SizedBox(

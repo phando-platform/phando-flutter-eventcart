@@ -1,6 +1,6 @@
 import 'package:event_app/Services/cart_item_notifier.dart';
 import 'package:event_app/Services/cart_notifier.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

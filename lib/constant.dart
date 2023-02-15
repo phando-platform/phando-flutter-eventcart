@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:google_fonts/google_fonts.dart';
 
 const kMainColor = Color(0xFFFF8400);
@@ -32,7 +32,6 @@ const String companyDescription = 'Event Company';
 
 final kTextStyle = GoogleFonts.openSans(
   color: kTitleColor,
-
 );
 
 const kButtonDecoration = BoxDecoration(

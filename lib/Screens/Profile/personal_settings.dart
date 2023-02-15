@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:event_app/Screens/Profile/update_profile.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;

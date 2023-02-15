@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:event_app/Screens/Home%20Screen/home.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
@@ -306,7 +306,7 @@ class _UpdateProfileWidgetState extends State<UpdateProfileWidget> {
     } on DioError catch (e) {
       log(e.message.toString());
       // Navigator.pop(context);
-      Fluttertoast.showToast(msg: e.message);
+      Fluttertoast.showToast(msg: e.message ?? "");
       return 'null';
     }
   }

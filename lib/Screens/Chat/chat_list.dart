@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -32,6 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -97,19 +98,25 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               Column(
                 children: list_data.map(
-                      (data) {
+                  (data) {
                     return SettingItemWidget(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       title: data.title.validate(),
                       subTitle: data.subTitle.validate(),
-                      leading: Image.network(data.image.validate(), height: 50, width: 50, fit: BoxFit.cover).cornerRadiusWithClipRRect(25),
+                      leading: Image.network(data.image.validate(),
+                              height: 50, width: 50, fit: BoxFit.cover)
+                          .cornerRadiusWithClipRRect(25),
                       trailing: Column(
                         children: [
                           Text('10.00 AM', style: secondaryTextStyle()),
                         ],
                       ),
                       onTap: () {
-                        ChatInbox(img: data.image.validate(), name: data.title.validate()).launch(context);
+                        ChatInbox(
+                                img: data.image.validate(),
+                                name: data.title.validate())
+                            .launch(context);
                       },
                     );
                   },

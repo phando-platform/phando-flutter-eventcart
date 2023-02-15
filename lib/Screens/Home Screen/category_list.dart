@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -11,8 +11,10 @@ import 'category_product.dart';
 import 'home.dart';
 
 class CategoryList extends StatefulWidget {
-  const CategoryList({Key? key,
-    required this.subCatModel,}) : super(key: key);
+  const CategoryList({
+    Key? key,
+    required this.subCatModel,
+  }) : super(key: key);
   final HomeModel? subCatModel;
   @override
   _CategoryListState createState() => _CategoryListState();
@@ -117,7 +119,9 @@ class _CategoryListState extends State<CategoryList> {
                       CategoryProduct(
                         subCatModel: widget.subCatModel,
                         clickIndex: index,
-                        catName: snapshot.data?.value?.data?[index].name.toString() ?? 'NA',
+                        catName: snapshot.data?.value?.data?[index].name
+                                .toString() ??
+                            'NA',
                         catId: snapshot.data?.value?.data?[index].id ?? 2,
                         page: 1,
                       ).launch(context);

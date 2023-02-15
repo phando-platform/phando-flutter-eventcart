@@ -1,13 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 
 import '../constant.dart';
 
-
-
 class OtpForm extends StatefulWidget {
- const OtpForm({
-    Key? key
-  }) : super(key: key);
+  const OtpForm({Key? key}) : super(key: key);
 
   @override
   _OtpFormState createState() => _OtpFormState();
