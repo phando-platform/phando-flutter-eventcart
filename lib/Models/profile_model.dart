@@ -136,7 +136,7 @@ class Orders {
   int? orderId;
   int? orderStat;
   int? productId;
-  int? salePrice;
+  double? salePrice;
   int? qty;
   String? color;
   String? size;
@@ -144,7 +144,7 @@ class Orders {
   int? tax;
   int? shippingCost;
   int? totalShippingCost;
-  int? totalPrice;
+  double? totalPrice;
   int? grandTotal;
   int? currencyId;
   double? exchangeRate;
@@ -182,7 +182,7 @@ class Orders {
     orderId = json['order_id'];
     orderStat = json['order_stat'];
     productId = json['product_id'];
-    salePrice = json['sale_price'];
+    salePrice = json['sale_price'].toDouble();
     qty = json['qty'];
     color = json['color'] ?? '';
     size = json['size'] ?? '';
@@ -190,7 +190,7 @@ class Orders {
     tax = json['tax'];
     shippingCost = json['shipping_cost'];
     totalShippingCost = json['total_shipping_cost'];
-    totalPrice = json['total_price'];
+    totalPrice = json['total_price'].toDouble();
     grandTotal = json['grand_total'];
     currencyId = json['currency_id'];
     exchangeRate = json['exchange_rate'].toDouble();

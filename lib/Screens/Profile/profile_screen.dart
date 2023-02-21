@@ -100,6 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ).launch(context))),
               );
             }
+
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -111,8 +112,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         ClipOval(
                           child: Image.network(
-                            snapshot.data?.value?.customer?.image ??
-                                strUserImage,
+                            snapshot.data!.value!.customer!.image
+                                    .toString()
+                                    .contains(".jpg")
+                                ? snapshot.data!.value!.customer!.image
+                                    .toString()
+                                : strUserImage,
                             fit: BoxFit.cover,
                             width: 90.0,
                             height: 90.0,

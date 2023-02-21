@@ -3,7 +3,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../GlobalComponents/button_global.dart';
-import '../../Models/order_list_model.dart';
+// import '../../Models/all_products_model.dart';
+// import '../../Models/all_products_model.dart' as newModel;
+
+// import '../../Models/order_list_model.dart';
+import '../../Models/order_list_model_backup.dart';
 import '../../Models/profile_model.dart';
 import '../../Services/api_manager.dart';
 import '../../constant.dart';
@@ -163,10 +167,12 @@ class _ManageOrderState extends State<ManageOrder> {
                                       color: kGreyTextColor),
                                 ),
                                 const Spacer(),
+                                //KAMAL
                                 Text(
                                   '\$${widget.details.salePrice.toString()}',
                                   style: kTextStyle.copyWith(color: kMainColor),
                                 ),
+                                //KAMAL
                               ],
                             ),
                           ],
@@ -187,12 +193,14 @@ class _ManageOrderState extends State<ManageOrder> {
                                 ).onTap(() => showPopUp()),
                               ),
                               const Spacer(),
+                              //KAMAL
                               Text(
                                 widget.details.createdAt?.substring(0, 10) ??
                                     '',
                                 style:
                                     kTextStyle.copyWith(color: kGreyTextColor),
                               ),
+                              //KAMAL
                             ],
                           ),
                         ),

@@ -3,8 +3,12 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
+// import '../../Models/all_products_model.dart' as newModel;
+// import '../../Models/all_products_model.dart';
+
+import '../../Models/order_list_model_backup.dart';
 import './manage_order.dart';
-import '../../Models/order_list_model.dart';
+// import '../../Models/order_list_model.dart';
 import '../../Models/order_timelines_model.dart';
 import '../../Services/api_manager.dart';
 import '../../constant.dart';
@@ -600,12 +604,15 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                                 padding: const EdgeInsets.only(top: 5.0),
                                 child: Row(
                                   children: [
+                                    //KAMAL
                                     Text(
                                       currencyIcon +
                                           widget.details.salePrice.toString(),
                                       style: kTextStyle.copyWith(
                                           color: kMainColor),
                                     ),
+                                    //KAMAL
+
                                     const Spacer(),
                                     Container(
                                       padding: const EdgeInsets.all(4.0),

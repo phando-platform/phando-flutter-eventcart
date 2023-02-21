@@ -497,7 +497,7 @@ class ApiManager {
         'Authorization': 'Bearer $token',
       },
     );
-    print("Profile" + " " + token);
+    print("Profile" + " API MANAGER" + " " + token);
     print("Profile" + " " + response.body);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -689,13 +689,13 @@ class ApiManager {
     );
     if (response.statusCode == 200) {
       // final data = jsonDecode(response.body);
-      try {
-        return OrderListModel.fromJson(jsonDecode(response.body));
-      } catch (error, stackTrace) {
-        log(error.toString());
-        log(stackTrace.toString());
-        rethrow;
-      }
+      // try {
+      return OrderListModel.fromJson(jsonDecode(response.body));
+      // } catch (error, stackTrace) {
+      //   log(error.toString());
+      //   log(stackTrace.toString());
+      //   rethrow;
+      // }
     } else {
       final data = Map<String, dynamic>.from(jsonDecode(response.body));
       return OrderListModel.fromJson(data);

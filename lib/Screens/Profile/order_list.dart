@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
 
 import '../../GlobalComponents/button_global.dart';
-import '../../Models/order_list_model.dart';
+import '../../Models/order_list_model.dart' as newmodel;
 import '../../Services/api_manager.dart';
 import '../../constant.dart';
 import '../Home Screen/home.dart';
@@ -66,7 +66,7 @@ class _OrderListState extends State<OrderList> {
             const SizedBox(
               height: 20.0,
             ),
-            FutureBuilder<OrderListModel>(
+            FutureBuilder<newmodel.OrderListModel>(
                 future: _apiManager.orderList(token, widget.page),
                 builder: (_, snapshot) {
                   if (snapshot.hasData) {
