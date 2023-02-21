@@ -575,7 +575,7 @@ class _CartScreenState extends State<CartScreen> {
                                       discount),
                                   cart: ref.watch(cartProvider).getItems(),
                                   reference: ref,
-                                  token: token,
+                                  // token: token,
                                 ).launch(context);
                               } else {
                                 toast('Please sign In to Checkout');

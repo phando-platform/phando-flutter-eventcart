@@ -140,6 +140,13 @@ class _UpdateShippingState extends State<UpdateShipping> {
                 height: 20.0,
               ),
               AppTextField(
+                validator: (value) {
+                  if (value == null || value.isEmpty || value.length < 9) {
+                    return "Length should be more than 8";
+                  } else {
+                    return null;
+                  }
+                },
                 // ignore: deprecated_member_use
                 textFieldType: TextFieldType.ADDRESS,
                 controller: addressOneController,
@@ -383,6 +390,8 @@ class _UpdateShippingState extends State<UpdateShipping> {
                     toast("Please input your email to proceed");
                   } else if (stateController.text.isEmpty) {
                     toast("Please input your state to proceed");
+                  } else if (addressOneController.text.length < 9) {
+                    toast("Length of Address line 1 should be more than 8");
                   } else if (addressOneController.text.isNotEmpty &&
                       cityController.text.isNotEmpty &&
                       postalController.text.isNotEmpty) {

@@ -888,6 +888,15 @@ class ApiManager {
     required DeliveryBodyModel details,
     required String token,
   }) async {
+    print("token in getShippingCharges $token");
+    print("token in getShippingCharges ${details.addressLineOne}");
+    print("token in getShippingCharges ${details.cart}");
+    print("token in getShippingCharges ${details.shippingPost}");
+    print("token in getShippingCharges ${details.shippingState}");
+    print("token in getShippingCharges ${details.shippingTown}");
+    print("token in getShippingCharges ${details.subTotal}");
+    print("token in getShippingCharges ${details.toJson()}");
+
     final response = await http.post(
       Uri.parse(apiUrl + 'get_rate_card'),
       headers: {
@@ -906,6 +915,7 @@ class ApiManager {
       if (data.containsKey('success') && data['success'] == true) {
         DeliveryResponseModel deliveryData =
             DeliveryResponseModel.fromMap(data);
+        print("deliveryData $deliveryData");
         return deliveryData;
       } else {
         return null;

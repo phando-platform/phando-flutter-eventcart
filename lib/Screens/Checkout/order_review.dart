@@ -24,14 +24,14 @@ import '../Home Screen/home.dart';
 import '../Profile/order_list.dart';
 
 class OrderReview extends StatefulWidget {
-  final String token;
-  const OrderReview(
-      {Key? key,
-      required this.subTotalAmount,
-      required this.cart,
-      required this.reference,
-      required this.token})
-      : super(key: key);
+  // final String token;
+  const OrderReview({
+    Key? key,
+    required this.subTotalAmount,
+    required this.cart,
+    required this.reference,
+    // required this.token
+  }) : super(key: key);
   @override
   _OrderReviewState createState() => _OrderReviewState();
 
@@ -58,7 +58,7 @@ class _OrderReviewState extends State<OrderReview> {
     country = preferences.getInt('country');
     mobile = preferences.getString('phone');
 
-    final profile = await _apiManager.getProfileInfo(widget.token);
+    final profile = await _apiManager.getProfileInfo(token);
 
     final finalAmount = await _apiManager.getShippingCharges(
       details: DeliveryBodyModel(
@@ -69,12 +69,12 @@ class _OrderReviewState extends State<OrderReview> {
         subTotal: widget.subTotalAmount.toString(),
         cart: widget.cart,
       ),
-      token: widget.token,
+      token: token,
     );
     print("finalAmount $finalAmount");
-    checkRazorEnable = await _apiManager.checkRazorStatus(widget.token);
-    print("RAZOR VALUE ${checkRazorEnable!.value!.payment!.status}");
+    checkRazorEnable = await _apiManager.checkRazorStatus(token);
 
+    print("finalAmount?.success ${finalAmount?.success}");
     if (finalAmount?.success ?? false) {
       updatedAmount = finalAmount;
     }
@@ -104,7 +104,7 @@ class _OrderReviewState extends State<OrderReview> {
       context: context,
       apiManager: _apiManager,
       model: model,
-      token: widget.token,
+      token: token,
       updatedAmount: updatedAmount,
       successCallbackFunction: () {
         EasyLoading.showSuccess('Order Placed Successfully');
@@ -229,7 +229,7 @@ class _OrderReviewState extends State<OrderReview> {
             ),
           ),
           body: FutureBuilder<ProfileModel>(
-            future: _apiManager.getProfileInfo(widget.token),
+            future: _apiManager.getProfileInfo(token),
             builder: (BuildContext context, snapshot) {
               if (snapshot.hasData && snapshot.data?.value?.shipping != null) {
                 saveBillingAndShippingData(
@@ -390,7 +390,7 @@ class _OrderReviewState extends State<OrderReview> {
                                               widget.subTotalAmount.toString(),
                                           cart: widget.cart,
                                         ),
-                                        token: widget.token,
+                                        token: token,
                                       );
                                       print("FINAL AMOUNT $finalAmount");
 
@@ -704,7 +704,7 @@ class _OrderReviewState extends State<OrderReview> {
                                       if (isCod) {
                                         final result =
                                             await CreateOrderHelper.placeOrder(
-                                          token: widget.token,
+                                          token: token,
                                           apiManager: _apiManager,
                                           paymentBy: 'cod',
                                           paymentId: '',
@@ -754,7 +754,7 @@ class _OrderReviewState extends State<OrderReview> {
                                           amount:
                                               updatedAmount?.value.grandTotal ??
                                                   0,
-                                          token: widget.token,
+                                          token: token,
                                         );
                                         if (razorPayDetails != null) {
                                           RazorPayMethods.openRazopay(

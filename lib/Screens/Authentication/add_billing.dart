@@ -131,6 +131,13 @@ class _AddBillingState extends State<AddBilling> {
                   height: 20.0,
                 ),
                 AppTextField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty || value.length < 9) {
+                      return "Length should be more than 8";
+                    } else {
+                      return null;
+                    }
+                  },
                   // ignore: deprecated_member_use
                   textFieldType: TextFieldType.ADDRESS,
                   controller: addressOneController,
@@ -349,6 +356,8 @@ class _AddBillingState extends State<AddBilling> {
                       toast("Please input your email to signup");
                     } else if (emailController.text.contains('Guest')) {
                       toast("Please input valid email to signup");
+                    } else if (addressOneController.text.length < 9) {
+                      toast("Length of Address line 1 should be more than 8");
                     } else if (addressOneController.text.isNotEmpty &&
                         cityController.text.isNotEmpty &&
                         postalController.text.isNotEmpty) {
