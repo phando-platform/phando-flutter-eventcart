@@ -50,19 +50,19 @@
 //     this.total,
 //   });
 
-//   int? currentPage;
+//   num? currentPage;
 //   List<Datum>? data;
 //   String? firstPageUrl;
-//   int? from;
-//   int? lastPage;
+//   num? from;
+//   num? lastPage;
 //   String? lastPageUrl;
 //   List<Link>? links;
 //   String? nextPageUrl;
 //   String? path;
-//   int? perPage;
+//   num? perPage;
 //   dynamic prevPageUrl;
-//   int? to;
-//   int? total;
+//   num? to;
+//   num? total;
 
 //   factory Value.fromJson(Map<String, dynamic> json) => Value(
 //         currentPage: json["current_page"] == null ? null : json["current_page"],
@@ -159,16 +159,16 @@
 //     this.details,
 //   });
 
-//   int? id;
+//   num? id;
 //   String? orderNo;
 //   dynamic discount;
 //   dynamic couponDiscount;
 //   dynamic tax;
-//   int? shippingCost;
-//   int? totalPrice;
+//   num? shippingCost;
+//   num? totalPrice;
 //   dynamic couponId;
-//   int? currencyId;
-//   int? exchangeRate;
+//   num? currencyId;
+//   num? exchangeRate;
 //   String? shippingName;
 //   String? shippingAddress1;
 //   String? shippingAddress2;
@@ -177,29 +177,29 @@
 //   String? shippingPost;
 //   String? shippingTown;
 //   String? shippingState;
-//   int? shippingCountryId;
+//   num? shippingCountryId;
 //   String? shippingNote;
 //   String? paymentBy;
-//   int? userId;
+//   num? userId;
 //   String? userFirstName;
 //   String? userLastName;
 //   String? userAddress1;
 //   String? userPostCode;
 //   String? userCity;
-//   int? userCountryId;
+//   num? userCountryId;
 //   String? userMobile;
 //   String? userEmail;
-//   int? ratecardRateid;
-//   int? ratecardProviderId;
-//   int? ratecardCtop;
-//   int? ratecardPrice;
-//   int? ratecardBp;
-//   double? ratecardTax;
+//   num? ratecardRateid;
+//   num? ratecardProviderId;
+//   num? ratecardCtop;
+//   num? ratecardPrice;
+//   num? ratecardBp;
+//   num? ratecardTax;
 //   String? ratecardPLatlng;
 //   String? ratecardDLatlng;
-//   double? ratecardDistance;
-//   int? ratecardBillwt;
-//   int? ratecardReplyCode;
+//   num? ratecardDistance;
+//   num? ratecardBillwt;
+//   num? ratecardReplyCode;
 //   String? ratecardReplyMsg;
 //   String? ratecardAwbNo;
 //   DateTime? createdAt;
@@ -270,7 +270,7 @@
 //         ratecardBp: json["ratecard_bp"] == null ? null : json["ratecard_bp"],
 //         ratecardTax: json["ratecard_tax"] == null
 //             ? null
-//             : json["ratecard_tax"].toDouble(),
+//             : json["ratecard_tax"].tonum(),
 //         ratecardPLatlng: json["ratecard_p_latlng"] == null
 //             ? null
 //             : json["ratecard_p_latlng"],
@@ -279,7 +279,7 @@
 //             : json["ratecard_d_latlng"],
 //         ratecardDistance: json["ratecard_distance"] == null
 //             ? null
-//             : json["ratecard_distance"].toDouble(),
+//             : json["ratecard_distance"].tonum(),
 //         ratecardBillwt:
 //             json["ratecard_billwt"] == null ? null : json["ratecard_billwt"],
 //         ratecardReplyCode: json["ratecard_reply_code"] == null
@@ -388,24 +388,24 @@
 //     this.product,
 //   });
 
-//   int? id;
-//   int? sellerId;
-//   int? userId;
-//   int? orderId;
-//   int? orderStat;
-//   int? productId;
-//   double? salePrice;
-//   int? qty;
+//   num? id;
+//   num? sellerId;
+//   num? userId;
+//   num? orderId;
+//   num? orderStat;
+//   num? productId;
+//   num? salePrice;
+//   num? qty;
 //   String? color;
 //   String? size;
-//   int? discount;
-//   int? tax;
-//   int? shippingCost;
-//   int? totalShippingCost;
-//   double? totalPrice;
-//   double? grandTotal;
-//   double? currencyId;
-//   int? exchangeRate;
+//   num? discount;
+//   num? tax;
+//   num? shippingCost;
+//   num? totalShippingCost;
+//   num? totalPrice;
+//   num? grandTotal;
+//   num? currencyId;
+//   num? exchangeRate;
 //   dynamic estimatedShippingDays;
 //   DateTime? createdAt;
 //   DateTime? updatedAt;
@@ -430,11 +430,11 @@
 //             ? null
 //             : json["total_shipping_cost"],
 //         totalPrice:
-//             json["total_price"] == null ? null : json["total_price"].toDouble(),
+//             json["total_price"] == null ? null : json["total_price"].tonum(),
 //         grandTotal:
-//             json["grand_total"] == null ? null : json["grand_total"].toDouble(),
+//             json["grand_total"] == null ? null : json["grand_total"].tonum(),
 //         currencyId:
-//             json["currency_id"] == null ? null : json["currency_id"].toDouble(),
+//             json["currency_id"] == null ? null : json["currency_id"].tonum(),
 //         exchangeRate:
 //             json["exchange_rate"] == null ? null : json["exchange_rate"],
 //         estimatedShippingDays: json["estimated_shipping_days"],
@@ -512,38 +512,38 @@
 //     this.images,
 //   });
 
-//   int? id;
-//   int? sellerId;
-//   int? categoryId;
-//   int? brandId;
+//   num? id;
+//   num? sellerId;
+//   num? categoryId;
+//   num? brandId;
 //   String? name;
 //   String? unit;
 //   String? tags;
-//   int? minimumQty;
+//   num? minimumQty;
 //   String? barcode;
 //   String? sku;
-//   int? length;
-//   int? width;
-//   int? height;
-//   int? weight;
-//   int? isRefundable;
+//   num? length;
+//   num? width;
+//   num? height;
+//   num? weight;
+//   num? isRefundable;
 //   String? attributes;
 //   //KK
-//   double? unitPrice;
-//   int? purchasePrice;
-//   int? salePrice;
-//   double? discount;
-//   int? quantity;
-//   int? shippingCost;
+//   num? unitPrice;
+//   num? purchasePrice;
+//   num? salePrice;
+//   num? discount;
+//   num? quantity;
+//   num? shippingCost;
 //   String? description;
 //   String? pdfSpecification;
 //   String? metaTitle;
 //   String? metaDescription;
 //   String? metaImage;
 //   String? slug;
-//   int? totalViewed;
-//   int? isActive;
-//   int? publishStat;
+//   num? totalViewed;
+//   num? isActive;
+//   num? publishStat;
 //   bool? isWishlisted;
 //   List<ImageModel>? images;
 
@@ -639,8 +639,8 @@
 //     this.image,
 //   });
 
-//   int? id;
-//   int? productId;
+//   num? id;
+//   num? productId;
 //   String? image;
 
 //   factory ImageModel.fromJson(Map<String, dynamic> json) => ImageModel(
@@ -681,25 +681,25 @@
 // }
 
 // class Details {
-//   int? id;
-//   int? sellerId;
-//   int? userId;
-//   int? orderId;
-//   int? orderStat;
-//   int? productId;
-//   int? salePrice;
-//   int? qty;
+//   num? id;
+//   num? sellerId;
+//   num? userId;
+//   num? orderId;
+//   num? orderStat;
+//   num? productId;
+//   num? salePrice;
+//   num? qty;
 //   String? color;
-//   int? size;
-//   int? discount;
-//   int? tax;
-//   int? shippingCost;
-//   int? totalShippingCost;
-//   int? totalPrice;
-//   int? grandTotal;
-//   int? currencyId;
-//   double? exchangeRate;
-//   int? estimatedShippingDays;
+//   num? size;
+//   num? discount;
+//   num? tax;
+//   num? shippingCost;
+//   num? totalShippingCost;
+//   num? totalPrice;
+//   num? grandTotal;
+//   num? currencyId;
+//   num? exchangeRate;
+//   num? estimatedShippingDays;
 //   String? createdAt;
 //   String? updatedAt;
 
@@ -831,19 +831,19 @@ class Value {
     this.total,
   });
 
-  int? currentPage;
+  num? currentPage;
   List<Datum>? data;
   String? firstPageUrl;
-  int? from;
-  int? lastPage;
+  num? from;
+  num? lastPage;
   String? lastPageUrl;
   List<Link>? links;
   String? nextPageUrl;
   String? path;
-  int? perPage;
+  num? perPage;
   dynamic prevPageUrl;
-  int? to;
-  int? total;
+  num? to;
+  num? total;
 
   factory Value.fromJson(Map<String, dynamic> json) => Value(
         currentPage: json["current_page"],
@@ -937,16 +937,16 @@ class Datum {
     this.details,
   });
 
-  int? id;
+  num? id;
   String? orderNo;
   dynamic discount;
   dynamic couponDiscount;
   dynamic tax;
-  int? shippingCost;
-  int? totalPrice;
+  num? shippingCost;
+  num? totalPrice;
   dynamic couponId;
-  int? currencyId;
-  int? exchangeRate;
+  num? currencyId;
+  num? exchangeRate;
   ShippingName? shippingName;
   String? shippingAddress1;
   ShippingAddress2? shippingAddress2;
@@ -955,29 +955,29 @@ class Datum {
   String? shippingPost;
   ShippingTown? shippingTown;
   ShippingState? shippingState;
-  int? shippingCountryId;
+  num? shippingCountryId;
   String? shippingNote;
   PaymentBy? paymentBy;
-  int? userId;
+  num? userId;
   UserFirstName? userFirstName;
   UserLastName? userLastName;
   UserAddress1? userAddress1;
   String? userPostCode;
   ShippingTown? userCity;
-  int? userCountryId;
+  num? userCountryId;
   String? userMobile;
   Email? userEmail;
-  int? ratecardRateid;
-  int? ratecardProviderId;
-  int? ratecardCtop;
-  int? ratecardPrice;
-  int? ratecardBp;
-  double? ratecardTax;
+  num? ratecardRateid;
+  num? ratecardProviderId;
+  num? ratecardCtop;
+  num? ratecardPrice;
+  num? ratecardBp;
+  num? ratecardTax;
   RatecardPLatlng? ratecardPLatlng;
   String? ratecardDLatlng;
-  double? ratecardDistance;
-  int? ratecardBillwt;
-  int? ratecardReplyCode;
+  num? ratecardDistance;
+  num? ratecardBillwt;
+  num? ratecardReplyCode;
   String? ratecardReplyMsg;
   String? ratecardAwbNo;
   DateTime? createdAt;
@@ -1022,10 +1022,10 @@ class Datum {
         ratecardCtop: json["ratecard_ctop"],
         ratecardPrice: json["ratecard_price"],
         ratecardBp: json["ratecard_bp"],
-        ratecardTax: json["ratecard_tax"]?.toDouble(),
+        ratecardTax: json["ratecard_tax"],
         ratecardPLatlng: ratecardPLatlngValues.map[json["ratecard_p_latlng"]],
         ratecardDLatlng: json["ratecard_d_latlng"],
-        ratecardDistance: json["ratecard_distance"]?.toDouble(),
+        ratecardDistance: json["ratecard_distance"],
         ratecardBillwt: json["ratecard_billwt"],
         ratecardReplyCode: json["ratecard_reply_code"],
         ratecardReplyMsg: json["ratecard_reply_msg"],
@@ -1122,24 +1122,24 @@ class Detail {
     this.product,
   });
 
-  int? id;
-  int? sellerId;
-  int? userId;
-  int? orderId;
-  int? orderStat;
-  int? productId;
-  double? salePrice;
-  int? qty;
+  num? id;
+  num? sellerId;
+  num? userId;
+  num? orderId;
+  num? orderStat;
+  num? productId;
+  num? salePrice;
+  num? qty;
   String? color;
   String? size;
-  int? discount;
-  int? tax;
-  int? shippingCost;
-  int? totalShippingCost;
-  double? totalPrice;
-  int? grandTotal;
-  int? currencyId;
-  int? exchangeRate;
+  num? discount;
+  num? tax;
+  num? shippingCost;
+  num? totalShippingCost;
+  num? totalPrice;
+  num? grandTotal;
+  num? currencyId;
+  num? exchangeRate;
   dynamic estimatedShippingDays;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -1152,7 +1152,7 @@ class Detail {
         orderId: json["order_id"],
         orderStat: json["order_stat"],
         productId: json["product_id"],
-        salePrice: json["sale_price"]?.toDouble(),
+        salePrice: json["sale_price"],
         qty: json["qty"],
         color: json["color"],
         size: json["size"],
@@ -1160,7 +1160,7 @@ class Detail {
         tax: json["tax"],
         shippingCost: json["shipping_cost"],
         totalShippingCost: json["total_shipping_cost"],
-        totalPrice: json["total_price"]?.toDouble(),
+        totalPrice: json["total_price"],
         grandTotal: json["grand_total"],
         currencyId: json["currency_id"],
         exchangeRate: json["exchange_rate"],
@@ -1238,37 +1238,37 @@ class Product {
     this.images,
   });
 
-  int? id;
-  int? sellerId;
-  int? categoryId;
-  int? brandId;
+  num? id;
+  num? sellerId;
+  num? categoryId;
+  num? brandId;
   String? name;
   Unit? unit;
   Tags? tags;
-  int? minimumQty;
+  num? minimumQty;
   String? barcode;
   String? sku;
-  int? length;
-  int? width;
-  int? height;
-  int? weight;
-  int? isRefundable;
+  num? length;
+  num? width;
+  num? height;
+  num? weight;
+  num? isRefundable;
   String? attributes;
-  double? unitPrice;
-  int? purchasePrice;
-  double? salePrice;
-  double? discount;
-  int? quantity;
-  int? shippingCost;
+  num? unitPrice;
+  num? purchasePrice;
+  num? salePrice;
+  num? discount;
+  num? quantity;
+  num? shippingCost;
   String? description;
   String? pdfSpecification;
   String? metaTitle;
   String? metaDescription;
   String? metaImage;
   String? slug;
-  int? totalViewed;
-  int? isActive;
-  int? publishStat;
+  num? totalViewed;
+  num? isActive;
+  num? publishStat;
   bool? isWishlisted;
   List<Image>? images;
 
@@ -1289,10 +1289,10 @@ class Product {
         weight: json["weight"],
         isRefundable: json["is_refundable"],
         attributes: json["attributes"],
-        unitPrice: json["unit_price"]?.toDouble(),
+        unitPrice: json["unit_price"],
         purchasePrice: json["purchase_price"],
-        salePrice: json["sale_price"]?.toDouble(),
-        discount: json["discount"]?.toDouble(),
+        salePrice: json["sale_price"],
+        discount: json["discount"],
         quantity: json["quantity"],
         shippingCost: json["shipping_cost"],
         description: json["description"],
@@ -1356,8 +1356,8 @@ class Image {
     this.image,
   });
 
-  int? id;
-  int? productId;
+  num? id;
+  num? productId;
   String? image;
 
   factory Image.fromJson(Map<String, dynamic> json) => Image(
