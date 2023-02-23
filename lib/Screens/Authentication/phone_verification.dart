@@ -63,253 +63,259 @@ class _PhoneVerificationState extends State<PhoneVerification> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
-        title: Text(
-          'Reset Password',
-          style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          centerTitle: true,
+          iconTheme: const IconThemeData(color: Colors.black),
+          title: Text(
+            'Reset Password',
+            style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Text(
-              'Reset Password',
-              style: kTextStyle.copyWith(
-                  fontWeight: FontWeight.bold, fontSize: 25),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 40.0),
-            child: Text(
-              'Please enter your one time code below to receive on your mail, along with your new password.',
-              style: kTextStyle.copyWith(
-                color: kGreyTextColor,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                'Reset Password',
+                style: kTextStyle.copyWith(
+                    fontWeight: FontWeight.bold, fontSize: 25),
               ),
             ),
-          ),
-          const SizedBox(
-            height: 50.0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              SizedBox(
-                width: 50.0,
-                child: TextFormField(
-                  autofocus: true,
-                  obscureText: true,
-                  controller: pin1Controller,
-                  style: const TextStyle(fontSize: 24),
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  decoration: otpInputDecoration,
-                  onChanged: (value) {
-                    nextField(value, pin2FocusNode);
-                  },
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 40.0),
+              child: Text(
+                'Please enter your one time code below to receive on your mail, along with your new password.',
+                style: kTextStyle.copyWith(
+                  color: kGreyTextColor,
                 ),
-              ),
-              SizedBox(
-                width: 50.0,
-                child: TextFormField(
-                  controller: pin2Controller,
-                  focusNode: pin2FocusNode,
-                  obscureText: true,
-                  style: const TextStyle(fontSize: 24),
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  decoration: otpInputDecoration,
-                  onChanged: (value) => nextField(value, pin3FocusNode),
-                ),
-              ),
-              SizedBox(
-                width: 50.0,
-                child: TextFormField(
-                  focusNode: pin3FocusNode,
-                  controller: pin3Controller,
-                  obscureText: true,
-                  style: const TextStyle(fontSize: 24),
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  decoration: otpInputDecoration,
-                  onChanged: (value) => nextField(value, pin4FocusNode),
-                ),
-              ),
-              SizedBox(
-                width: 50.0,
-                child: TextFormField(
-                  focusNode: pin4FocusNode,
-                  obscureText: true,
-                  controller: pin4Controller,
-                  style: const TextStyle(fontSize: 24),
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  decoration: otpInputDecoration,
-                  onChanged: (value) => nextField(value, pin5FocusNode),
-                ),
-              ),
-              SizedBox(
-                width: 50.0,
-                child: TextFormField(
-                  focusNode: pin5FocusNode,
-                  obscureText: true,
-                  controller: pin5Controller,
-                  style: const TextStyle(fontSize: 24),
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  decoration: otpInputDecoration,
-                  onChanged: (value) => nextField(value, pin6FocusNode),
-                ),
-              ),
-              SizedBox(
-                width: 50.0,
-                child: TextFormField(
-                  focusNode: pin6FocusNode,
-                  obscureText: true,
-                  controller: pin6Controller,
-                  style: const TextStyle(fontSize: 24),
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  decoration: otpInputDecoration,
-                  onChanged: (value) {
-                    if (value.length == 1) {
-                      pin6FocusNode.unfocus();
-                      // Then you need to check is the code is correct or not
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 50.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 40.0),
-            child: Text(
-              'Please enter your new password.',
-              style: kTextStyle.copyWith(
-                color: kGreyTextColor,
               ),
             ),
-          ),
-          const SizedBox(
-            height: 10.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: AppTextField(
-              textFieldType: TextFieldType.PASSWORD,
-              controller: passwordEditingController,
-              decoration: InputDecoration(
-                labelText: 'Enter password',
-                labelStyle: kTextStyle,
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: kMainColor),
+            const SizedBox(
+              height: 50.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: 50.0,
+                  child: TextFormField(
+                    autofocus: true,
+                    obscureText: true,
+                    controller: pin1Controller,
+                    style: const TextStyle(fontSize: 24),
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    decoration: otpInputDecoration,
+                    onChanged: (value) {
+                      nextField(value, pin2FocusNode);
+                    },
+                  ),
                 ),
-                hintText: 'Enter new password',
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(
-                    color: kBorderColorTextField,
+                SizedBox(
+                  width: 50.0,
+                  child: TextFormField(
+                    controller: pin2Controller,
+                    focusNode: pin2FocusNode,
+                    obscureText: true,
+                    style: const TextStyle(fontSize: 24),
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    decoration: otpInputDecoration,
+                    onChanged: (value) => nextField(value, pin3FocusNode),
+                  ),
+                ),
+                SizedBox(
+                  width: 50.0,
+                  child: TextFormField(
+                    focusNode: pin3FocusNode,
+                    controller: pin3Controller,
+                    obscureText: true,
+                    style: const TextStyle(fontSize: 24),
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    decoration: otpInputDecoration,
+                    onChanged: (value) => nextField(value, pin4FocusNode),
+                  ),
+                ),
+                SizedBox(
+                  width: 50.0,
+                  child: TextFormField(
+                    focusNode: pin4FocusNode,
+                    obscureText: true,
+                    controller: pin4Controller,
+                    style: const TextStyle(fontSize: 24),
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    decoration: otpInputDecoration,
+                    onChanged: (value) => nextField(value, pin5FocusNode),
+                  ),
+                ),
+                SizedBox(
+                  width: 50.0,
+                  child: TextFormField(
+                    focusNode: pin5FocusNode,
+                    obscureText: true,
+                    controller: pin5Controller,
+                    style: const TextStyle(fontSize: 24),
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    decoration: otpInputDecoration,
+                    onChanged: (value) => nextField(value, pin6FocusNode),
+                  ),
+                ),
+                SizedBox(
+                  width: 50.0,
+                  child: TextFormField(
+                    focusNode: pin6FocusNode,
+                    obscureText: true,
+                    controller: pin6Controller,
+                    style: const TextStyle(fontSize: 24),
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    decoration: otpInputDecoration,
+                    onChanged: (value) {
+                      if (value.length == 1) {
+                        pin6FocusNode.unfocus();
+                        // Then you need to check is the code is correct or not
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 50.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 40.0),
+              child: Text(
+                'Please enter your new password.',
+                style: kTextStyle.copyWith(
+                  color: kGreyTextColor,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: AppTextField(
+                textFieldType: TextFieldType.PASSWORD,
+                controller: passwordEditingController,
+                decoration: InputDecoration(
+                  labelText: 'Enter password',
+                  labelStyle: kTextStyle,
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: kMainColor),
+                  ),
+                  hintText: 'Enter new password',
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: kBorderColorTextField,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          /*Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: ArgonTimerButton(
-              initialTimer: 30,
-              // Optional
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              minWidth: MediaQuery.of(context).size.width,
-              color: Colors.white,
-              borderRadius: 0.0,
-              elevation: 0.0,
-              child: Text(
-                "Resend OTP",
-                style: kTextStyle,
-              ),
-              loader: (timeLeft) {
-                return Text(
-                  "Try again in $timeLeft seconds",
-                  style: kTextStyle.copyWith(color: kGreyTextColor),
-                );
-              },
-              onTap: (startTimer, btnState) async {
-                if (btnState == ButtonState.Idle) {
-                  startTimer(30);
-                }
-                try {
-                  final sendOtp =
-                      await _apiManager.resetPasswordWithEmail(widget.email);
-                  if (sendOtp.success == true) {
-                    toast(sendOtp.message);
-                  } else {
-                    toast(sendOtp.message);
+            /*Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: ArgonTimerButton(
+                initialTimer: 30,
+                // Optional
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                minWidth: MediaQuery.of(context).size.width,
+                color: Colors.white,
+                borderRadius: 0.0,
+                elevation: 0.0,
+                child: Text(
+                  "Resend OTP",
+                  style: kTextStyle,
+                ),
+                loader: (timeLeft) {
+                  return Text(
+                    "Try again in $timeLeft seconds",
+                    style: kTextStyle.copyWith(color: kGreyTextColor),
+                  );
+                },
+                onTap: (startTimer, btnState) async {
+                  if (btnState == ButtonState.Idle) {
+                    startTimer(30);
                   }
-                } catch (e) {
-                  toast(e.toString());
-                }
-              },
-            ),
-          ).visible(!isVerified),*/
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-            child: ButtonGlobal(
-                buttontext: 'Set New Password',
-                buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
-                onPressed: () async {
-                  EasyLoading.show(status: 'Setting New Password...');
                   try {
-                    if (pin1Controller.text.isNotEmpty &&
-                        pin2Controller.text.isNotEmpty &&
-                        pin3Controller.text.isNotEmpty &&
-                        pin4Controller.text.isNotEmpty &&
-                        pin5Controller.text.isNotEmpty &&
-                        pin6Controller.text.isNotEmpty &&
-                        passwordEditingController.text.isNotEmpty) {
-                      String code = pin1Controller.text +
-                          pin2Controller.text +
-                          pin3Controller.text +
-                          pin4Controller.text +
-                          pin5Controller.text +
-                          pin6Controller.text;
-                      final resetPass = await _apiManager.setNewPassword(
-                        widget.email,
-                        code,
-                        passwordEditingController.text,
-                      );
-                      if (resetPass.success == true) {
-                        EasyLoading.showSuccess(resetPass.message.toString());
-                        const SignIn().launch(context, isNewTask: true);
-                      } else {
-                        EasyLoading.showError(resetPass.message.toString());
-                      }
+                    final sendOtp =
+                        await _apiManager.resetPasswordWithEmail(widget.email);
+                    if (sendOtp.success == true) {
+                      toast(sendOtp.message);
                     } else {
-                      EasyLoading.showError('All fields are required!');
+                      toast(sendOtp.message);
                     }
-                  } catch (e, stackTrace) {
-                    log(e.toString());
-                    log(stackTrace.toString());
-                    EasyLoading.showError(e.toString());
+                  } catch (e) {
+                    toast(e.toString());
                   }
-                }),
-          ),
-          const SizedBox(
-            height: 20.0,
-          ),
-        ],
+                },
+              ),
+            ).visible(!isVerified),*/
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+              child: ButtonGlobal(
+                  buttontext: 'Set New Password',
+                  buttonDecoration:
+                      kButtonDecoration.copyWith(color: kMainColor),
+                  onPressed: () async {
+                    EasyLoading.show(status: 'Setting New Password...');
+                    try {
+                      if (pin1Controller.text.isNotEmpty &&
+                          pin2Controller.text.isNotEmpty &&
+                          pin3Controller.text.isNotEmpty &&
+                          pin4Controller.text.isNotEmpty &&
+                          pin5Controller.text.isNotEmpty &&
+                          pin6Controller.text.isNotEmpty &&
+                          passwordEditingController.text.isNotEmpty) {
+                        String code = pin1Controller.text +
+                            pin2Controller.text +
+                            pin3Controller.text +
+                            pin4Controller.text +
+                            pin5Controller.text +
+                            pin6Controller.text;
+                        final resetPass = await _apiManager.setNewPassword(
+                          widget.email,
+                          code,
+                          passwordEditingController.text,
+                        );
+                        if (resetPass.success == true) {
+                          EasyLoading.showSuccess(resetPass.message.toString());
+                          const SignIn().launch(context, isNewTask: true);
+                        } else {
+                          EasyLoading.showError(resetPass.message.toString());
+                        }
+                      } else {
+                        EasyLoading.showError('All fields are required!');
+                      }
+                    } catch (e, stackTrace) {
+                      log(e.toString());
+                      log(stackTrace.toString());
+                      EasyLoading.showError(e.toString());
+                    }
+                  }),
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+          ],
+        ),
       ),
     );
   }

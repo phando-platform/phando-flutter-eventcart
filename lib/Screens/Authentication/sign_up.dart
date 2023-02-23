@@ -63,142 +63,61 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
-        title: Text(
-          'Sign Up',
-          style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          centerTitle: true,
+          iconTheme: const IconThemeData(color: Colors.black),
+          title: Text(
+            'Sign Up',
+            style: kTextStyle.copyWith(fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Center(
-                child: FractionallySizedBox(
-                  widthFactor: 0.5,
-                  child: Image(
-                    image: AssetImage('images/logo.png'),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 50.0,
-              ),
-              Text(
-                'A New Journey Awaits',
-                style: kTextStyle.copyWith(
-                    fontWeight: FontWeight.bold, fontSize: 18.0),
-              ),
-              Text(
-                'Please sign up to continue browsing',
-                style:
-                    kTextStyle.copyWith(color: kGreyTextColor, fontSize: 14.0),
-              ),
-              const SizedBox(
-                height: 50.0,
-              ),
-              AppTextField(
-                textFieldType: TextFieldType.NAME,
-                controller: firstNameController,
-                decoration: InputDecoration(
-                  labelText: 'First Name',
-                  labelStyle: kTextStyle,
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: kMainColor),
-                  ),
-                  hintText: 'Enter Your First Name',
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFE8E7E5),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Center(
+                  child: FractionallySizedBox(
+                    widthFactor: 0.5,
+                    child: Image(
+                      image: AssetImage('images/logo.png'),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              AppTextField(
-                textFieldType: TextFieldType.NAME,
-                controller: lastNameController,
-                decoration: InputDecoration(
-                  labelText: 'Last Name',
-                  labelStyle: kTextStyle,
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: kMainColor),
-                  ),
-                  hintText: 'Enter Your Last Name',
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFE8E7E5),
-                    ),
-                  ),
+                const SizedBox(
+                  height: 50.0,
                 ),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              AppTextField(
-                textFieldType: TextFieldType.NAME,
-                controller: usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  labelStyle: kTextStyle,
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: kMainColor),
-                  ),
-                  hintText: 'Enter Your Username',
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFE8E7E5),
-                    ),
-                  ),
+                Text(
+                  'A New Journey Awaits',
+                  style: kTextStyle.copyWith(
+                      fontWeight: FontWeight.bold, fontSize: 18.0),
                 ),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              AppTextField(
-                textFieldType: TextFieldType.EMAIL,
-                controller: emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email Address',
-                  labelStyle: kTextStyle,
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: kMainColor),
-                  ),
-                  hintText: 'Enter Your Email Address',
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFE8E7E5),
-                    ),
-                  ),
+                Text(
+                  'Please sign up to continue browsing',
+                  style: kTextStyle.copyWith(
+                      color: kGreyTextColor, fontSize: 14.0),
                 ),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              SizedBox(
-                height: 70.0,
-                child: AppTextField(
-                  textFieldType: TextFieldType.PHONE,
-                  controller: mobileController,
-                  enabled: true,
-                  maxLength: countryCode == "IN" ? 10 : null,
+                const SizedBox(
+                  height: 50.0,
+                ),
+                AppTextField(
+                  textFieldType: TextFieldType.NAME,
+                  controller: firstNameController,
                   decoration: InputDecoration(
+                    labelText: 'First Name',
+                    labelStyle: kTextStyle,
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: kMainColor),
                     ),
-                    labelText: 'Phone Number',
-                    hintText: 'Enter your Phone Number',
-                    labelStyle: kTextStyle,
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    hintText: 'Enter Your First Name',
                     enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Color(0xFFE8E7E5),
@@ -206,93 +125,179 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
-              ),
-              Visibility(
-                // visible: otpVisible,
-                visible: false,
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 20.0,
+                const SizedBox(
+                  height: 20.0,
+                ),
+                AppTextField(
+                  textFieldType: TextFieldType.NAME,
+                  controller: lastNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Last Name',
+                    labelStyle: kTextStyle,
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: kMainColor),
                     ),
-                    SizedBox(
-                      height: 60.0,
-                      child: AppTextField(
-                        textFieldType: TextFieldType.NUMBER,
-                        controller: otpController,
-                        enabled: true,
-                        decoration: InputDecoration(
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: kMainColor),
-                          ),
-                          labelText: 'OTP',
-                          hintText: 'Enter your OTP',
-                          labelStyle: kTextStyle,
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFE8E7E5),
+                    hintText: 'Enter Your Last Name',
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFE8E7E5),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                AppTextField(
+                  textFieldType: TextFieldType.NAME,
+                  controller: usernameController,
+                  decoration: InputDecoration(
+                    labelText: 'Username',
+                    labelStyle: kTextStyle,
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: kMainColor),
+                    ),
+                    hintText: 'Enter Your Username',
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFE8E7E5),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                AppTextField(
+                  textFieldType: TextFieldType.EMAIL,
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email Address',
+                    labelStyle: kTextStyle,
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: kMainColor),
+                    ),
+                    hintText: 'Enter Your Email Address',
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFE8E7E5),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                SizedBox(
+                  height: 70.0,
+                  child: AppTextField(
+                    textFieldType: TextFieldType.PHONE,
+                    controller: mobileController,
+                    enabled: true,
+                    maxLength: countryCode == "IN" ? 10 : null,
+                    decoration: InputDecoration(
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: kMainColor),
+                      ),
+                      labelText: 'Phone Number',
+                      hintText: 'Enter your Phone Number',
+                      labelStyle: kTextStyle,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFE8E7E5),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  // visible: otpVisible,
+                  visible: false,
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      SizedBox(
+                        height: 60.0,
+                        child: AppTextField(
+                          textFieldType: TextFieldType.NUMBER,
+                          controller: otpController,
+                          enabled: true,
+                          decoration: InputDecoration(
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: kMainColor),
+                            ),
+                            labelText: 'OTP',
+                            hintText: 'Enter your OTP',
+                            labelStyle: kTextStyle,
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFFE8E7E5),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              AppTextField(
-                textFieldType: TextFieldType.PASSWORD,
-                controller: passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  labelStyle: kTextStyle,
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: kMainColor),
-                  ),
-                  hintText: 'Enter password',
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFE8E7E5),
-                    ),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              AppTextField(
-                textFieldType: TextFieldType.PASSWORD,
-                controller: confirmPasswordController,
-                decoration: InputDecoration(
-                  labelText: 'Confirm Password',
-                  labelStyle: kTextStyle,
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: kMainColor),
-                  ),
-                  hintText: 'Confirm password',
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFE8E7E5),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                AppTextField(
+                  textFieldType: TextFieldType.PASSWORD,
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    labelStyle: kTextStyle,
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: kMainColor),
+                    ),
+                    hintText: 'Enter password',
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFE8E7E5),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              if (_showErrors) FormErrorsList(_errorsList) else Container(),
-              const SizedBox(
-                height: 20.0,
-              ),
-              ButtonGlobal(
-                  buttontext: 'Sign Up',
-                  buttonDecoration:
-                      kButtonDecoration.copyWith(color: kMainColor),
-                  onPressed: _onFormSubmit),
-            ],
+                const SizedBox(
+                  height: 20.0,
+                ),
+                AppTextField(
+                  textFieldType: TextFieldType.PASSWORD,
+                  controller: confirmPasswordController,
+                  decoration: InputDecoration(
+                    labelText: 'Confirm Password',
+                    labelStyle: kTextStyle,
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: kMainColor),
+                    ),
+                    hintText: 'Confirm password',
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFE8E7E5),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                if (_showErrors) FormErrorsList(_errorsList) else Container(),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                ButtonGlobal(
+                    buttontext: 'Sign Up',
+                    buttonDecoration:
+                        kButtonDecoration.copyWith(color: kMainColor),
+                    onPressed: _onFormSubmit),
+              ],
+            ),
           ),
         ),
       ),
