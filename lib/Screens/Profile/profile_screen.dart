@@ -41,9 +41,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
     final wish = await _apiManager.wishList(token);
     final value = await _apiManager.getProfileInfo(token);
-    setState(() {
-      wishLength = wish.value?.data?.length ?? 0;
-    });
+
+    if (mounted) {
+      setState(() {
+        wishLength = wish.value?.data?.length ?? 0;
+      });
+    }
+    // setState(() {
+    //   wishLength = wish.value?.data?.length ?? 0;
+    // });
   }
 
   List<String> policyList = [

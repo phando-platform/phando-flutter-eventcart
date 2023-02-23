@@ -78,8 +78,9 @@ class _OrderReviewState extends State<OrderReview> {
     if (finalAmount?.success ?? false) {
       updatedAmount = finalAmount;
     }
-
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
 
     _razorpay = Razorpay();
 
@@ -204,6 +205,7 @@ class _OrderReviewState extends State<OrderReview> {
   @override
   void initState() {
     super.initState();
+
     getToken();
   }
 

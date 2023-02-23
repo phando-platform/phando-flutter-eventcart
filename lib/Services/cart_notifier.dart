@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+// import 'dart:math';
 
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -119,7 +120,7 @@ class CartNotifier extends ChangeNotifier {
 
   Future<void> updatePrice(int itemId, int quantity) async {
     log('updated price called');
-    log(cartItems.toString());
+    log(cartItems.map((e) => log(e.toJson().toString())).toString());
     for (final item in cartItems) {
       log(itemId.toString());
       log(item.id.toString());
@@ -136,6 +137,7 @@ class CartNotifier extends ChangeNotifier {
       'cart_items',
       cartItems.map((e) => jsonEncode(e.toJson())).toList(),
     );
+    log(cartItems.map((e) => log(e.toJson().toString())).toString());
   }
 
   void couponForProduct(List<String> productId, int discount, String type) {

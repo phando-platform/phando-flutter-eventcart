@@ -141,12 +141,12 @@ class CartItemNotifier extends ChangeNotifier {
             ;
         notifyListeners();
       }
-      pref = await SharedPreferences.getInstance();
-      await pref.setStringList(
-        'cart_ui_items',
-        cartItemUis.map((e) => jsonEncode(e)).toList(),
-      );
     }
+    pref = await SharedPreferences.getInstance();
+    await pref.setStringList(
+      'cart_ui_items',
+      cartItemUis.map((e) => jsonEncode(e)).toList(),
+    );
   }
 
   void decreaseQuantity(int itemId) {
