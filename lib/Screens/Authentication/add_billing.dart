@@ -356,8 +356,8 @@ class _AddBillingState extends State<AddBilling> {
                       toast("Please input your email to signup");
                     } else if (emailController.text.contains('Guest')) {
                       toast("Please input valid email to signup");
-                    } else if (addressOneController.text.length < 9) {
-                      toast("Length of Address line 1 should be more than 8");
+                    } else if (addressOneController.text.length < 26) {
+                      toast("Length of Address line 1 should be more than 25");
                     } else if (addressOneController.text.isNotEmpty &&
                         cityController.text.isNotEmpty &&
                         postalController.text.isNotEmpty) {

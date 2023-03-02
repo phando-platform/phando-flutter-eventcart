@@ -562,6 +562,7 @@ class ApiManager {
     required String totalShipping,
     required String total,
     required String paymentId,
+    required String deliveryDate,
   }) async {
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
 
@@ -605,34 +606,35 @@ class ApiManager {
         'Content-Type': 'application/json',
       },
       body: CreateOrderBody(
-        first_name: billingFirstName,
-        last_name: billingLastName,
-        user_address_1: billingAddOne,
-        user_mobile: billingPhone,
-        user_email: billingEmail,
-        user_post_code: billingPostCode,
-        user_city: billingUserCity,
-        user_country_id: "104",
-        shipping_name: shippingFirstName,
-        shipping_mobile: shippingPhone,
-        shipping_email: shippingEmail,
-        shipping_post: shippingPostCode,
-        shipping_town: shippingUserCity,
-        shipping_state: shippingUserState,
-        address_line_one: shippingAddOne,
-        shipping_country_id: "104",
-        payment_by: payment,
-        subTotal: subTotal,
-        totalShipping: totalShipping,
-        total: total,
-        currency: model.currency ??
-            Currency(
-              id: '63',
-              exchangeRate: '1',
-            ),
-        cart: model.cart ?? [],
-        payment_txn_id: paymentId,
-      ).toJson(),
+              first_name: billingFirstName,
+              last_name: billingLastName,
+              user_address_1: billingAddOne,
+              user_mobile: billingPhone,
+              user_email: billingEmail,
+              user_post_code: billingPostCode,
+              user_city: billingUserCity,
+              user_country_id: "104",
+              shipping_name: shippingFirstName,
+              shipping_mobile: shippingPhone,
+              shipping_email: shippingEmail,
+              shipping_post: shippingPostCode,
+              shipping_town: shippingUserCity,
+              shipping_state: shippingUserState,
+              address_line_one: shippingAddOne,
+              shipping_country_id: "104",
+              payment_by: payment,
+              subTotal: subTotal,
+              totalShipping: totalShipping,
+              total: total,
+              currency: model.currency ??
+                  Currency(
+                    id: '63',
+                    exchangeRate: '1',
+                  ),
+              cart: model.cart ?? [],
+              payment_txn_id: paymentId,
+              delivery_date: deliveryDate)
+          .toJson(),
     );
 
     log(
@@ -664,6 +666,7 @@ class ApiManager {
             ),
         cart: model.cart ?? [],
         payment_txn_id: paymentId,
+        delivery_date: deliveryDate,
       ).toJson(),
     );
 

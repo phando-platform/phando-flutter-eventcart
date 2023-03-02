@@ -21,6 +21,8 @@ class CreateOrderHelper {
         totalShipping: (amount?.value.shippingCost ?? 0).toString(),
         total: (amount?.value.grandTotal ?? 0).toString(),
         paymentId: paymentId ?? '',
+        //IMPT
+        deliveryDate: model.deliveryDate!,
       );
       if (order.success ?? false) {
         return true;

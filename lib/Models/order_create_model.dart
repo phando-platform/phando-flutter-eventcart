@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 class OrderCreateModel {
-  OrderCreateModel({
-    String? couponDiscount,
-    String? totalShipping,
-    String? total,
-    String? subTotal,
-    String? couponId,
-    String? shippingAddressId,
-    String? billingAddressId,
-    String? paymentBy,
-    Currency? currency,
-    List<Carts>? cart,
-  }) {
+  OrderCreateModel(
+      {String? couponDiscount,
+      String? totalShipping,
+      String? total,
+      String? subTotal,
+      String? couponId,
+      String? shippingAddressId,
+      String? billingAddressId,
+      String? paymentBy,
+      Currency? currency,
+      List<Carts>? cart,
+      String? deliveryDate}) {
     _couponDiscount = couponDiscount;
     _totalShipping = totalShipping;
     _total = total;
@@ -23,6 +23,7 @@ class OrderCreateModel {
     _paymentBy = paymentBy;
     _currency = currency;
     _cart = cart;
+    _deliveryDate = deliveryDate;
   }
 
   OrderCreateModel.fromJson(dynamic json) {
@@ -42,6 +43,8 @@ class OrderCreateModel {
         _cart?.add(Carts.fromJson(v));
       });
     }
+
+    _deliveryDate = json['delivery_date'];
   }
 
   String? _couponDiscount;
@@ -54,6 +57,7 @@ class OrderCreateModel {
   String? _paymentBy;
   Currency? _currency;
   List<Carts>? _cart;
+  String? _deliveryDate;
 
   String? get couponDiscount => _couponDiscount;
 
@@ -75,6 +79,8 @@ class OrderCreateModel {
 
   List<Carts>? get cart => _cart;
 
+  String? get deliveryDate => _deliveryDate;
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['coupon_discount'] = _couponDiscount;
@@ -91,6 +97,8 @@ class OrderCreateModel {
     if (_cart != null) {
       map['cart'] = _cart?.map((v) => v.toJson()).toList();
     }
+    map['delivery_date'] = _deliveryDate;
+
     return map;
   }
 }
@@ -320,32 +328,33 @@ class CreateOrderBody {
   final Currency currency;
   final List<Carts> cart;
   final String payment_txn_id;
+  final String delivery_date;
 
-  CreateOrderBody({
-    required this.first_name,
-    required this.last_name,
-    required this.user_address_1,
-    required this.user_mobile,
-    required this.user_email,
-    required this.user_post_code,
-    required this.user_city,
-    required this.user_country_id,
-    required this.shipping_name,
-    required this.shipping_mobile,
-    required this.shipping_email,
-    required this.shipping_post,
-    required this.shipping_town,
-    required this.shipping_state,
-    required this.address_line_one,
-    required this.shipping_country_id,
-    required this.payment_by,
-    required this.subTotal,
-    required this.totalShipping,
-    required this.total,
-    required this.currency,
-    required this.cart,
-    required this.payment_txn_id,
-  });
+  CreateOrderBody(
+      {required this.first_name,
+      required this.last_name,
+      required this.user_address_1,
+      required this.user_mobile,
+      required this.user_email,
+      required this.user_post_code,
+      required this.user_city,
+      required this.user_country_id,
+      required this.shipping_name,
+      required this.shipping_mobile,
+      required this.shipping_email,
+      required this.shipping_post,
+      required this.shipping_town,
+      required this.shipping_state,
+      required this.address_line_one,
+      required this.shipping_country_id,
+      required this.payment_by,
+      required this.subTotal,
+      required this.totalShipping,
+      required this.total,
+      required this.currency,
+      required this.cart,
+      required this.payment_txn_id,
+      required this.delivery_date});
 
   Map<String, dynamic> toMap() {
     return {
@@ -372,6 +381,7 @@ class CreateOrderBody {
       'currency': currency.toMap(),
       'cart': cart.map((x) => x.toMap()).toList(),
       'payment_txn_id': payment_txn_id,
+      'delivery_date': delivery_date
     };
   }
 
@@ -400,6 +410,7 @@ class CreateOrderBody {
       currency: Currency.fromMap(map['currency']),
       cart: List<Carts>.from(map['cart']?.map((x) => Carts.fromMap(x))),
       payment_txn_id: map['payment_txn_id'] ?? '',
+      delivery_date: map['delivery_date'] ?? '',
     );
   }
 

@@ -101,13 +101,28 @@ class _OrderListState extends State<OrderList> {
                                               style:
                                                   const TextStyle(fontSize: 13),
                                             ),
-                                            Text(
-                                              DateFormat.yMMMd().format(
-                                                order!.createdAt!,
-                                              ),
-                                              style:
-                                                  const TextStyle(fontSize: 13),
-                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Order Date:   ${DateFormat.yMMMd().format(
+                                                    order!.createdAt!,
+                                                  )}",
+                                                  style: const TextStyle(
+                                                      fontSize: 13),
+                                                ),
+                                                Text(
+                                                  order.deliveryDate == null ||
+                                                          order.deliveryDate ==
+                                                              ""
+                                                      ? ""
+                                                      : "Delivery Date: ${DateFormat.yMMMd().format(order.deliveryDate!)}",
+                                                  style: const TextStyle(
+                                                      fontSize: 13),
+                                                ),
+                                              ],
+                                            )
                                           ],
                                         ),
                                         const SizedBox(height: 12),

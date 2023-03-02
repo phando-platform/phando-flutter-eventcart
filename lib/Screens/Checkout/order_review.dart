@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:event_app/Models/delivery/delivery_body_model.dart';
 import 'package:event_app/Models/delivery/delivery_reponse_model.dart';
+import 'package:event_app/Screens/Checkout/date_picket_widget.dart';
 import 'package:event_app/Screens/payment_helpers/create_order_helper.dart';
 import 'package:event_app/Screens/payment_helpers/razorpay_methods.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
@@ -40,6 +41,8 @@ class OrderReview extends StatefulWidget {
   final WidgetRef reference;
 }
 
+final TextEditingController _controller = TextEditingController();
+
 CheckRazorEnable? checkRazorEnable;
 
 class _OrderReviewState extends State<OrderReview> {
@@ -50,6 +53,7 @@ class _OrderReviewState extends State<OrderReview> {
   int? country;
   String? mobile;
   DeliveryResponseModel? updatedAmount;
+  // String? deliveryDate;
 
   Future<void> getToken() async {
     SharedPreferences preferences = await _prefs;
@@ -431,6 +435,16 @@ class _OrderReviewState extends State<OrderReview> {
                             const SizedBox(
                               height: 20.0,
                             ),
+
+                            const Text("Select delivery Date"),
+                            const SizedBox(height: 10),
+                            DateTimePickerWidget(
+                                hintText: "Select Delivery Date",
+                                prefixIcon: const Icon(Icons.calendar_month),
+                                controller: _controller),
+                            const SizedBox(
+                              height: 20.0,
+                            ),
                             RichText(
                               text: TextSpan(
                                 children: [
@@ -448,6 +462,7 @@ class _OrderReviewState extends State<OrderReview> {
                                 ],
                               ),
                             ),
+
                             Container(
                               padding: const EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
@@ -680,28 +695,29 @@ class _OrderReviewState extends State<OrderReview> {
                                       Currency currency =
                                           Currency(exchangeRate: '1', id: '63');
                                       OrderCreateModel model = OrderCreateModel(
-                                        couponId: info.couponId ?? "1",
-                                        couponDiscount:
-                                            info.discountAmount == null
-                                                ? "0.0"
-                                                : discount.toString(),
-                                        subTotal: updatedAmount?.value.subtotal
-                                            .toString(),
-                                        totalShipping: updatedAmount
-                                            ?.value.shippingCost
-                                            .toString(),
-                                        total: updatedAmount?.value.grandTotal
-                                            .toString(),
-                                        shippingAddressId: snapshot
-                                            .data?.value?.shipping?.id
-                                            .toString(),
-                                        billingAddressId: snapshot
-                                            .data?.value?.billing?.id
-                                            .toString(),
-                                        cart: cartItems,
-                                        currency: currency,
-                                        paymentBy: 'cod',
-                                      );
+                                          couponId: info.couponId ?? "1",
+                                          couponDiscount:
+                                              info.discountAmount == null
+                                                  ? "0.0"
+                                                  : discount.toString(),
+                                          subTotal: updatedAmount
+                                              ?.value.subtotal
+                                              .toString(),
+                                          totalShipping: updatedAmount
+                                              ?.value.shippingCost
+                                              .toString(),
+                                          total: updatedAmount?.value.grandTotal
+                                              .toString(),
+                                          shippingAddressId: snapshot
+                                              .data?.value?.shipping?.id
+                                              .toString(),
+                                          billingAddressId: snapshot
+                                              .data?.value?.billing?.id
+                                              .toString(),
+                                          cart: cartItems,
+                                          currency: currency,
+                                          paymentBy: 'cod',
+                                          deliveryDate: _controller.text);
                                       // If the order is COD
                                       if (isCod) {
                                         final result =
