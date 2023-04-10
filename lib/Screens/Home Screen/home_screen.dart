@@ -165,26 +165,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount: snapshot.data?.value?.banners?.length ?? 0,
                           itemBuilder: (BuildContext context, int itemIndex,
                               int pageViewIndex) {
-                            return Container(
+                            return SizedBox(
                               width: context.width(),
                               // decoration: const BoxDecoration(
                               //   color: Colors.black,
                               // ),
-                              padding: const EdgeInsets.all(2),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Image.network(
-                                      snapshot.data?.value?.banners![itemIndex]
-                                              .image
-                                              .toString() ??
-                                          '',
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                ],
+                              // padding: const EdgeInsets.all(2),
+                              child: Image.network(
+                                snapshot.data?.value?.banners![itemIndex].image
+                                        .toString() ??
+                                    '',
+                                fit: BoxFit.fill,
                               ),
                             ).onTap(
                               () {
@@ -204,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                           options: CarouselOptions(
-                            height: 200,
+                            // height: 200,
                             aspectRatio: 16 / 9,
                             viewportFraction: 1,
                             initialPage: 0,

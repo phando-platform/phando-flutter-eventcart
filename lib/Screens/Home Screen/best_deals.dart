@@ -86,11 +86,11 @@ class _BestDealsState extends State<BestDeals> {
                       productTitle:
                           snapshot.data?.value?.data?[i].name.toString() ??
                               'Null',
-                      productPrice: snapshot.data?.value?.data?[i].purchasePrice
-                              .toString() ??
-                          'Null',
+                      productPrice:
+                          snapshot.data?.value?.data?[i].salePrice.toString() ??
+                              'Null',
                       productDiscount:
-                          snapshot.data?.value?.data?[i].discount.toString() ??
+                          snapshot.data?.value?.data?[i].unitPrice.toString() ??
                               'Null',
                       productRating:
                           snapshot.data?.value?.data?[i].id.toString() ??

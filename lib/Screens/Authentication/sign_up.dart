@@ -225,6 +225,9 @@ class _SignUpState extends State<SignUp> {
                           textFieldType: TextFieldType.NUMBER,
                           controller: otpController,
                           enabled: true,
+                          onFieldSubmitted: (p0) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
                           decoration: InputDecoration(
                             focusedBorder: const OutlineInputBorder(
                               borderSide: BorderSide(color: kMainColor),
