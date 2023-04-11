@@ -196,7 +196,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           options: CarouselOptions(
                             // height: 200,
-                            aspectRatio: 16 / 9,
+                            // aspectRatio: 16 / 9,
+                            aspectRatio: 1320 / 600,
                             viewportFraction: 1,
                             initialPage: 0,
                             enableInfiniteScroll: true,

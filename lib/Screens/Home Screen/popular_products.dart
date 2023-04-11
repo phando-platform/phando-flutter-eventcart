@@ -92,11 +92,11 @@ class _PopularProductState extends State<PopularProduct> {
                               productTitle:
                                   snapshot.data?.value?[i].name.toString() ??
                                       'Null',
-                              productPrice: snapshot
-                                      .data?.value?[i].purchasePrice
+                              productPrice: snapshot.data?.value?[i].salePrice
                                       .toString() ??
                                   'Null',
-                              productDiscount: snapshot.data?.value?[i].discount
+                              productDiscount: snapshot
+                                      .data?.value?[i].unitPrice
                                       .toString() ??
                                   'Null',
                               productRating:
