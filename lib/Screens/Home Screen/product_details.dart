@@ -234,7 +234,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                     .name,
                                         minimumQtd: snapshot
                                             .data!.value!.minimumQty
-                                            .toString());
+                                            .toString(),
+                                        unitPrice:
+                                            snapshot.data!.value!.unitPrice!);
                                     await ref
                                         .read(cartProvider)
                                         .addItem(cartItem);
@@ -387,7 +389,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                     .name,
                                         minimumQtd: snapshot
                                             .data!.value!.minimumQty
-                                            .toString());
+                                            .toString(),
+                                        unitPrice:
+                                            snapshot.data!.value!.unitPrice!);
                                     await ref
                                         .read(cartProvider)
                                         .addItem(cartItem);

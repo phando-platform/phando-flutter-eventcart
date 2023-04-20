@@ -161,11 +161,27 @@ class _CartScreenState extends State<CartScreen> {
                                         style: kTextStyle,
                                         maxLines: 2,
                                       ),
-                                      Text(
-                                        'Price: $currencyIcon${(cartItemUi[index].productPrice * cartItemUi[index].productQuantity).toString()}',
-                                        style: kTextStyle.copyWith(
-                                            color: kMainColor, fontSize: 12.0),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Price: $currencyIcon${(cartItemUi[index].productPrice * cartItemUi[index].productQuantity).toString()}',
+                                            style: kTextStyle.copyWith(
+                                                color: kMainColor,
+                                                fontSize: 12.0),
+                                          ),
+                                          Text(
+                                            ' ${cartItemUi[index].unitPrice}',
+                                            style: kTextStyle.copyWith(
+                                                color: kGreyTextColor,
+                                                fontSize: 12.0,
+                                                decoration:
+                                                    TextDecoration.lineThrough),
+                                          ),
+                                        ],
                                       ),
+
                                       // RichText(
                                       //   text: TextSpan(
                                       //     children: [

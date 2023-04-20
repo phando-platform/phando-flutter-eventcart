@@ -14,6 +14,7 @@ class CartItemUi {
   String? productColor;
   String? productSize;
   String? minimumQtd;
+  double? unitPrice;
 
   CartItemUi({
     required this.id,
@@ -24,6 +25,7 @@ class CartItemUi {
     required this.productColor,
     required this.productSize,
     required this.minimumQtd,
+    required this.unitPrice,
   });
 
   Map<String, dynamic> toMap() {
@@ -36,6 +38,7 @@ class CartItemUi {
       'productColor': productColor,
       'productSize': productSize,
       'minimumQtd': minimumQtd,
+      'unitPrice': unitPrice
     };
   }
 
@@ -49,6 +52,7 @@ class CartItemUi {
       productColor: map['productColor'],
       productSize: map['productSize'],
       minimumQtd: map['minimumQtd'],
+      unitPrice: map['unitPrice']?.toDouble(),
     );
   }
 
