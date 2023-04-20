@@ -171,8 +171,11 @@ class _CartScreenState extends State<CartScreen> {
                                                 color: kMainColor,
                                                 fontSize: 12.0),
                                           ),
+                                          const SizedBox(
+                                            width: 3,
+                                          ),
                                           Text(
-                                            ' ${cartItemUi[index].unitPrice}',
+                                            '${cartItemUi[index].unitPrice! * cartItemUi[index].productQuantity!}',
                                             style: kTextStyle.copyWith(
                                                 color: kGreyTextColor,
                                                 fontSize: 12.0,
