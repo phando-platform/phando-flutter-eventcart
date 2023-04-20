@@ -26,19 +26,22 @@ import '../Profile/order_list.dart';
 
 class OrderReview extends StatefulWidget {
   // final String token;
-  const OrderReview({
-    Key? key,
-    required this.subTotalAmount,
-    required this.cart,
-    required this.reference,
-    // required this.token
-  }) : super(key: key);
+  const OrderReview(
+      {Key? key,
+      required this.subTotalAmount,
+      required this.cart,
+      required this.reference,
+      required this.totalUnitPrice
+      // required this.token
+      })
+      : super(key: key);
   @override
   _OrderReviewState createState() => _OrderReviewState();
 
   final double subTotalAmount;
   final List<Carts> cart;
   final WidgetRef reference;
+  final double totalUnitPrice;
 }
 
 final TextEditingController _controller = TextEditingController();
@@ -209,7 +212,6 @@ class _OrderReviewState extends State<OrderReview> {
   @override
   void initState() {
     super.initState();
-
     getToken();
   }
 
@@ -617,7 +619,8 @@ class _OrderReviewState extends State<OrderReview> {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      '$currencyIcon ${updatedAmount?.value.subtotal ?? 0}',
+                                      // '$currencyIcon ${updatedAmount?.value.subtotal ?? 0}',
+                                      '$currencyIcon ${widget.totalUnitPrice}',
                                       style: kTextStyle.copyWith(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -653,7 +656,7 @@ class _OrderReviewState extends State<OrderReview> {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      '$currencyIcon $discount',
+                                      '$currencyIcon ${(widget.totalUnitPrice - updatedAmount!.value.subtotal).toStringAsFixed(2)}',
                                       style: kTextStyle.copyWith(
                                           fontWeight: FontWeight.bold),
                                     ),

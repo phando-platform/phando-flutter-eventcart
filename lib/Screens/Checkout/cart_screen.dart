@@ -594,6 +594,7 @@ class _CartScreenState extends State<CartScreen> {
                                       discount),
                                   cart: ref.watch(cartProvider).getItems(),
                                   reference: ref,
+                                  totalUnitPrice: calculateTotal(cartItemUi),
                                   // token: token,
                                 ).launch(context);
                               } else {
@@ -614,4 +615,12 @@ class _CartScreenState extends State<CartScreen> {
       },
     );
   }
+}
+
+double calculateTotal(List<CartItemUi> items) {
+  double total = 0;
+  for (final item in items) {
+    total += item.unitPrice! * item.productQuantity!;
+  }
+  return total;
 }
