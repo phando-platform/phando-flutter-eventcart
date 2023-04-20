@@ -14,7 +14,7 @@ class CartItemUi {
   String? productColor;
   String? productSize;
   String? minimumQtd;
-  double? unitPrice;
+  dynamic? unitPrice;
 
   CartItemUi({
     required this.id,
